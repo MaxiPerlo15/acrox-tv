@@ -1,50 +1,71 @@
 import type { Metadata } from "next";
-import { Orbitron, Plus_Jakarta_Sans } from "next/font/google";
+import { Exo_2, Montserrat } from "next/font/google";
 import "./globals.css";
 
-const display = Orbitron({
+const display = Exo_2({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["600", "700", "800"]
 });
 
-const body = Plus_Jakarta_Sans({
+const body = Montserrat({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"]
 });
 
+const siteUrl = "https://www.acroxtv.com.ar";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://acroxtv.com"),
-  title: "Acrox TV | Produccion Audiovisual",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Acrox TV | Produccion Audiovisual en Las Varillas, Cordoba",
+    template: "%s | Acrox TV"
+  },
   description:
-    "Acrox TV crea contenido audiovisual moderno: cobertura de eventos, edicion, branding visual y piezas para redes sociales.",
+    "Acrox TV es una consultora audiovisual de Las Varillas, Cordoba. Cobertura de eventos, books, cortos, streaming y produccion de contenido para marcas.",
+  keywords: [
+    "productora audiovisual",
+    "consultora audiovisual",
+    "Las Varillas",
+    "Cordoba",
+    "cobertura de eventos",
+    "books fotograficos",
+    "streaming",
+    "videos institucionales",
+    "produccion audiovisual"
+  ],
+  alternates: {
+    canonical: siteUrl
+  },
+  category: "business",
   icons: {
     icon: "/logo-acrox.svg",
     shortcut: "/logo-acrox.svg",
     apple: "/logo-acrox.svg"
   },
   openGraph: {
-    title: "Acrox TV",
-    description: "Produccion audiovisual para marcas, eventos y creadores.",
-    url: "https://acroxtv.com",
+    title: "Acrox TV | Produccion Audiovisual",
+    description:
+      "Produccion audiovisual para eventos, marcas y proyectos culturales en Las Varillas y Cordoba.",
+    url: siteUrl,
     siteName: "Acrox TV",
     locale: "es_AR",
     type: "website",
     images: [
       {
-        url: "/logo-acrox.svg",
-        width: 674,
-        height: 674,
-        alt: "Logo Acrox TV"
+        url: "/guillermo-chabrando.webp",
+        width: 1024,
+        height: 1024,
+        alt: "Acrox TV - Produccion Audiovisual"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Acrox TV",
-    description: "Produccion audiovisual para marcas, eventos y creadores.",
-    images: ["/logo-acrox.svg"]
+    title: "Acrox TV | Produccion Audiovisual",
+    description: "Produccion audiovisual para marcas, eventos y proyectos culturales.",
+    images: ["/guillermo-chabrando.webp"]
   }
 };
 

@@ -48,10 +48,46 @@ const footerNavLinks = [
 
 const mapsQuery = "Tucuman 32, X5941 Las Varillas, Cordoba, Argentina";
 const mapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(mapsQuery)}&output=embed`;
+const siteUrl = "https://www.acroxtv.com.ar";
 
 export default function HomePage() {
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Acrox TV",
+    url: siteUrl,
+    image: `${siteUrl}/guillermo-chabrando.webp`,
+    logo: `${siteUrl}/logo-acrox.svg`,
+    description:
+      "Consultora y productora audiovisual de Las Varillas, Cordoba. Cobertura de eventos, books, cortos, streaming y contenido para redes.",
+    areaServed: ["Las Varillas", "Cordoba", "Argentina"],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Tucuman 32",
+      addressLocality: "Las Varillas",
+      postalCode: "X5941",
+      addressRegion: "Cordoba",
+      addressCountry: "AR"
+    },
+    sameAs: [
+      env.instagramUrl,
+      env.youtubeUrl,
+      `https://wa.me/${env.whatsappNumber}`
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: env.contactEmail,
+      telephone: `+${env.whatsappNumber}`
+    }
+  };
+
   return (
     <div className="site-shell">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+      />
       <Navbar />
       <ScrollReveal />
 
