@@ -1,4 +1,5 @@
 import ContactForm from "@/components/ContactForm";
+import LiveStreamPanel from "@/components/LiveStreamPanel";
 import Navbar from "@/components/Navbar";
 import ScrollReveal from "@/components/ScrollReveal";
 import SocialCarousel from "@/components/SocialCarousel";
@@ -172,6 +173,9 @@ export default function HomePage() {
                 Ver YouTube
               </a>
             </div>
+          </div>
+          <div className="live-stream-wrap">
+            <LiveStreamPanel />
           </div>
           <div className="integrations-shell">
             <SocialCarousel />
