@@ -1,0 +1,48 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="40" x2="1120" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020B2D" />
+      <stop offset="0.5" stop-color="#051650" />
+      <stop offset="1" stop-color="#0B234F" />
+    </linearGradient>
+    <linearGradient id="accent" x1="186" y1="180" x2="1014" y2="450" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38EF7D" />
+      <stop offset="1" stop-color="#11998E" />
+    </linearGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" stroke="rgba(162,194,255,0.12)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+  <rect width="1200" height="630" rx="32" fill="url(#grid)" />
+  <rect x="78" y="78" width="1044" height="474" rx="28" fill="rgba(3,10,37,0.74)" stroke="rgba(143,171,255,0.18)" />
+
+  <rect x="134" y="132" width="196" height="36" rx="18" fill="rgba(17,153,142,0.14)" stroke="rgba(56,239,125,0.38)" />
+  <text x="232" y="156" fill="#E8F4FF" font-family="'Montserrat', Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="2">
+    ACROX
+  </text>
+
+  <text x="134" y="266" fill="#F6FAFF" font-family="'Exo 2', Arial, sans-serif" font-size="78" font-weight="800">
+    Productora
+  </text>
+  <text x="134" y="352" fill="#F6FAFF" font-family="'Exo 2', Arial, sans-serif" font-size="78" font-weight="800">
+    audiovisual
+  </text>
+  <text x="134" y="438" fill="url(#accent)" font-family="'Exo 2', Arial, sans-serif" font-size="78" font-weight="800">
+    para marcas y eventos
+  </text>
+
+  <text x="136" y="494" fill="#B4C6E8" font-family="'Montserrat', Arial, sans-serif" font-size="26" font-weight="500">
+    Cobertura, streaming, proyectos culturales y contenido con identidad visual.
+  </text>
+
+  <circle cx="960" cy="184" r="74" fill="rgba(56,239,125,0.12)" />
+  <circle cx="1002" cy="326" r="112" fill="rgba(95,157,255,0.14)" />
+  <circle cx="908" cy="420" r="56" fill="rgba(255,255,255,0.08)" />
+
+  <path d="M861 165L1040 165" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+  <path d="M861 470L1040 470" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+  <path d="M861 165L861 470" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+  <path d="M1040 165L1040 470" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+</svg>
