@@ -15,7 +15,7 @@ type InstagramMediaResponse = {
 
 export const fetchInstagramContent = async (limit: number): Promise<SocialContentItem[]> => {
   if (!env.instagramAccessToken || !env.instagramUserId) {
-    return [];
+    throw new Error("Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID");
   }
 
   const params = new URLSearchParams({
@@ -26,11 +26,14 @@ export const fetchInstagramContent = async (limit: number): Promise<SocialConten
 
   const response = await fetch(
     `https://graph.instagram.com/${env.instagramUserId}/media?${params.toString()}`,
-    { next: { revalidate: 300 } }
+    { cache: "no-store" }
   );
 
   if (!response.ok) {
-    throw new Error(`Instagram API error: ${response.status}`);
+    const body = await response.text().catch(() => "");
+    throw new Error(
+      `Instagram API error: ${response.status}${body ? ` - ${body.slice(0, 400)}` : ""}`
+    );
   }
 
   const data = (await response.json()) as InstagramMediaResponse;
@@ -59,7 +62,7 @@ export const fetchInstagramContent = async (limit: number): Promise<SocialConten
         url: item.permalink,
         thumbnailUrl,
         publishedAt: item.timestamp,
-        previewVideoUrl: item.media_type === "VIDEO" ? item.media_url : undefined
+        mediaType: item.media_type
       } satisfies SocialContentItem;
     })
     .filter((item): item is SocialContentItem => item !== null);

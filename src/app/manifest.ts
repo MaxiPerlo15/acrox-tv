@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/domain/site-config";
-
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    id: "/",
     name: "Acrox",
     short_name: "Acrox",
     description:
@@ -13,11 +12,10 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#05070e",
     icons: [
       {
-        src: "/logo-acrox-icon-192.png",
-        sizes: "192x192",
-        type: "image/png"
+        src: "/logo-acrox.svg",
+        sizes: "any",
+        type: "image/svg+xml"
       }
-    ],
-    id: SITE_URL
+    ]
   };
 }

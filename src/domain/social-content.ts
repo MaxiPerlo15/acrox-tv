@@ -7,5 +7,6 @@ export type SocialContentItem = {
   url: string;
   thumbnailUrl: string;
   publishedAt: string;
+  mediaType?: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
   previewVideoUrl?: string;
 };

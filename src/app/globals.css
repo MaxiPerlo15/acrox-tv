@@ -1474,6 +1474,34 @@ a {
   background: #000;
 }
 
+.social-image-error {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  color: rgba(238, 245, 255, 0.92);
+  background:
+    radial-gradient(circle at 50% 38%, rgba(165, 71, 255, 0.26), transparent 28%),
+    linear-gradient(180deg, rgba(7, 10, 20, 0.7), rgba(5, 7, 14, 0.96));
+}
+
+.social-image-error svg {
+  width: 38px;
+  height: 38px;
+}
+
+.social-image-error span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .platform-block.youtube .social-image-wrap img,
 .platform-block.instagram .social-image-wrap img {
   object-fit: contain;

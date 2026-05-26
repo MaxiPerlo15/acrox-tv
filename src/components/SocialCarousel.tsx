@@ -25,7 +25,6 @@ type SocialCarouselProps = {
 type PreviewState = {
   id: string;
   title: string;
-  kind: "video" | "embed";
   embedUrl: string;
 } | null;
 
@@ -35,15 +34,6 @@ const getYouTubeEmbedUrl = (url: string): string | null => {
     const videoId = parsed.searchParams.get("v");
     if (!videoId) return null;
     return `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
-  } catch {
-    return null;
-  }
-};
-
-const getInstagramEmbedUrl = (url: string): string | null => {
-  try {
-    const normalized = url.endsWith("/") ? url.slice(0, -1) : url;
-    return `${normalized}/embed/`;
   } catch {
     return null;
   }
@@ -65,6 +55,7 @@ const SocialCarousel = ({
   const [current, setCurrent] = useState(0);
   const [preview, setPreview] = useState<PreviewState>(null);
   const [previewLoadingId, setPreviewLoadingId] = useState<string | null>(null);
+  const [imageFailures, setImageFailures] = useState<Record<string, true>>({});
   const [isHovering, setIsHovering] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -172,7 +163,7 @@ const SocialCarousel = ({
   }
 
   const togglePreview = (item: SocialContentItem, index: number) => {
-    if (isTouchDevice) {
+    if (platform === "instagram" || isTouchDevice) {
       window.open(item.url, "_blank", "noopener,noreferrer");
       return;
     }
@@ -183,15 +174,7 @@ const SocialCarousel = ({
       return;
     }
 
-    let kind: "video" | "embed" = "embed";
-    let sourceUrl: string | null = null;
-
-    if (platform === "instagram" && item.previewVideoUrl) {
-      kind = "video";
-      sourceUrl = item.previewVideoUrl;
-    } else {
-      sourceUrl = platform === "youtube" ? getYouTubeEmbedUrl(item.url) : getInstagramEmbedUrl(item.url);
-    }
+    const sourceUrl = getYouTubeEmbedUrl(item.url);
 
     if (!sourceUrl) return;
     setCurrent(index);
@@ -199,7 +182,6 @@ const SocialCarousel = ({
     setPreview({
       id: item.id,
       title: item.title,
-      kind,
       embedUrl: sourceUrl
     });
   };
@@ -265,49 +247,60 @@ const SocialCarousel = ({
                 className="social-card-trigger"
                 onClick={() => togglePreview(item, index)}
                 aria-pressed={activePreview?.id === item.id}
-                aria-label={isTouchDevice ? `Abrir ${item.title} en ${title}` : `Reproducir ${item.title}`}
+                aria-label={platform === "instagram" || isTouchDevice ? `Abrir ${item.title} en ${title}` : `Reproducir ${item.title}`}
               >
                 <div className={activePreview?.id === item.id ? "social-image-wrap is-previewing" : "social-image-wrap"}>
                   <span className={`media-platform-badge ${platform}`}>{title}</span>
                   {activePreview?.id === item.id ? (
                     <>
-                      {activePreview.kind === "video" ? (
-                        <video
-                          src={activePreview.embedUrl}
-                          controls
-                          autoPlay
-                          playsInline
-                          preload="metadata"
-                          onLoadedData={() => setPreviewLoadingId(null)}
-                        />
-                      ) : (
-                        <iframe
-                          src={activePreview.embedUrl}
-                          title={activePreview.title}
-                          loading="lazy"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                          onLoad={() => setPreviewLoadingId(null)}
-                        />
-                      )}
+                      <iframe
+                        src={activePreview.embedUrl}
+                        title={activePreview.title}
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        onLoad={() => setPreviewLoadingId(null)}
+                      />
                       {previewLoadingId === item.id ? <span className="preview-loading">Cargando...</span> : null}
                     </>
                   ) : (
                     <>
-                      <Image
-                        src={item.thumbnailUrl}
-                        alt={item.title}
-                        fill
-                        sizes="(max-width: 900px) 100vw, (max-width: 1400px) 50vw, 620px"
-                        priority={index === 0}
-                        loading={index === 0 ? "eager" : "lazy"}
-                      />
-                      <span className="inline-play-badge">Reproducir</span>
+                      {platform === "instagram" && imageFailures[item.id] ? (
+                        <span className="social-image-error" aria-hidden="true">
+                          <InstagramIcon />
+                          <span>Vista previa no disponible</span>
+                        </span>
+                      ) : (
+                        <Image
+                          src={item.thumbnailUrl}
+                          alt={item.title}
+                          fill
+                          sizes="(max-width: 900px) 100vw, (max-width: 1400px) 50vw, 620px"
+                          priority={index === 0}
+                          loading={index === 0 ? "eager" : "lazy"}
+                          unoptimized={platform === "instagram"}
+                          onError={() => {
+                            if (platform !== "instagram") return;
+                            setImageFailures((prev) => {
+                              if (prev[item.id]) return prev;
+                              return {
+                                ...prev,
+                                [item.id]: true
+                              };
+                            });
+                          }}
+                        />
+                      )}
+                      <span className="inline-play-badge">
+                        {platform === "instagram" ? "Ver en Instagram" : "Reproducir"}
+                      </span>
                     </>
                   )}
                 </div>
                 <span className="sr-only">
-                  Presiona Enter o Espacio para reproducir. Presiona Escape para cerrar.
+                  {platform === "instagram"
+                    ? "Presiona Enter o Espacio para abrir el contenido en Instagram."
+                    : "Presiona Enter o Espacio para reproducir. Presiona Escape para cerrar."}
                 </span>
               </button>
             </article>
