@@ -12,6 +12,7 @@
     "test:e2e:firefox": "playwright test --project=firefox",
     "test:e2e:webkit": "playwright test --project=webkit",
     "test:e2e:mobile": "playwright test --project=mobile",
+    "test:contracts": "playwright test --config=playwright.contracts.config.ts tests/e2e/acroxtv-contracts.spec.ts",
     "perf:audit:local": "node scripts/lighthouse-audit.mjs --target=local",
     "perf:audit:preview": "node scripts/lighthouse-audit.mjs --target=preview",
     "perf:audit:report": "node scripts/lighthouse-audit.mjs --target=report"
