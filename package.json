@@ -12,7 +12,7 @@
     "test:e2e:firefox": "playwright test --project=firefox",
     "test:e2e:webkit": "playwright test --project=webkit",
     "test:e2e:mobile": "playwright test --project=mobile",
-    "test:contracts": "playwright test --config=playwright.contracts.config.ts tests/e2e/acroxtv-contracts.spec.ts",
+    "test:contracts": "NODE_OPTIONS=--conditions=react-server playwright test --config=playwright.contracts.config.ts",
     "perf:audit:local": "node scripts/lighthouse-audit.mjs --target=local",
     "perf:audit:preview": "node scripts/lighthouse-audit.mjs --target=preview",
     "perf:audit:report": "node scripts/lighthouse-audit.mjs --target=report"
@@ -31,6 +31,7 @@
     "@types/react-dom": "^19.0.5",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.1.6",
+    "server-only": "^0.0.1",
     "typescript": "^5.9.3"
   }
 }

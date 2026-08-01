@@ -58,7 +58,7 @@ test.describe("Acrox TV program registry contract", () => {
     expect(nextConfig.turbopack?.root).toBe(resolve(process.cwd()));
   });
 
-  test("documents the registry contract and collision inputs", () => {
+  test("documents the registry and server-only program media adapter contracts", () => {
     const readme = readFileSync(resolve(process.cwd(), "README.md"), "utf8");
 
     expect(readme).toContain("`PROGRAMS`");
@@ -68,5 +68,9 @@ test.describe("Acrox TV program registry contract", () => {
     expect(readme).toContain("reserved segments");
     expect(readme).toContain("static route segments");
     expect(readme).toContain("public-root paths");
+    expect(readme).toContain("`PROGRAM_MEDIA_SOURCES`");
+    expect(readme).toContain("`fetchProgramYouTubeFeed`");
+    expect(readme).toContain("server-only");
+    expect(readme).toContain("no deben llegar desde el navegador");
   });
 });

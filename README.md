@@ -37,6 +37,12 @@ const href = programPath(slug); // "/alta-data"
 
 `assertProgramRegistry` recibe `programs`, `staticRouteSegments` y `publicRootPaths`; valida que cada slug use kebab-case, sea único y no colisione con reserved segments, static route segments o public-root paths. Los dos últimos inputs deben obtenerse de los directorios inmediatos de `src/app` y de las rutas raíz de `public`, respectivamente, para que una ruta o asset nuevo no vuelva inaccesible un programa.
 
+## Contrato de fuentes de medios por programa
+
+`src/infrastructure/program-media-sources.ts` es un módulo server-only que exporta `PROGRAM_MEDIA_SOURCES`. Su registro exhaustivo asigna a cada `ProgramSlug` únicamente su fuente de YouTube autorizada; los identificadores de playlist no deben llegar desde el navegador ni provenir de parámetros públicos.
+
+`fetchProgramYouTubeFeed` recibe una fuente `ProgramYouTubeSource` del registro y devuelve solamente los episodios normalizados de su playlist. Los consumidores deben resolver la fuente en el servidor y propagar errores del proveedor sin sustituir contenido de otro programa. La protección por cuota de una fuente programática está aislada de la alimentación legacy de Acrox TV.
+
 ## Scripts
 - `npm run dev`
 - `npm run build`

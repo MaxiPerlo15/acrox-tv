@@ -1,6 +1,7 @@
 import { env } from "@/lib/env";
 import type { EpisodeItem, LiveItem } from "@/domain/acroxtv-feed";
 import { getSWRResource } from "@/infrastructure/swr-cache";
+import type { ProgramYouTubeSource } from "@/infrastructure/program-media-sources";
 
 type YouTubeSearchResponse = {
   items?: Array<{
@@ -70,7 +71,17 @@ export class YouTubeApiError extends Error {
   }
 }
 
-const throwYouTubeApiError = async (response: Response, context: string): Promise<never> => {
+type QuotaCooldown = {
+  block: () => void;
+  clear: () => void;
+  isBlocked: () => boolean;
+};
+
+const throwYouTubeApiError = async (
+  response: Response,
+  context: string,
+  quotaCooldown: QuotaCooldown
+): Promise<never> => {
   let reason: string | undefined;
   let message = `YouTube API error (${context}): ${response.status}`;
 
@@ -89,7 +100,7 @@ const throwYouTubeApiError = async (response: Response, context: string): Promis
   }
 
   if (reason === "quotaExceeded") {
-    quotaBlockedUntil = Date.now() + YOUTUBE_QUOTA_COOLDOWN_MS;
+    quotaCooldown.block();
   }
 
   throw new YouTubeApiError(message, response.status, reason);
@@ -117,12 +128,27 @@ const ACROX_TV_LIVE_CACHE_KEY = "yt:acroxtv:live";
 const ACROX_TV_PROGRAM_CACHE_KEY = "yt:acroxtv:program";
 
 let quotaBlockedUntil = 0;
+const programQuotaBlockedUntilByPlaylist = new Map<string, number>();
 
-const isQuotaBlocked = (): boolean => Date.now() < quotaBlockedUntil;
-
-const clearQuotaCooldown = () => {
-  quotaBlockedUntil = 0;
+const legacyQuotaCooldown: QuotaCooldown = {
+  isBlocked: () => Date.now() < quotaBlockedUntil,
+  block: () => {
+    quotaBlockedUntil = Date.now() + YOUTUBE_QUOTA_COOLDOWN_MS;
+  },
+  clear: () => {
+    quotaBlockedUntil = 0;
+  }
 };
+
+const getProgramQuotaCooldown = (playlistId: string): QuotaCooldown => ({
+  isBlocked: () => Date.now() < (programQuotaBlockedUntilByPlaylist.get(playlistId) ?? 0),
+  block: () => {
+    programQuotaBlockedUntilByPlaylist.set(playlistId, Date.now() + YOUTUBE_QUOTA_COOLDOWN_MS);
+  },
+  clear: () => {
+    programQuotaBlockedUntilByPlaylist.delete(playlistId);
+  }
+});
 
 const getCordobaFridayWindow = () => {
   const formatter = new Intl.DateTimeFormat("en-US", {
@@ -179,6 +205,18 @@ const mapDetailsToEpisode = (item: YouTubeVideoDetails, viewCount: number): Epis
   viewCount
 });
 
+export const fetchProgramYouTubeFeed = async (
+  source: ProgramYouTubeSource
+): Promise<EpisodeItem[]> => {
+  const quotaCooldown = getProgramQuotaCooldown(source.playlistId);
+  const videoIds = await fetchPlaylistVideoIds(source.playlistId, quotaCooldown);
+  const details = await fetchYouTubeVideoDetailsWithStats(videoIds.slice(0, 50), quotaCooldown);
+
+  return details
+    .filter((item) => item.durationSeconds >= STREAM_MIN_DURATION_SECONDS)
+    .map((item) => mapDetailsToEpisode(item, item.viewCount));
+};
+
 const fetchCurrentYouTubeLive = async (): Promise<LiveItem | null> => {
   if (!env.youtubeApiKey || !env.youtubeChannelId) {
     return null;
@@ -193,7 +231,7 @@ const fetchCurrentYouTubeLive = async (): Promise<LiveItem | null> => {
     maxResults: "1"
   });
 
-  if (isQuotaBlocked()) {
+  if (legacyQuotaCooldown.isBlocked()) {
     throw createQuotaExceededError("search-live-feed");
   }
 
@@ -202,9 +240,9 @@ const fetchCurrentYouTubeLive = async (): Promise<LiveItem | null> => {
     { cache: "no-store" }
   );
   if (!liveResponse.ok) {
-    await throwYouTubeApiError(liveResponse, "search-live-feed");
+    await throwYouTubeApiError(liveResponse, "search-live-feed", legacyQuotaCooldown);
   }
-  clearQuotaCooldown();
+  legacyQuotaCooldown.clear();
 
   const liveData = (await liveResponse.json()) as YouTubeSearchResponse;
   const liveItem = liveData.items?.[0];
@@ -225,9 +263,12 @@ const fetchCurrentYouTubeLive = async (): Promise<LiveItem | null> => {
   };
 };
 
-const fetchPlaylistVideoIds = async (playlistId: string): Promise<string[]> => {
+const fetchPlaylistVideoIds = async (
+  playlistId: string,
+  quotaCooldown: QuotaCooldown = legacyQuotaCooldown
+): Promise<string[]> => {
   if (!env.youtubeApiKey) return [];
-  if (isQuotaBlocked()) {
+  if (quotaCooldown.isBlocked()) {
     throw createQuotaExceededError("playlist-items");
   }
 
@@ -243,9 +284,9 @@ const fetchPlaylistVideoIds = async (playlistId: string): Promise<string[]> => {
     { cache: "no-store" }
   );
   if (!response.ok) {
-    await throwYouTubeApiError(response, "playlist-items");
+    await throwYouTubeApiError(response, "playlist-items", quotaCooldown);
   }
-  clearQuotaCooldown();
+  quotaCooldown.clear();
 
   const data = (await response.json()) as YouTubePlaylistItemsResponse;
   return (data.items ?? [])
@@ -254,10 +295,11 @@ const fetchPlaylistVideoIds = async (playlistId: string): Promise<string[]> => {
 };
 
 const fetchYouTubeVideoDetailsWithStats = async (
-  videoIds: string[]
+  videoIds: string[],
+  quotaCooldown: QuotaCooldown = legacyQuotaCooldown
 ): Promise<Array<YouTubeVideoDetails & { viewCount: number }>> => {
   if (videoIds.length === 0 || !env.youtubeApiKey) return [];
-  if (isQuotaBlocked()) {
+  if (quotaCooldown.isBlocked()) {
     throw createQuotaExceededError("videos-playlist-details");
   }
 
@@ -273,9 +315,9 @@ const fetchYouTubeVideoDetailsWithStats = async (
     { cache: "no-store" }
   );
   if (!detailsResponse.ok) {
-    await throwYouTubeApiError(detailsResponse, "videos-playlist-details");
+    await throwYouTubeApiError(detailsResponse, "videos-playlist-details", quotaCooldown);
   }
-  clearQuotaCooldown();
+  quotaCooldown.clear();
 
   const detailsData = (await detailsResponse.json()) as YouTubeVideoDetailsWithStatsResponse;
 
@@ -424,7 +466,7 @@ export const fetchAcroxTvYouTubeFeed = async (): Promise<{
   } catch (error) {
     hasError = true;
     if (error instanceof YouTubeApiError && error.reason === "quotaExceeded") {
-      quotaBlockedUntil = Date.now() + YOUTUBE_QUOTA_COOLDOWN_MS;
+      legacyQuotaCooldown.block();
       warnings.push("YouTube live sin datos por cuota excedida.");
     } else {
       warnings.push("YouTube live sin datos por error de API.");
@@ -446,7 +488,7 @@ export const fetchAcroxTvYouTubeFeed = async (): Promise<{
   } catch (error) {
     hasError = true;
     if (error instanceof YouTubeApiError && error.reason === "quotaExceeded") {
-      quotaBlockedUntil = Date.now() + YOUTUBE_QUOTA_COOLDOWN_MS;
+      legacyQuotaCooldown.block();
       warnings.push("YouTube episodios sin datos por cuota excedida.");
     } else {
       warnings.push("YouTube episodios sin datos por error de API.");
