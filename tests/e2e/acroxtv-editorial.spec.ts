@@ -77,3 +77,100 @@ test.describe("Acrox TV direct program routes", () => {
     }
   });
 });
+
+test.describe("Acrox TV editorial directory", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route("**/api/acroxtv-feed", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          liveItem: null,
+          latestEpisode: null,
+          topEpisode: null,
+          episodes: [],
+          instagram: [],
+          youtubeError: true,
+          instagramError: true
+        })
+      });
+    });
+  });
+
+  test("renders equally prominent canonical program covers and keeps the approved-only ribbon off program pages", async ({ page }) => {
+    await page.goto("/");
+
+    const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+    const covers = directory.locator("[data-program-cover]");
+    await expect(covers).toHaveCount(2);
+    await expect(covers.nth(0)).toHaveAttribute("href", "/alta-data");
+    await expect(covers.nth(1)).toHaveAttribute("href", "/mas-que-nutricion");
+    const [altaDataBox, nutritionBox] = await Promise.all([covers.nth(0).boundingBox(), covers.nth(1).boundingBox()]);
+    expect(altaDataBox?.width).toBe(nutritionBox?.width);
+    expect(altaDataBox?.height).toBe(nutritionBox?.height);
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toBeVisible();
+
+    await page.goto("/alta-data");
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
+  });
+
+  test("reaches and activates each editorial cover through Tab navigation", async ({ page }) => {
+    for (const program of PROGRAMS) {
+      await page.goto("/");
+      await page.locator("body").press("Control+Home");
+
+      let reachedCover = false;
+      for (let tabPresses = 0; tabPresses < 20; tabPresses += 1) {
+        await page.keyboard.press("Tab");
+        if ((await page.locator(":focus").getAttribute("href")) === `/${program.slug}`) {
+          reachedCover = true;
+          break;
+        }
+      }
+
+      expect(reachedCover).toBe(true);
+      await page.keyboard.press("Enter");
+      await expect(page).toHaveURL(new RegExp(`/${program.slug}$`));
+    }
+  });
+
+  test("shows a visible program fallback when artwork fails to load", async ({ page }) => {
+    await page.route("**/_next/image?url=%2Falta-data-logo.png**", (route) => route.abort());
+    await page.goto("/");
+
+    const altaDataCover = page.getByRole("link", { name: /Alta Data ¡Te Tire!/ });
+    await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toBeVisible();
+  });
+
+  test("reserves an empty sponsor ribbon without rendering sponsor items", async ({ page }) => {
+    await page.goto("/");
+
+    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
+    await expect(ribbon.getByText("Espacio reservado para aliados aprobados")).toBeVisible();
+    await expect(ribbon.getByRole("listitem")).toHaveCount(0);
+  });
+
+  test("keeps legacy media, live, and feed content out of the home directory", async ({ page }) => {
+    await page.goto("/");
+
+    const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+    await expect(directory).not.toContainText("EN VIVO");
+    await expect(directory).not.toContainText("Últimos episodios");
+    await expect(directory).not.toContainText("Instagram");
+    await expect(directory).not.toContainText("YouTube");
+    await expect(directory.locator("video, audio, iframe, picture, source")).toHaveCount(0);
+  });
+
+  test("keeps both covers available and readable on mobile @mobile", async ({ page }) => {
+    await page.goto("/");
+
+    const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+    const altaDataCover = directory.getByRole("link", { name: /Alta Data ¡Te Tire!/ });
+    const nutritionCover = directory.getByRole("link", { name: /Más que Nutrición/ });
+    await expect(altaDataCover).toBeVisible();
+    await expect(nutritionCover).toBeVisible();
+    const [altaDataBox, nutritionBox] = await Promise.all([altaDataCover.boundingBox(), nutritionCover.boundingBox()]);
+    expect(altaDataBox?.x).toBe(nutritionBox?.x);
+    expect(nutritionBox?.y).toBeGreaterThan(altaDataBox?.y ?? 0);
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toBeVisible();
+  });
+});

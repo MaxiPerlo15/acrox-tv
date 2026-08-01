@@ -1,23 +1,34 @@
 export type Program = {
   slug: string;
   name: string;
+  summary: string;
+  coverLogoSrc?: string;
 };
 
 export const RESERVED_TOP_LEVEL_SEGMENTS = ["api", "privacy", "proyectos", "terms"] as const;
 
 export const PROGRAMS = [
-  { slug: "alta-data", name: "Alta Data ¡Te Tire!" },
-  { slug: "mas-que-nutricion", name: "Más que Nutrición" }
+  {
+    slug: "alta-data",
+    name: "Alta Data ¡Te Tire!",
+    summary: "Conversaciones, música y voces de la región.",
+    coverLogoSrc: "/alta-data-logo.png"
+  },
+  {
+    slug: "mas-que-nutricion",
+    name: "Más que Nutrición",
+    summary: "Bienestar, hábitos y conocimiento para todos los días."
+  }
 ] as const satisfies readonly Program[];
 
 export type ProgramSlug = (typeof PROGRAMS)[number]["slug"];
 
 const SLUG_PATTERN = /^[a-z]+(?:-[a-z]+)*$/;
 
-export const programPath = (slug: ProgramSlug) => `/${slug}`;
+export const programPath = (slug: string) => `/${slug}`;
 
 export const assertProgramRegistry = (
-  programs: readonly Program[],
+  programs: readonly { slug: string }[],
   staticRouteSegments: readonly string[] = [],
   publicRootPaths: readonly string[] = []
 ) => {
