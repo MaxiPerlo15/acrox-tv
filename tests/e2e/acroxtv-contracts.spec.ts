@@ -52,13 +52,14 @@ test.describe("Acrox TV program registry contract", () => {
 
   test("forbids focused tests in every Playwright run", () => {
     expect(playwrightConfig.forbidOnly).toBe(true);
+    expect(playwrightConfig).toMatchObject({ use: { baseURL: "http://127.0.0.1:3015" }, webServer: { url: "http://127.0.0.1:3015", reuseExistingServer: false } });
   });
 
   test("pins Turbopack to this absolute project root", () => {
     expect(nextConfig.turbopack?.root).toBe(resolve(process.cwd()));
   });
 
-  test("documents the registry and server-only program media adapter contracts", () => {
+  test("documents the registry, media adapter, and scoped feed HTTP contracts", () => {
     const readme = readFileSync(resolve(process.cwd(), "README.md"), "utf8");
 
     expect(readme).toContain("`PROGRAMS`");
@@ -72,5 +73,11 @@ test.describe("Acrox TV program registry contract", () => {
     expect(readme).toContain("`fetchProgramYouTubeFeed`");
     expect(readme).toContain("server-only");
     expect(readme).toContain("no deben llegar desde el navegador");
+    expect(readme).toContain("`GET /api/acroxtv-feed/[slug]`");
+    expect(readme).toContain("`available`");
+    expect(readme).toContain("`stale`");
+    expect(readme).toContain("`error`");
+    expect(readme).toContain("`unavailable`");
+    expect(readme).toContain("`Cache-Control: private, no-store, max-age=0`");
   });
 });

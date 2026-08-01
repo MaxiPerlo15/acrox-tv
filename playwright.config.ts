@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const port = "3015";
+const baseURL = `http://127.0.0.1:${port}`;
+
 export default defineConfig({
   testDir: "./tests/e2e",
   forbidOnly: true,
@@ -10,15 +13,15 @@ export default defineConfig({
   },
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     video: "retain-on-failure"
   },
   webServer: {
-    command: "npm run dev",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: true,
+    command: `npm run dev -- -p ${port}`,
+    url: baseURL,
+    reuseExistingServer: false,
     timeout: 120_000
   },
   projects: [

@@ -28,3 +28,18 @@ export type AcroxTvFeedResponse = {
   youtubeError: boolean;
   instagramError: boolean;
 };
+
+export type SourceState = "available" | "unavailable" | "stale" | "error";
+
+export type MediaSurface<T> =
+  | { state: "available"; items: T; asOf: string }
+  | { state: "stale"; items: T; asOf: string }
+  | { state: "unavailable" }
+  | { state: "error" };
+
+export type ProgramFeedResponse = {
+  programSlug: string;
+  episodes: MediaSurface<EpisodeItem[]>;
+  instagram: MediaSurface<SocialContentItem[]>;
+  live: MediaSurface<LiveItem | null>;
+};

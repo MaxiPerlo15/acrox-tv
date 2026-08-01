@@ -43,6 +43,10 @@ const href = programPath(slug); // "/alta-data"
 
 `fetchProgramYouTubeFeed` recibe una fuente `ProgramYouTubeSource` del registro y devuelve solamente los episodios normalizados de su playlist. Los consumidores deben resolver la fuente en el servidor y propagar errores del proveedor sin sustituir contenido de otro programa. La protección por cuota de una fuente programática está aislada de la alimentación legacy de Acrox TV.
 
+## API pública de medios por programa
+
+`GET /api/acroxtv-feed/[slug]` accepts a registered slug only; unknown slugs return body-less `404`; every response uses `Cache-Control: private, no-store, max-age=0`. A `200` payload has `programSlug`, `episodes`, `instagram`, and `live`; a surface is `available` or `stale` with `items` and cache-derived `asOf`, `error` without fallback content, or `unavailable` (`instagram` and `live` currently are `unavailable`).
+
 ## Scripts
 - `npm run dev`
 - `npm run build`
