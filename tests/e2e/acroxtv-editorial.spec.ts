@@ -45,6 +45,36 @@ test.describe("Acrox TV direct program routes", () => {
     }
   });
 
+  test("keeps direct program media scoped while Navbar uses the legacy feed", async ({ page }) => {
+    let unscopedRequestCount = 0;
+    const scopedRequestPaths: string[] = [];
+
+    await page.route("**/api/acroxtv-feed", async (route) => {
+      unscopedRequestCount += 1;
+      await route.fulfill({ status: 500 });
+    });
+    await page.route("**/api/acroxtv-feed/*", async (route) => {
+      scopedRequestPaths.push(new URL(route.request().url()).pathname);
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          programSlug: route.request().url().endsWith("/alta-data") ? "alta-data" : "mas-que-nutricion",
+          episodes: { state: "unavailable" },
+          instagram: { state: "unavailable" },
+          live: { state: "unavailable" }
+        })
+      });
+    });
+
+    for (const program of PROGRAMS) {
+      await page.goto(`/${program.slug}`);
+      await expect(page.getByRole("heading", { level: 1, name: program.name })).toBeVisible();
+    }
+
+    expect(unscopedRequestCount).toBe(PROGRAMS.length);
+    expect(scopedRequestPaths).toEqual(PROGRAMS.map((program) => `/api/acroxtv-feed/${program.slug}`));
+  });
+
   test("presents an available program feed without sibling media", async ({ page }) => {
     await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
       await route.fulfill({
@@ -234,12 +264,20 @@ test.describe("Acrox TV editorial directory", () => {
   });
 
   test("shows a visible program fallback when artwork fails to load", async ({ page }) => {
+    await page.route("**/alta-data-logo.png", async (route) => {
+      await route.fulfill({
+        status: 404,
+        contentType: "text/plain",
+        body: "Artwork unavailable"
+      });
+    });
+    const artworkRequest = page.waitForRequest("**/alta-data-logo.png");
+
     await page.goto("/");
 
     const altaDataCover = page.getByRole("link", { name: /Alta Data ¡Te Tire!/ });
-    const artwork = altaDataCover.locator("img");
-    await expect(artwork).toBeVisible();
-    await artwork.dispatchEvent("error");
+    await altaDataCover.scrollIntoViewIfNeeded();
+    await artworkRequest;
     await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toBeVisible();
   });
 

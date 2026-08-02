@@ -2,6 +2,13 @@ import { defineConfig, devices } from "@playwright/test";
 
 const port = "3015";
 const baseURL = `http://127.0.0.1:${port}`;
+const publicEnvironment = {
+  NEXT_PUBLIC_WHATSAPP_NUMBER: "5491100000000",
+  NEXT_PUBLIC_CONTACT_EMAIL: "contact@example.com",
+  NEXT_PUBLIC_INSTAGRAM_URL: "https://instagram.com/example",
+  NEXT_PUBLIC_TIKTOK_URL: "https://tiktok.com/@example",
+  NEXT_PUBLIC_YOUTUBE_URL: "https://youtube.com/@example"
+};
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -19,7 +26,12 @@ export default defineConfig({
     video: "retain-on-failure"
   },
   webServer: {
-    command: `npm run dev -- -p ${port}`,
+    command: `npm run build && npm run start -- -p ${port}`,
+    env: {
+      ...process.env,
+      ...publicEnvironment,
+      NODE_ENV: "production"
+    },
     url: baseURL,
     reuseExistingServer: false,
     timeout: 120_000

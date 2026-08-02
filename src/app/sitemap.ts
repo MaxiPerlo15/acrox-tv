@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { PROGRAMS, programPath } from "@/domain/programs";
 import { SITE_URL } from "@/domain/site-config";
 
 const baseUrl = SITE_URL;
@@ -13,6 +14,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1
     },
+    ...PROGRAMS.map((program) => ({
+      url: `${baseUrl}${programPath(program.slug)}`,
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.8
+    })),
     {
       url: `${baseUrl}/privacy`,
       lastModified,

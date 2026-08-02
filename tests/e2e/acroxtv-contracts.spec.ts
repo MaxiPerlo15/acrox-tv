@@ -3,6 +3,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import playwrightConfig from "../../playwright.config";
 import nextConfig from "../../next.config";
+import sitemap from "@/app/sitemap";
 import {
   assertProgramRegistry,
   PROGRAMS,
@@ -31,6 +32,14 @@ test.describe("Acrox TV program registry contract", () => {
     expect(programPath("mas-que-nutricion")).toBe("/mas-que-nutricion");
   });
 
+  test("discovers every registered program through its direct canonical sitemap URL", () => {
+    const urls = sitemap().map((entry) => entry.url);
+
+    for (const program of PROGRAMS) {
+      expect(urls).toContain(`https://acrox.com.ar/${program.slug}`);
+    }
+  });
+
   test("rejects duplicate and reserved slugs", () => {
     expect(() => assertProgramRegistry([validProgram, validProgram])).toThrow(/unique/i);
     expect(() => assertProgramRegistry([{ ...validProgram, slug: "api" }])).toThrow(/reserved/i);
@@ -51,9 +60,16 @@ test.describe("Acrox TV program registry contract", () => {
     expect(() => assertProgramRegistry(PROGRAMS, staticRouteSegments, publicRootPaths)).not.toThrow();
   });
 
-  test("forbids focused tests in every Playwright run", () => {
+  test("runs the parallel browser suite against a fresh production server", () => {
     expect(playwrightConfig.forbidOnly).toBe(true);
-    expect(playwrightConfig).toMatchObject({ use: { baseURL: "http://127.0.0.1:3015" }, webServer: { url: "http://127.0.0.1:3015", reuseExistingServer: false } });
+    expect(playwrightConfig).toMatchObject({
+      use: { baseURL: "http://127.0.0.1:3015" },
+      webServer: {
+        command: "npm run build && npm run start -- -p 3015",
+        url: "http://127.0.0.1:3015",
+        reuseExistingServer: false
+      }
+    });
   });
 
   test("pins Turbopack to this absolute project root", () => {
