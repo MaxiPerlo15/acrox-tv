@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { Program } from "@/domain/programs";
 import { programPath } from "@/domain/programs";
 
@@ -12,18 +12,25 @@ type ProgramDirectoryCardProps = {
 
 export default function ProgramDirectoryCard({ program }: ProgramDirectoryCardProps) {
   const [isArtworkUnavailable, setIsArtworkUnavailable] = useState(false);
+  const inspectArtwork = useCallback((artwork: HTMLImageElement | null) => {
+    if (artwork?.complete && artwork.naturalWidth === 0) {
+      setIsArtworkUnavailable(true);
+    }
+  }, []);
 
   return (
-    <Link href={programPath(program.slug)} className="program-directory-card" data-program-cover>
+    <Link href={programPath(program.slug)} className="program-directory-card" data-program-cover tabIndex={0}>
       <div className="program-directory-card-art" aria-hidden="true">
         {program.coverLogoSrc && !isArtworkUnavailable ? (
           <Image
+            ref={inspectArtwork}
             src={program.coverLogoSrc}
             alt=""
             width={320}
             height={320}
             sizes="(max-width: 700px) 100vw, 50vw"
             className="program-directory-card-logo"
+            unoptimized
             onError={() => setIsArtworkUnavailable(true)}
           />
         ) : (

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   HOME_PROJECT_HIGHLIGHTS,
   PROJECT_CATEGORY_META
@@ -61,7 +62,7 @@ const HomeProjectsTeaser = () => {
           );
         })}
 
-        <a
+        <Link
           href="/proyectos"
           className="home-projects-teaser-card home-projects-teaser-card--cta"
           data-reveal
@@ -77,7 +78,7 @@ const HomeProjectsTeaser = () => {
             <span>Explorar proyectos</span>
             <span aria-hidden="true">→</span>
           </span>
-        </a>
+        </Link>
       </div>
     </section>
   );

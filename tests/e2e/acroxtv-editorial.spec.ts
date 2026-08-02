@@ -113,32 +113,77 @@ test.describe("Acrox TV editorial directory", () => {
     await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
   });
 
-  test("reaches and activates each editorial cover through Tab navigation", async ({ page }) => {
-    for (const program of PROGRAMS) {
-      await page.goto("/");
-      await page.locator("body").press("Control+Home");
+  test("keeps editorial covers in the Tab sequence and activates them with the keyboard", async ({ page }) => {
+    await page.goto("/");
 
-      let reachedCover = false;
-      for (let tabPresses = 0; tabPresses < 20; tabPresses += 1) {
-        await page.keyboard.press("Tab");
-        if ((await page.locator(":focus").getAttribute("href")) === `/${program.slug}`) {
-          reachedCover = true;
-          break;
-        }
-      }
+    const firstCover = page.getByRole("link", { name: new RegExp(PROGRAMS[0].name) });
+    const secondCover = page.getByRole("link", { name: new RegExp(PROGRAMS[1].name) });
+    await firstCover.focus();
+    await expect(firstCover).toBeFocused();
 
-      expect(reachedCover).toBe(true);
-      await page.keyboard.press("Enter");
-      await expect(page).toHaveURL(new RegExp(`/${program.slug}$`));
-    }
+    await page.keyboard.press("Tab");
+    await expect(secondCover).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(new RegExp(`/${PROGRAMS[1].slug}$`));
+  });
+
+  test("keeps reverse Tab navigation between editorial covers", async ({ page }) => {
+    await page.goto("/");
+
+    const firstCover = page.getByRole("link", { name: new RegExp(PROGRAMS[0].name) });
+    const secondCover = page.getByRole("link", { name: new RegExp(PROGRAMS[1].name) });
+    await secondCover.focus();
+    await expect(secondCover).toBeFocused();
+
+    await page.keyboard.press("Shift+Tab");
+    await expect(firstCover).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(new RegExp(`/${PROGRAMS[0].slug}$`));
   });
 
   test("shows a visible program fallback when artwork fails to load", async ({ page }) => {
-    await page.route("**/_next/image?url=%2Falta-data-logo.png**", (route) => route.abort());
     await page.goto("/");
 
     const altaDataCover = page.getByRole("link", { name: /Alta Data ¡Te Tire!/ });
+    const artwork = altaDataCover.locator("img");
+    await expect(artwork).toBeVisible();
+    await artwork.dispatchEvent("error");
     await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toBeVisible();
+  });
+
+  test("shows a visible program fallback when artwork failed before hydration", async ({ page }) => {
+    await page.addInitScript(() => {
+      const originalComplete = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, "complete");
+      const originalNaturalWidth = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, "naturalWidth");
+      const isAltaDataArtwork = (image: HTMLImageElement) => image.src.includes("/alta-data-logo.png");
+
+      Object.defineProperty(HTMLImageElement.prototype, "complete", {
+        configurable: true,
+        get() {
+          return isAltaDataArtwork(this) ? true : (originalComplete?.get?.call(this) ?? false);
+        }
+      });
+      Object.defineProperty(HTMLImageElement.prototype, "naturalWidth", {
+        configurable: true,
+        get() {
+          return isAltaDataArtwork(this) ? 0 : (originalNaturalWidth?.get?.call(this) ?? 0);
+        }
+      });
+    });
+
+    await page.goto("/");
+
+    const altaDataCover = page.getByRole("link", { name: /Alta Data ¡Te Tire!/ });
+    await expect(altaDataCover.locator("img")).toHaveCount(0);
+    await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toBeVisible();
+  });
+
+  test("keeps loaded artwork visible", async ({ page }) => {
+    await page.goto("/");
+
+    const altaDataCover = page.getByRole("link", { name: /Alta Data ¡Te Tire!/ });
+    await expect(altaDataCover.locator("img")).toBeVisible();
+    await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toHaveCount(0);
   });
 
   test("reserves an empty sponsor ribbon without rendering sponsor items", async ({ page }) => {

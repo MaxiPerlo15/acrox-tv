@@ -12,7 +12,8 @@ import {
 
 const validProgram: Program = {
   slug: "programa-prueba",
-  name: "Programa de prueba"
+  name: "Programa de prueba",
+  summary: "Resumen del programa de prueba."
 };
 
 const staticRouteSegments = readdirSync(resolve(process.cwd(), "src/app"), { withFileTypes: true })
