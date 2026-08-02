@@ -27,8 +27,8 @@ const publicRootPaths = readdirSync(resolve(process.cwd(), "public"), { withFile
 
 test.describe("Acrox TV program registry contract", () => {
   test("exposes the two canonical program paths", () => {
-    expect(PROGRAMS.map((program) => program.slug)).toEqual(["alta-data", "mas-que-nutricion"]);
-    expect(programPath("alta-data")).toBe("/alta-data");
+    expect(PROGRAMS.map((program) => program.slug)).toEqual(["alta-data-te-tire", "mas-que-nutricion"]);
+    expect(programPath("alta-data-te-tire")).toBe("/alta-data-te-tire");
     expect(programPath("mas-que-nutricion")).toBe("/mas-que-nutricion");
   });
 

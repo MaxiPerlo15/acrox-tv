@@ -62,7 +62,7 @@ test.afterEach(() => {
 
 test.describe("program YouTube provider contract", () => {
   test("selects Alta Data's exact playlist and normalizes its attributable episode", async () => {
-    const source = PROGRAM_MEDIA_SOURCES["alta-data"].youtube;
+    const source = PROGRAM_MEDIA_SOURCES["alta-data-te-tire"].youtube;
     const requests = respondForPlaylist(source, "alta-video", "Alta episode");
 
     const result = await fetchProgramYouTubeFeed(source);
@@ -112,7 +112,7 @@ test.describe("program YouTube provider contract", () => {
   });
 
   test("returns no episodes when the assigned playlist response is empty", async () => {
-    const source = PROGRAM_MEDIA_SOURCES["alta-data"].youtube;
+    const source = PROGRAM_MEDIA_SOURCES["alta-data-te-tire"].youtube;
     const requests: URL[] = [];
     globalThis.fetch = async (input) => {
       requests.push(new URL(input.toString()));
@@ -124,7 +124,7 @@ test.describe("program YouTube provider contract", () => {
   });
 
   test("ignores malformed playlist items without requesting video details", async () => {
-    const source = PROGRAM_MEDIA_SOURCES["alta-data"].youtube;
+    const source = PROGRAM_MEDIA_SOURCES["alta-data-te-tire"].youtube;
     const requests: URL[] = [];
     globalThis.fetch = async (input) => {
       requests.push(new URL(input.toString()));
@@ -136,7 +136,7 @@ test.describe("program YouTube provider contract", () => {
   });
 
   test("propagates a video-details failure after accepting its assigned playlist", async () => {
-    const source = PROGRAM_MEDIA_SOURCES["alta-data"].youtube;
+    const source = PROGRAM_MEDIA_SOURCES["alta-data-te-tire"].youtube;
     const requests: URL[] = [];
     globalThis.fetch = async (input) => {
       const requestUrl = new URL(input.toString());
@@ -159,7 +159,7 @@ test.describe("program YouTube provider contract", () => {
   });
 
   test("does not let a scoped quota failure block the legacy Acrox feed", async () => {
-    const source = PROGRAM_MEDIA_SOURCES["alta-data"].youtube;
+    const source = PROGRAM_MEDIA_SOURCES["alta-data-te-tire"].youtube;
     env.youtubeChannelId = "legacy-channel";
     env.youtubePlaylistId = "legacy-playlist";
     const requests: URL[] = [];

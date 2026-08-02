@@ -11,7 +11,7 @@ type ProgramMediaSource = {
 };
 
 export const PROGRAM_MEDIA_SOURCES = {
-  "alta-data": {
+  "alta-data-te-tire": {
     youtube: { playlistId: "PL0Nzx2OTlHZ_ZOlLPB6gPjhH88yFGIF_y" }
   },
   "mas-que-nutricion": {

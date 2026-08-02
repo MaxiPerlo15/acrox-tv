@@ -9,7 +9,7 @@ export const RESERVED_TOP_LEVEL_SEGMENTS = ["api", "privacy", "proyectos", "term
 
 export const PROGRAMS = [
   {
-    slug: "alta-data",
+    slug: "alta-data-te-tire",
     name: "Alta Data ¡Te Tire!",
     summary: "Conversaciones, música y voces de la región.",
     coverLogoSrc: "/alta-data-logo.png"

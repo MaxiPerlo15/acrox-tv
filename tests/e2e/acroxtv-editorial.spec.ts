@@ -40,9 +40,22 @@ test.describe("Acrox TV direct program routes", () => {
       await expect(page).toHaveTitle(new RegExp(program.name));
       await expect(page.getByRole("heading", { level: 1, name: program.name })).toBeVisible();
       await expect(page.getByAltText("Logo Acrox").first()).toBeVisible();
+      await expect(page.getByRole("contentinfo")).toBeVisible();
       await expect(page.getByRole("contentinfo")).toContainText("Acrox ©");
       await expect(page.getByRole("heading", { level: 2, name: "Episodios" })).toBeVisible();
+      await expect(
+        page.getByRole("contentinfo").getByLabel("Navegacion del pie de pagina").getByRole("link", { name: "Inicio" })
+      ).toHaveAttribute("href", "/#inicio");
     }
+  });
+
+  test("serves the canonical Alta URL and rejects the former direct alias", async ({ page }) => {
+    await page.goto("/alta-data-te-tire");
+    await expect(page.getByRole("heading", { level: 1, name: "Alta Data ¡Te Tire!" })).toBeVisible();
+
+    const response = await page.goto("/alta-data");
+    expect(response?.status()).toBe(404);
+    await expect(page.getByRole("heading", { level: 1, name: "Esta página no está disponible" })).toBeVisible();
   });
 
   test("keeps direct program media scoped while Navbar uses the legacy feed", async ({ page }) => {
@@ -58,7 +71,7 @@ test.describe("Acrox TV direct program routes", () => {
       await route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
-          programSlug: route.request().url().endsWith("/alta-data") ? "alta-data" : "mas-que-nutricion",
+          programSlug: route.request().url().endsWith("/alta-data-te-tire") ? "alta-data-te-tire" : "mas-que-nutricion",
           episodes: { state: "unavailable" },
           instagram: { state: "unavailable" },
           live: { state: "unavailable" }
@@ -76,11 +89,11 @@ test.describe("Acrox TV direct program routes", () => {
   });
 
   test("presents an available program feed without sibling media", async ({ page }) => {
-    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
       await route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
-          programSlug: "alta-data",
+          programSlug: "alta-data-te-tire",
           episodes: {
             state: "available",
             asOf: "2026-08-01T12:00:00.000Z",
@@ -102,7 +115,7 @@ test.describe("Acrox TV direct program routes", () => {
       });
     });
 
-    await page.goto("/alta-data");
+    await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
     await expect(main.getByRole("heading", { name: "Episodios" })).toBeVisible();
@@ -112,11 +125,11 @@ test.describe("Acrox TV direct program routes", () => {
   });
 
   test("labels stale media and keeps its zero-item state honest", async ({ page }) => {
-    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
       await route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
-          programSlug: "alta-data",
+          programSlug: "alta-data-te-tire",
           episodes: {
             state: "stale",
             asOf: "2026-07-31T12:00:00.000Z",
@@ -128,7 +141,7 @@ test.describe("Acrox TV direct program routes", () => {
       });
     });
 
-    await page.goto("/alta-data");
+    await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
     await expect(main.getByText("Este contenido puede no estar actualizado.")).toBeVisible();
@@ -136,11 +149,11 @@ test.describe("Acrox TV direct program routes", () => {
   });
 
   test("keeps an available zero-item feed honest", async ({ page }) => {
-    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
       await route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
-          programSlug: "alta-data",
+          programSlug: "alta-data-te-tire",
           episodes: {
             state: "available",
             asOf: "2026-08-01T12:00:00.000Z",
@@ -152,7 +165,7 @@ test.describe("Acrox TV direct program routes", () => {
       });
     });
 
-    await page.goto("/alta-data");
+    await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
     await expect(main.getByText("No hay episodios atribuidos a este programa.")).toBeVisible();
@@ -160,11 +173,11 @@ test.describe("Acrox TV direct program routes", () => {
   });
 
   test("explains unavailable and failed media without claiming that items exist", async ({ page }) => {
-    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
       await route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
-          programSlug: "alta-data",
+          programSlug: "alta-data-te-tire",
           episodes: { state: "unavailable" },
           instagram: { state: "error" },
           live: { state: "unavailable" }
@@ -172,7 +185,7 @@ test.describe("Acrox TV direct program routes", () => {
       });
     });
 
-    await page.goto("/alta-data");
+    await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
     await expect(main.getByText("La programación de YouTube aún no está disponible para este programa.")).toBeVisible();
@@ -224,14 +237,14 @@ test.describe("Acrox TV editorial directory", () => {
     const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
     const covers = directory.locator("[data-program-cover]");
     await expect(covers).toHaveCount(2);
-    await expect(covers.nth(0)).toHaveAttribute("href", "/alta-data");
+    await expect(covers.nth(0)).toHaveAttribute("href", "/alta-data-te-tire");
     await expect(covers.nth(1)).toHaveAttribute("href", "/mas-que-nutricion");
     const [altaDataBox, nutritionBox] = await Promise.all([covers.nth(0).boundingBox(), covers.nth(1).boundingBox()]);
     expect(altaDataBox?.width).toBe(nutritionBox?.width);
     expect(altaDataBox?.height).toBe(nutritionBox?.height);
     await expect(page.getByRole("region", { name: "Nos acompañan" })).toBeVisible();
 
-    await page.goto("/alta-data");
+    await page.goto("/alta-data-te-tire");
     await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
   });
 

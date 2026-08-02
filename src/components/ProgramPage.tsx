@@ -9,19 +9,19 @@ type ProgramPageProps = {
 
 export default function ProgramPage({ program }: ProgramPageProps) {
   return (
-    <div className="site-shell program-page">
+    <div className="program-page">
       <Navbar />
       <main className="program-page-main">
         <section className="program-hero" aria-labelledby="program-title">
           <p className="program-hero-kicker">ACROX TV · PROGRAMA</p>
           <h1 id="program-title">{program.name}</h1>
           <p className="program-hero-copy">
-            Un espacio editorial de Acrox TV. Conocé las próximas novedades del programa.
+            {program.summary}
           </p>
           <ProgramMediaSection programSlug={program.slug} />
         </section>
       </main>
-      <Footer />
+      <Footer anchorPrefix="/" />
     </div>
   );
 }

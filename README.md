@@ -32,7 +32,7 @@ Los valores `NEXT_PUBLIC_*` de la plantilla son marcadores públicos y seguros p
 import { PROGRAMS, programPath, type ProgramSlug } from "@/domain/programs";
 
 const slug: ProgramSlug = PROGRAMS[0].slug;
-const href = programPath(slug); // "/alta-data"
+const href = programPath(slug); // "/alta-data-te-tire"
 ```
 
 `assertProgramRegistry` recibe `programs`, `staticRouteSegments` y `publicRootPaths`; valida que cada slug use kebab-case, sea único y no colisione con reserved segments, static route segments o public-root paths. Los dos últimos inputs deben obtenerse de los directorios inmediatos de `src/app` y de las rutas raíz de `public`, respectivamente, para que una ruta o asset nuevo no vuelva inaccesible un programa.

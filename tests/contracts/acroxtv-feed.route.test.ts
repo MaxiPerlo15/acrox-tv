@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { createProgramFeedRoute } from "@/app/api/acroxtv-feed/[slug]/route";
 import { createProgramFeedService } from "@/application/acroxtv-feed.service";
+import { PROGRAMS } from "@/domain/programs";
+import { PROGRAM_MEDIA_SOURCES } from "@/infrastructure/program-media-sources";
 import { env } from "@/lib/env";
 import { createSWRStore } from "@/infrastructure/swr-cache";
 const requestFor = (slug: string) => new Request(`http://localhost/api/acroxtv-feed/${slug}`);
@@ -14,21 +16,31 @@ test.afterEach(() => {
 });
 
 test.describe("program-scoped Acrox TV feed route", () => {
+  test("registers the canonical Alta route with its existing playlist", () => {
+    expect(PROGRAMS.map((program) => program.slug)).toEqual([
+      "alta-data-te-tire",
+      "mas-que-nutricion"
+    ]);
+    expect(PROGRAM_MEDIA_SOURCES["alta-data-te-tire"].youtube.playlistId).toBe(
+      "PL0Nzx2OTlHZ_ZOlLPB6gPjhH88yFGIF_y"
+    );
+  });
+
   test("returns an available response with no-store caching from an injected service", async () => {
     const GET = createProgramFeedRoute({
       get: async () => ({
-        programSlug: "alta-data",
+        programSlug: "alta-data-te-tire",
         episodes: { state: "available" as const, asOf: "2026-08-01T12:00:00.000Z", items: [] },
         instagram: { state: "unavailable" as const }, live: { state: "unavailable" as const }
       })
     });
 
-    const response = await GET(requestFor("alta-data"), contextFor("alta-data"));
+    const response = await GET(requestFor("alta-data-te-tire"), contextFor("alta-data-te-tire"));
 
     expect(response.status).toBe(200);
     expect(response.headers.get("Cache-Control")).toBe("private, no-store, max-age=0");
     await expect(response.json()).resolves.toMatchObject({
-      programSlug: "alta-data",
+      programSlug: "alta-data-te-tire",
       episodes: { state: "available", items: [] }
     });
   });
@@ -60,10 +72,10 @@ test.describe("program-scoped Acrox TV feed route", () => {
     });
     const GET = createProgramFeedRoute(service);
 
-    await GET(requestFor("alta-data"), contextFor("alta-data"));
+    await GET(requestFor("alta-data-te-tire"), contextFor("alta-data-te-tire"));
     shouldFail = true;
     currentTime = 30 * 60 * 1000 + 1;
-    const response = await GET(requestFor("alta-data"), contextFor("alta-data"));
+    const response = await GET(requestFor("alta-data-te-tire"), contextFor("alta-data-te-tire"));
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toMatchObject({
@@ -82,7 +94,7 @@ test.describe("program-scoped Acrox TV feed route", () => {
       })
     );
 
-    const response = await GET(requestFor("alta-data"), contextFor("alta-data"));
+    const response = await GET(requestFor("alta-data-te-tire"), contextFor("alta-data-te-tire"));
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toMatchObject({ episodes: { state: "error" } });

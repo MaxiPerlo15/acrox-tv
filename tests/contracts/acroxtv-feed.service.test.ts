@@ -48,8 +48,8 @@ test.describe("program-scoped media service", () => {
     });
 
     const [altaFirst, altaSecond, nutrition] = await Promise.all([
-      service.get("alta-data"),
-      service.get("alta-data"),
+      service.get("alta-data-te-tire"),
+      service.get("alta-data-te-tire"),
       service.get("mas-que-nutricion")
     ]);
 
@@ -63,7 +63,7 @@ test.describe("program-scoped media service", () => {
       { state: "available", items: [{ videoId: "PL0Nzx2OTlHZ_42gBgmG_9d6UqJgoXhWSq" }] }
     ]);
     currentTime = 1_500;
-    const cached = await service.get("alta-data");
+    const cached = await service.get("alta-data-te-tire");
 
     expect(altaFirst?.episodes).toMatchObject({ asOf: "1970-01-01T00:00:01.000Z" });
     expect(cached?.episodes).toMatchObject({ state: "available", asOf: "1970-01-01T00:00:01.000Z" });
