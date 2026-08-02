@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { loadAcroxTvFeedClient } from "@/application/acroxtv-feed.client";
+import { loadAcroxTvFeedClient, loadProgramFeedClient } from "@/application/acroxtv-feed.client";
 import SocialCarousel from "@/components/SocialCarousel";
 import { TvGhostIcon, YouTubeIcon } from "@/components/icons";
-import type { AcroxTvFeedResponse, EpisodeItem } from "@/domain/acroxtv-feed";
+import type { AcroxTvFeedResponse, EpisodeItem, LiveItem, MediaSurface, ProgramFeedResponse } from "@/domain/acroxtv-feed";
 import type { SocialContentItem } from "@/domain/social-content";
 import { publicEnv } from "@/lib/public-env";
 
@@ -227,3 +227,84 @@ const AcroxTvMediaSection = () => {
 };
 
 export default AcroxTvMediaSection;
+
+type ProgramMediaSectionProps = { programSlug: string };
+
+type ProgramMediaPanelProps<T extends { title: string; watchUrl?: string; url?: string }> = {
+  title: string;
+  surface: MediaSurface<T[]>;
+  emptyMessage: string;
+  unavailableMessage: string;
+  errorMessage: string;
+};
+
+const ProgramMediaPanel = <T extends { title: string; watchUrl?: string; url?: string }>({
+  title,
+  surface,
+  emptyMessage,
+  unavailableMessage,
+  errorMessage
+}: ProgramMediaPanelProps<T>) => {
+  const items = "items" in surface ? surface.items : [];
+
+  return (
+    <section className="program-media-notice" aria-label={title}>
+      <h2>{title}</h2>
+      {surface.state === "stale" ? <p>Este contenido puede no estar actualizado.</p> : null}
+      {surface.state === "unavailable" ? <p>{unavailableMessage}</p> : null}
+      {surface.state === "error" ? <p role="alert">{errorMessage}</p> : null}
+      {(surface.state === "available" || surface.state === "stale") && items.length === 0 ? <p>{emptyMessage}</p> : null}
+      {items.length > 0 ? (
+        <ul>
+          {items.map((item) => {
+            const href = item.watchUrl ?? item.url;
+            return <li key={href ?? item.title}>{href ? <a href={href}>{item.title}</a> : item.title}</li>;
+          })}
+        </ul>
+      ) : null}
+    </section>
+  );
+};
+
+const ProgramLivePanel = ({ surface }: { surface: MediaSurface<LiveItem | null> }) => (
+  <section className="program-media-notice" aria-label="En vivo">
+    <h2>En vivo</h2>
+    {surface.state === "stale" ? <p>Este contenido puede no estar actualizado.</p> : null}
+    {surface.state === "unavailable" ? <p>El streaming en vivo aún no está disponible para este programa.</p> : null}
+    {surface.state === "error" ? <p role="alert">No pudimos cargar el streaming en vivo para este programa.</p> : null}
+    {(surface.state === "available" || surface.state === "stale") && !surface.items ? (
+      <p>No hay streaming en vivo atribuido a este programa.</p>
+    ) : null}
+    {"items" in surface && surface.items ? <a href={surface.items.watchUrl}>{surface.items.title}</a> : null}
+  </section>
+);
+
+export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) => {
+  const [feed, setFeed] = useState<ProgramFeedResponse | null>(null);
+
+  useEffect(() => {
+    void loadProgramFeedClient(programSlug).then(setFeed);
+  }, [programSlug]);
+
+  if (!feed) return <p>Cargando programación...</p>;
+
+  return (
+    <div aria-label="Programación del programa">
+      <ProgramMediaPanel<EpisodeItem>
+        title="Episodios"
+        surface={feed.episodes}
+        emptyMessage="No hay episodios atribuidos a este programa."
+        unavailableMessage="La programación de YouTube aún no está disponible para este programa."
+        errorMessage="No pudimos cargar la programación de YouTube para este programa."
+      />
+      <ProgramMediaPanel<SocialContentItem>
+        title="Instagram"
+        surface={feed.instagram}
+        emptyMessage="No hay publicaciones de Instagram atribuidas a este programa."
+        unavailableMessage="Instagram aún no está disponible para este programa."
+        errorMessage="No pudimos cargar Instagram para este programa."
+      />
+      <ProgramLivePanel surface={feed.live} />
+    </div>
+  );
+};

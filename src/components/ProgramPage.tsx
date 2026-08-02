@@ -1,4 +1,5 @@
 import Footer from "@/components/Footer";
+import { ProgramMediaSection } from "@/components/AcroxTvMediaSection";
 import Navbar from "@/components/Navbar";
 import type { Program } from "@/domain/programs";
 
@@ -17,9 +18,7 @@ export default function ProgramPage({ program }: ProgramPageProps) {
           <p className="program-hero-copy">
             Un espacio editorial de Acrox TV. Conocé las próximas novedades del programa.
           </p>
-          <aside className="program-media-notice" aria-label="Estado de programación">
-            <p>La programación estará disponible próximamente.</p>
-          </aside>
+          <ProgramMediaSection programSlug={program.slug} />
         </section>
       </main>
       <Footer />

@@ -41,22 +41,114 @@ test.describe("Acrox TV direct program routes", () => {
       await expect(page.getByRole("heading", { level: 1, name: program.name })).toBeVisible();
       await expect(page.getByAltText("Logo Acrox").first()).toBeVisible();
       await expect(page.getByRole("contentinfo")).toContainText("Acrox ©");
-      await expect(page.getByText("La programación estará disponible próximamente.")).toBeVisible();
+      await expect(page.getByRole("heading", { level: 2, name: "Episodios" })).toBeVisible();
     }
   });
 
-  test("keeps the program main content media-safe", async ({ page }) => {
-    await page.goto(`/${PROGRAMS[0].slug}`);
+  test("presents an available program feed without sibling media", async ({ page }) => {
+    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          programSlug: "alta-data",
+          episodes: {
+            state: "available",
+            asOf: "2026-08-01T12:00:00.000Z",
+            items: [
+              {
+                videoId: "alta-episode",
+                title: "Episodio de Alta Data",
+                watchUrl: "https://youtube.com/watch?v=alta-episode",
+                thumbnailUrl: "https://example.com/alta.jpg",
+                publishedAt: "2026-08-01T12:00:00.000Z",
+                durationSeconds: 120,
+                viewCount: 10
+              }
+            ]
+          },
+          instagram: { state: "unavailable" },
+          live: { state: "unavailable" }
+        })
+      });
+    });
+
+    await page.goto("/alta-data");
 
     const main = page.getByRole("main");
-    await expect(main.getByText("La programación estará disponible próximamente.")).toBeVisible();
-    await expect(main.locator("img, video, audio, iframe, picture, source, [aria-label*='EN VIVO' i]")).toHaveCount(0);
-    await expect(main.getByRole("link")).toHaveCount(0);
-    await expect(main).not.toContainText("EN VIVO");
-    await expect(main).not.toContainText("Últimos episodios");
-    await expect(main).not.toContainText("Instagram");
-    await expect(main).not.toContainText("YouTube");
-    await expect(main).not.toContainText("Directorio");
+    await expect(main.getByRole("heading", { name: "Episodios" })).toBeVisible();
+    await expect(main.getByRole("link", { name: "Episodio de Alta Data" })).toBeVisible();
+    await expect(main).not.toContainText("Más que Nutrición");
+    await expect(main.getByText("La programación estará disponible próximamente.")).toHaveCount(0);
+  });
+
+  test("labels stale media and keeps its zero-item state honest", async ({ page }) => {
+    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          programSlug: "alta-data",
+          episodes: {
+            state: "stale",
+            asOf: "2026-07-31T12:00:00.000Z",
+            items: []
+          },
+          instagram: { state: "unavailable" },
+          live: { state: "unavailable" }
+        })
+      });
+    });
+
+    await page.goto("/alta-data");
+
+    const main = page.getByRole("main");
+    await expect(main.getByText("Este contenido puede no estar actualizado.")).toBeVisible();
+    await expect(main.getByText("No hay episodios atribuidos a este programa.")).toBeVisible();
+  });
+
+  test("keeps an available zero-item feed honest", async ({ page }) => {
+    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          programSlug: "alta-data",
+          episodes: {
+            state: "available",
+            asOf: "2026-08-01T12:00:00.000Z",
+            items: []
+          },
+          instagram: { state: "unavailable" },
+          live: { state: "unavailable" }
+        })
+      });
+    });
+
+    await page.goto("/alta-data");
+
+    const main = page.getByRole("main");
+    await expect(main.getByText("No hay episodios atribuidos a este programa.")).toBeVisible();
+    await expect(main.getByRole("link", { name: /episodio/i })).toHaveCount(0);
+  });
+
+  test("explains unavailable and failed media without claiming that items exist", async ({ page }) => {
+    await page.route("**/api/acroxtv-feed/alta-data", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          programSlug: "alta-data",
+          episodes: { state: "unavailable" },
+          instagram: { state: "error" },
+          live: { state: "unavailable" }
+        })
+      });
+    });
+
+    await page.goto("/alta-data");
+
+    const main = page.getByRole("main");
+    await expect(main.getByText("La programación de YouTube aún no está disponible para este programa.")).toBeVisible();
+    await expect(main.getByText("El streaming en vivo aún no está disponible para este programa.")).toBeVisible();
+    await expect(main.getByRole("alert")).toHaveText("No pudimos cargar Instagram para este programa.");
+    await expect(main).not.toContainText("contenido disponible");
   });
 
   test("leaves explicit static and API routes under their current owners", async ({ page }) => {
