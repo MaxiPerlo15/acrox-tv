@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Footer from "@/components/Footer";
 import { ProgramMediaSection } from "@/components/AcroxTvMediaSection";
 import Navbar from "@/components/Navbar";
@@ -13,13 +14,22 @@ export default function ProgramPage({ program }: ProgramPageProps) {
       <Navbar />
       <main className="program-page-main">
         <section className="program-hero" aria-labelledby="program-title">
-          <p className="program-hero-kicker">ACROX TV · PROGRAMA</p>
-          <h1 id="program-title">{program.name}</h1>
-          <p className="program-hero-copy">
-            {program.summary}
-          </p>
-          <ProgramMediaSection programSlug={program.slug} />
+          <div className="program-hero-copy">
+            <p className="program-hero-kicker">ACROX TV · PROGRAMACIÓN ORIGINAL</p>
+            <h1 id="program-title">{program.name}</h1>
+            <p>{program.summary}</p>
+            <p className="program-hero-presenter">Conducción Acrox TV</p>
+          </div>
+          <div className="program-hero-identity" aria-label={`Identidad de ${program.name}`}>
+            {program.coverLogoSrc ? (
+              // This is the only approved program identity asset currently available.
+              <Image src={program.coverLogoSrc} alt={program.name} width={250} height={160} />
+            ) : (
+              <span>{program.name}</span>
+            )}
+          </div>
         </section>
+        <ProgramMediaSection programSlug={program.slug} />
       </main>
       <Footer anchorPrefix="/" />
     </div>

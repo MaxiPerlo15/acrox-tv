@@ -61,15 +61,19 @@ test.describe("Acrox TV program registry contract", () => {
   });
 
   test("runs the parallel browser suite against a fresh production server", () => {
+    const webServer = playwrightConfig.webServer;
+    if (!webServer || Array.isArray(webServer)) throw new Error("Expected one E2E web server.");
+
     expect(playwrightConfig.forbidOnly).toBe(true);
     expect(playwrightConfig).toMatchObject({
-      use: { baseURL: "http://127.0.0.1:3015" },
       webServer: {
-        command: "npm run build && npm run start -- -p 3015",
-        url: "http://127.0.0.1:3015",
+        command: expect.stringMatching(/^npm run build && npm run start -- -p \d+$/),
+        url: expect.stringMatching(/^http:\/\/127\.0\.0\.1:\d+$/),
         reuseExistingServer: false
       }
     });
+    expect(playwrightConfig.use?.baseURL).toBe(webServer.url);
+    expect(readFileSync(resolve(process.cwd(), "package.json"), "utf8")).toContain('"test:e2e": "node scripts/run-e2e.mjs"');
   });
 
   test("pins Turbopack to this absolute project root", () => {

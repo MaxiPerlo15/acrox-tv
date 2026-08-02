@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const port = "3015";
+const port = process.env.E2E_PORT ?? "3015";
 const baseURL = `http://127.0.0.1:${port}`;
 const publicEnvironment = {
   NEXT_PUBLIC_WHATSAPP_NUMBER: "5491100000000",
@@ -12,6 +12,7 @@ const publicEnvironment = {
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  testMatch: ["critical.spec.ts", "smoke.spec.ts", "acroxtv-*.spec.ts"],
   forbidOnly: true,
   fullyParallel: true,
   timeout: 30_000,

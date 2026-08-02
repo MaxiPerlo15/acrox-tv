@@ -1,8 +1,23 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page, type Route } from "@playwright/test";
 import { PROGRAMS } from "@/domain/programs";
+
+const TRANSPARENT_PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLJNgAAAABJRU5ErkJggg==", "base64");
+const mockExternalThumbnails = async (page: Page) => {
+  const fulfillThumbnail = (route: Route) => route.fulfill({ contentType: "image/png", body: TRANSPARENT_PNG });
+  await Promise.all([page.route("**/i.ytimg.com/**", fulfillThumbnail), page.route("**/scontent.cdninstagram.com/**", fulfillThumbnail)]);
+  await page.route("**/_next/image?url=**", async (route) => {
+    const source = new URL(route.request().url()).searchParams.get("url");
+    if (source?.startsWith("https://i.ytimg.com/") || source?.startsWith("https://scontent.cdninstagram.com/")) {
+      await fulfillThumbnail(route);
+      return;
+    }
+    await route.continue();
+  });
+};
 
 test.describe("Acrox TV direct program routes", () => {
   test.beforeEach(async ({ page }) => {
+    await mockExternalThumbnails(page);
     await page.route("**/api/acroxtv-feed", async (route) => {
       await route.fulfill({
         contentType: "application/json",
@@ -88,28 +103,34 @@ test.describe("Acrox TV direct program routes", () => {
     expect(scopedRequestPaths).toEqual(PROGRAMS.map((program) => `/api/acroxtv-feed/${program.slug}`));
   });
 
-  test("presents an available program feed without sibling media", async ({ page }) => {
-    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
+  test("renders available Instagram items without sibling media", async ({ page }) => {
+    const siblingThumbnail = "https://i.ytimg.com/vi/sibling-nutrition/hqdefault.jpg";
+    await page.route("**/api/acroxtv-feed/*", async (route) => {
+      const isAlta = route.request().url().endsWith("/alta-data-te-tire");
       await route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
-          programSlug: "alta-data-te-tire",
+          programSlug: isAlta ? "alta-data-te-tire" : "mas-que-nutricion",
           episodes: {
             state: "available",
             asOf: "2026-08-01T12:00:00.000Z",
             items: [
               {
-                videoId: "alta-episode",
-                title: "Episodio de Alta Data",
-                watchUrl: "https://youtube.com/watch?v=alta-episode",
-                thumbnailUrl: "https://example.com/alta.jpg",
+                videoId: isAlta ? "alta-episode" : "sibling-nutrition",
+                title: isAlta ? "Episodio de Alta Data" : "Episodio de Más que Nutrición",
+                watchUrl: `https://youtube.com/watch?v=${isAlta ? "alta-episode" : "sibling-nutrition"}`,
+                thumbnailUrl: isAlta ? "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" : siblingThumbnail,
                 publishedAt: "2026-08-01T12:00:00.000Z",
                 durationSeconds: 120,
                 viewCount: 10
               }
             ]
           },
-          instagram: { state: "unavailable" },
+          instagram: {
+            state: "available",
+            asOf: "2026-08-01T12:00:00.000Z",
+            items: [{ id: "instagram-alta", platform: "instagram", title: "Publicación de Alta Data", url: "https://instagram.com/p/alta", thumbnailUrl: "https://scontent.cdninstagram.com/alta.jpg", publishedAt: "2026-08-01T12:00:00.000Z" }]
+          },
           live: { state: "unavailable" }
         })
       });
@@ -119,12 +140,39 @@ test.describe("Acrox TV direct program routes", () => {
 
     const main = page.getByRole("main");
     await expect(main.getByRole("heading", { name: "Episodios" })).toBeVisible();
-    await expect(main.getByRole("link", { name: "Episodio de Alta Data" })).toBeVisible();
+    await expect(main.getByLabel("Episodios").getByRole("link", { name: "Episodio de Alta Data" })).toBeVisible();
+    await expect(main.getByRole("link", { name: "Publicación de Alta Data" })).toHaveAttribute("href", "https://instagram.com/p/alta");
+    await expect(main.locator('img[src*="dQw4w9WgXcQ"]')).toHaveCount(3);
+    await expect(main.locator('img[src*="sibling-nutrition"]')).toHaveCount(0);
     await expect(main).not.toContainText("Más que Nutrición");
     await expect(main.getByText("La programación estará disponible próximamente.")).toHaveCount(0);
   });
 
-  test("labels stale media and keeps its zero-item state honest", async ({ page }) => {
+  test("renders unavailable Instagram distinctly with a latest-episode fallback", async ({ page }) => {
+    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          programSlug: "alta-data-te-tire",
+          episodes: {
+            state: "available",
+            asOf: "2026-08-01T12:00:00.000Z",
+            items: [{ videoId: "alta-latest", title: "Episodio real de Alta", watchUrl: "https://youtube.com/watch?v=alta-latest", thumbnailUrl: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg", publishedAt: "2026-08-01T12:00:00.000Z", durationSeconds: 120, viewCount: 10 }]
+          },
+          instagram: { state: "unavailable" },
+          live: { state: "available", asOf: "2026-08-01T12:00:00.000Z", items: null }
+        })
+      });
+    });
+
+    await page.goto("/alta-data-te-tire");
+    const main = page.getByRole("main");
+    await expect(main.getByRole("link", { name: "Episodio real de Alta" }).first()).toHaveAttribute("href", "https://youtube.com/watch?v=alta-latest");
+    await expect(main.getByText("Instagram aún no está disponible para este programa.")).toBeVisible();
+    await expect(main.getByRole("heading", { level: 2, name: "En vivo" })).toHaveCount(0);
+  });
+
+  test("renders stale Instagram items with a stale indication", async ({ page }) => {
     await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
       await route.fulfill({
         contentType: "application/json",
@@ -135,7 +183,11 @@ test.describe("Acrox TV direct program routes", () => {
             asOf: "2026-07-31T12:00:00.000Z",
             items: []
           },
-          instagram: { state: "unavailable" },
+          instagram: {
+            state: "stale",
+            asOf: "2026-07-31T12:00:00.000Z",
+            items: [{ id: "instagram-stale", platform: "instagram", title: "Publicación de Instagram en caché", url: "https://instagram.com/p/stale", thumbnailUrl: "https://scontent.cdninstagram.com/stale.jpg", publishedAt: "2026-07-31T12:00:00.000Z" }]
+          },
           live: { state: "unavailable" }
         })
       });
@@ -144,8 +196,10 @@ test.describe("Acrox TV direct program routes", () => {
     await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
-    await expect(main.getByText("Este contenido puede no estar actualizado.")).toBeVisible();
-    await expect(main.getByText("No hay episodios atribuidos a este programa.")).toBeVisible();
+    await expect(main.getByText("Este contenido puede no estar actualizado.")).toHaveCount(2);
+    await expect(main.getByLabel("Último episodio")).toContainText("No hay episodios atribuidos a este programa.");
+    await expect(main.getByText("No hay episodios atribuidos a este programa.")).toHaveCount(2);
+    await expect(main.getByRole("link", { name: "Publicación de Instagram en caché" })).toBeVisible();
   });
 
   test("keeps an available zero-item feed honest", async ({ page }) => {
@@ -168,17 +222,38 @@ test.describe("Acrox TV direct program routes", () => {
     await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
-    await expect(main.getByText("No hay episodios atribuidos a este programa.")).toBeVisible();
+    await expect(main.getByText("No hay episodios atribuidos a este programa.")).toHaveCount(2);
+    await expect(main.getByLabel("Último episodio")).toContainText("No hay episodios atribuidos a este programa.");
     await expect(main.getByRole("link", { name: /episodio/i })).toHaveCount(0);
   });
 
-  test("explains unavailable and failed media without claiming that items exist", async ({ page }) => {
+  for (const state of ["available", "stale"] as const) {
+    test(`keeps a ${state} empty Instagram feed honest`, async ({ page }) => {
+      await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
+        await route.fulfill({
+          contentType: "application/json",
+          body: JSON.stringify({
+            programSlug: "alta-data-te-tire", episodes: { state: "unavailable" },
+            instagram: { state, asOf: "2026-08-01T12:00:00.000Z", items: [] }, live: { state: "unavailable" }
+          })
+        });
+      });
+      await page.goto("/alta-data-te-tire");
+
+      const instagram = page.getByRole("region", { name: "Instagram" });
+      await expect(instagram.getByText("No hay publicaciones de Instagram atribuidas a este programa.")).toBeVisible();
+      await expect(instagram.getByText("Este contenido puede no estar actualizado.")).toHaveCount(state === "stale" ? 1 : 0);
+      await expect(instagram.getByRole("link")).toHaveCount(0);
+    });
+  }
+
+  test("renders an Instagram error distinctly from the primary episode error", async ({ page }) => {
     await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
       await route.fulfill({
         contentType: "application/json",
         body: JSON.stringify({
           programSlug: "alta-data-te-tire",
-          episodes: { state: "unavailable" },
+          episodes: { state: "error" },
           instagram: { state: "error" },
           live: { state: "unavailable" }
         })
@@ -188,10 +263,40 @@ test.describe("Acrox TV direct program routes", () => {
     await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
-    await expect(main.getByText("La programación de YouTube aún no está disponible para este programa.")).toBeVisible();
-    await expect(main.getByText("El streaming en vivo aún no está disponible para este programa.")).toBeVisible();
-    await expect(main.getByRole("alert")).toHaveText("No pudimos cargar Instagram para este programa.");
-    await expect(main).not.toContainText("contenido disponible");
+    const primaryMedia = main.getByLabel("Programación del programa").getByRole("alert").first();
+    await expect(primaryMedia).toHaveText("No pudimos cargar la programación de YouTube para este programa.");
+    await expect(main.getByRole("alert").filter({ hasText: "No pudimos cargar Instagram para este programa." })).toBeVisible();
+    await expect(main).not.toContainText("La programación de YouTube aún no está disponible para este programa.");
+    await expect(main.getByRole("heading", { level: 2, name: "En vivo" })).toHaveCount(0);
+  });
+
+  test("keeps the direct program media hierarchy readable at 380px @mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 380, height: 844 });
+    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          programSlug: "alta-data-te-tire",
+          episodes: {
+            state: "available",
+            asOf: "2026-08-01T12:00:00.000Z",
+            items: [{ videoId: "latest", title: "Último episodio de Alta", watchUrl: "https://youtube.com/watch?v=latest", thumbnailUrl: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg", publishedAt: "2026-08-01T12:00:00.000Z", durationSeconds: 120, viewCount: 10 }]
+          },
+          instagram: { state: "unavailable" },
+          live: { state: "unavailable" }
+        })
+      });
+    });
+
+    await page.goto("/alta-data-te-tire");
+    const main = page.getByRole("main");
+    const latest = main.getByRole("heading", { level: 2, name: "Último episodio" });
+    await expect(latest).toBeVisible();
+    await expect(main.getByRole("link", { name: "Último episodio de Alta" }).first()).toBeVisible();
+    for (const name of ["Más visto", "Episodios", "Instagram"]) {
+      await expect(main.getByRole("region", { name })).toBeVisible();
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(380);
   });
 
   test("leaves explicit static and API routes under their current owners", async ({ page }) => {
@@ -340,12 +445,8 @@ test.describe("Acrox TV editorial directory", () => {
   test("keeps legacy media, live, and feed content out of the home directory", async ({ page }) => {
     await page.goto("/");
 
-    const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
-    await expect(directory).not.toContainText("EN VIVO");
-    await expect(directory).not.toContainText("Últimos episodios");
-    await expect(directory).not.toContainText("Instagram");
-    await expect(directory).not.toContainText("YouTube");
-    await expect(directory.locator("video, audio, iframe, picture, source")).toHaveCount(0);
+    const main = page.getByRole("main");
+    await expect(main.locator(".live-stream-panel, .social-feeds-stack, .social-carousel, video, audio, iframe, picture, source")).toHaveCount(0);
   });
 
   test("keeps both covers available and readable on mobile @mobile", async ({ page }) => {
