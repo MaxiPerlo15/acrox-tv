@@ -6153,3 +6153,30 @@ a {
     flex-direction: column;
   }
 }
+
+/* Approved Acrox TV directory prototype. */
+.program-directory { max-width: var(--layout-container-max); margin-inline: auto; }
+.program-directory-heading { max-width: 760px; }
+.program-directory-heading > p:first-child, .sponsor-ribbon h2 { margin: 0 0 14px; color: #9ab6ff; font-size: .76rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.program-directory-heading h2 { max-width: 12ch; font-size: clamp(3rem, 6.3vw, 6.5rem); line-height: .88; letter-spacing: -.045em; text-transform: uppercase; }
+.program-directory-heading h2 span { color: #9b86ff; }
+.program-directory-heading > p:last-child { max-width: 58ch; margin: 22px 0 0; color: var(--text-secondary); line-height: 1.56; }
+.program-directory-grid { gap: 16px; }
+.program-directory-card { position: relative; grid-template-rows: auto 1fr auto; min-height: min(48vw, 620px); padding: clamp(20px, 3vw, 40px); border-color: rgba(126, 148, 196, .38); border-radius: var(--radius); background: linear-gradient(145deg, #08152f, #101758); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04), 0 16px 34px rgba(3, 7, 18, .28); transition-duration: .28s; }
+.program-directory-card:nth-child(2) { background: rgba(13, 20, 37, .82); }
+.program-directory-card:hover, .program-directory-card:focus-visible { transform: translateY(-5px); border-color: rgba(176, 142, 255, .72); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06), 0 0 24px rgba(122, 59, 255, .22), 0 20px 38px rgba(3, 7, 18, .48); }
+.program-directory-card-meta { color: #dce8ff; font-size: .72rem; font-weight: 700; letter-spacing: .1em; }
+.program-directory-card-art { min-height: 0; padding: clamp(32px, 5vw, 64px) 0; background: none; }
+.program-directory-card-logo { width: min(76%, 330px); filter: drop-shadow(0 10px 20px rgba(3, 8, 28, .45)); }
+.program-directory-card-placeholder { display: grid; width: min(72%, 300px); min-height: 142px; place-content: center; gap: 10px; border: 1px dashed rgba(184, 194, 218, .5); border-radius: 12px; color: var(--text-secondary); text-align: center; }
+.program-directory-card-placeholder strong { font-family: var(--font-display), sans-serif; font-size: clamp(1.25rem, 2.4vw, 1.8rem); letter-spacing: .04em; text-transform: uppercase; }
+.program-directory-card-placeholder small { color: var(--text-tertiary); font-size: .67rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+.program-directory-card-copy { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 0; background: none; }
+.program-directory-card-copy > span:first-child { max-width: 29ch; color: rgba(243, 246, 255, .86); font-size: .92rem; line-height: 1.45; }
+.program-directory-card-copy strong { display: grid; flex: 0 0 auto; width: 2.6rem; height: 2.6rem; place-items: center; margin: 0; border: 1px solid currentColor; border-radius: 50%; font-size: 1.3rem; transition: transform .2s ease; }
+.program-directory-card:hover .program-directory-card-copy strong { transform: translate(3px, -3px); }
+.sponsor-ribbon { display: block; margin-top: clamp(24px, 3vw, 40px); padding-top: clamp(20px, 2.5vw, 32px); overflow: hidden; border-color: var(--line); }
+.sponsor-ribbon h2 { color: var(--text-secondary); font-size: .7rem; }.sponsor-ribbon-viewport { display: flex; width: max-content; animation: sponsor-ribbon-scroll 28s linear infinite; }.sponsor-ribbon-track { display: grid; grid-template-columns: repeat(5, minmax(132px, 1fr)); gap: 10px; width: min(100vw - 40px, 760px); margin: 0; padding: 0; list-style: none; }.sponsor-ribbon li { min-width: 0; min-height: 70px; padding: 0; border-color: rgba(137, 157, 209, .28); border-radius: 10px; background: linear-gradient(135deg, rgba(18, 27, 50, .82), rgba(10, 15, 31, .54)); }.sponsor-ribbon:hover .sponsor-ribbon-viewport, .sponsor-ribbon:focus .sponsor-ribbon-viewport { animation-play-state: paused; }
+@keyframes sponsor-ribbon-scroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .sponsor-ribbon-viewport { animation: none; } }
+@media (max-width: 700px) { .program-directory-card { min-height: 430px; }.program-directory-card-art { padding-block: 32px; }.sponsor-ribbon-track { grid-template-columns: repeat(5, 132px); width: 700px; } }

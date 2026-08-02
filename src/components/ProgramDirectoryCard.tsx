@@ -8,9 +8,10 @@ import { programPath } from "@/domain/programs";
 
 type ProgramDirectoryCardProps = {
   program: Program;
+  position: number;
 };
 
-export default function ProgramDirectoryCard({ program }: ProgramDirectoryCardProps) {
+export default function ProgramDirectoryCard({ program, position }: ProgramDirectoryCardProps) {
   const [isArtworkUnavailable, setIsArtworkUnavailable] = useState(false);
   const artworkRef = useRef<HTMLImageElement>(null);
 
@@ -31,6 +32,7 @@ export default function ProgramDirectoryCard({ program }: ProgramDirectoryCardPr
 
   return (
     <Link href={programPath(program.slug)} className="program-directory-card" data-program-cover tabIndex={0}>
+      <span className="program-directory-card-meta">{String(position).padStart(2, "0")} / ACROX TV</span>
       <div className="program-directory-card-art" aria-hidden="true">
         {program.coverLogoSrc && !isArtworkUnavailable ? (
           <Image
@@ -45,14 +47,16 @@ export default function ProgramDirectoryCard({ program }: ProgramDirectoryCardPr
             onError={() => setIsArtworkUnavailable(true)}
           />
         ) : (
-          <span className="program-directory-card-placeholder">ACROX TV</span>
+          <span className="program-directory-card-placeholder">
+            <strong>{program.coverLogoSrc ? "ACROX TV" : program.name}</strong>
+            {!program.coverLogoSrc ? <small>Identidad lista para integrar</small> : null}
+          </span>
         )}
       </div>
       <div className="program-directory-card-copy">
-        <p>Programa editorial</p>
-        <h3>{program.name}</h3>
         <span>{program.summary}</span>
-        <strong>Conocer el programa <span aria-hidden="true">↗</span></strong>
+        <strong aria-hidden="true">↗</strong>
+        <span className="sr-only">Conocer {program.name}</span>
       </div>
     </Link>
   );

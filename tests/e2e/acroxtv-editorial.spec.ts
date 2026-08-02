@@ -434,12 +434,26 @@ test.describe("Acrox TV editorial directory", () => {
     await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toHaveCount(0);
   });
 
-  test("reserves an empty sponsor ribbon without rendering sponsor items", async ({ page }) => {
+  test("renders neutral sponsorship cells without inventing brands", async ({ page }) => {
     await page.goto("/");
 
     const ribbon = page.getByRole("region", { name: "Nos acompañan" });
-    await expect(ribbon.getByText("Espacio reservado para aliados aprobados")).toBeVisible();
-    await expect(ribbon.getByRole("listitem")).toHaveCount(0);
+    await expect(ribbon.getByRole("heading", { name: "Con el apoyo de" })).toBeVisible();
+    await expect(ribbon.getByRole("listitem", { name: "Espacio de colaboración" })).toHaveCount(5);
+    await expect(ribbon).not.toContainText("Logos de referencia");
+    await expect(ribbon).not.toContainText("Espacio reservado para aliados aprobados");
+  });
+
+  test("pauses the sponsorship ribbon for keyboard and reduced-motion visitors", async ({ page }) => {
+    await page.goto("/");
+
+    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
+    const track = ribbon.locator(".sponsor-ribbon-viewport");
+    await ribbon.focus();
+    await expect(track).toHaveCSS("animation-play-state", "paused");
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(track).toHaveCSS("animation-name", "none");
   });
 
   test("keeps legacy media, live, and feed content out of the home directory", async ({ page }) => {
