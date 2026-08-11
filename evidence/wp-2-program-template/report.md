@@ -5,13 +5,22 @@
 - Branch: `feat/acrox-tv-s1-program-template`
 - Scope: WP-2 only; no merge to `main`.
 
-## RED → GREEN
+## Immutable RED → GREEN provenance
 
-`tests/e2e/acroxtv-wp2-program-isolation.spec.ts` was written before the
-provenance guard. The RED run failed in both directions because a response
-labelled for the sibling program rendered its episode three times. The GREEN
-run passed after the direct-program client rendered unavailable surfaces when
-the response `programSlug` did not match the requested route.
+The original report did not retain an immutable RED transcript. This addendum
+re-ran the exact safety-test blob at two pinned revisions in detached worktrees.
+It is evidence-only: no product source was changed.
+
+| Run | Revision | Test source | Result | Permanent output |
+| --- | --- | --- | --- | --- |
+| RED | `da69785a6b37458ba7435e3b3bff7677df05a8cf` (the direct parent of `f5bcca0`) | `8670b661aad0ce6cb9a76a623effffed19f51ceb` injected from `f5bcca0:tests/e2e/acroxtv-wp2-program-isolation.spec.ts` | 2 failed, exit 1; each sibling episode rendered 3 times | `provenance-red-playwright-output.txt` |
+| GREEN | `f5bcca0bb47878f7bac56ba47372908ba22d8115` | `8670b661aad0ce6cb9a76a623effffed19f51ceb` tracked at that revision | 2 passed, exit 0 | `provenance-green-playwright-output.txt` |
+
+RED executed the f5bcca0 test blob as an untracked test-only file against an
+otherwise pinned `da69785` checkout, because the safety test did not exist in
+the parent. GREEN started with a clean source checkout at `f5bcca0`; its only
+post-test modification was generated `next-env.d.ts`. Both full commands and
+checksums are linked in `provenance-manifest.sha256`.
 
 ## Verification
 
