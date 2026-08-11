@@ -13,6 +13,11 @@ const publicEnvironment = {
 export default defineConfig({
   testDir: "./tests/e2e",
   testMatch: ["critical.spec.ts", "smoke.spec.ts", "acroxtv-*.spec.ts"],
+  // WP-1 evidence owns its execution; keep the normal green suite free of self-managed builds and intentional RED proof.
+  testIgnore: [
+    "acroxtv-wp1-capture-contract.spec.ts",
+    "acroxtv-wp1-legacy-alias.red.spec.ts"
+  ],
   forbidOnly: true,
   fullyParallel: true,
   timeout: 30_000,

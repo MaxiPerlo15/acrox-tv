@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test:e2e": "node scripts/run-e2e.mjs",
+    "test:e2e:wp1-capture": "node scripts/run-e2e.mjs --config=playwright.wp1-capture.config.ts",
     "test:e2e:chromium": "playwright test --project=chromium",
     "test:e2e:firefox": "playwright test --project=firefox",
     "test:e2e:webkit": "playwright test --project=webkit",
