@@ -232,6 +232,13 @@ type ProgramMediaSectionProps = { programSlug: string };
 
 const episodeItems = (surface: MediaSurface<EpisodeItem[]>) => ("items" in surface ? surface.items : []);
 
+const unavailableProgramFeed = (programSlug: string): ProgramFeedResponse => ({
+  programSlug,
+  episodes: { state: "unavailable" },
+  instagram: { state: "unavailable" },
+  live: { state: "unavailable" }
+});
+
 const EpisodeLink = ({ episode, compact = false }: { episode: EpisodeItem; compact?: boolean }) => (
   <a className={compact ? "program-episode program-episode--compact" : "program-episode"} href={episode.watchUrl}>
     <Image src={episode.thumbnailUrl} alt="" width={320} height={180} />
@@ -250,7 +257,9 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
   const [feed, setFeed] = useState<ProgramFeedResponse | null>(null);
 
   useEffect(() => {
-    void loadProgramFeedClient(programSlug).then(setFeed);
+    void loadProgramFeedClient(programSlug).then((response) => {
+      setFeed(response.programSlug === programSlug ? response : unavailableProgramFeed(programSlug));
+    });
   }, [programSlug]);
 
   if (!feed) return <p>Cargando programación...</p>;
