@@ -353,6 +353,15 @@ test.describe("Acrox TV editorial directory", () => {
     await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
   });
 
+  test("keeps each canonical program name in the visible editorial hierarchy", async ({ page }) => {
+    await page.goto("/");
+
+    const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+    for (const program of PROGRAMS) {
+      await expect(directory.getByRole("heading", { level: 3, name: program.name })).toBeVisible();
+    }
+  });
+
   test("keeps editorial covers in the Tab sequence and activates them with the keyboard", async ({ page }) => {
     await page.goto("/");
 

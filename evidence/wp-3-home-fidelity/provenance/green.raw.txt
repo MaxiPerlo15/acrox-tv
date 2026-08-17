@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy (282ms)
+
+  1 passed (6.0s)
+
+[exit_code=0]

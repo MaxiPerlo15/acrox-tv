@@ -1,0 +1,616 @@
+
+> acrox-tv-landing@0.1.0 test:e2e
+> node scripts/run-e2e.mjs
+
+
+Running 154 tests using 5 workers
+
+  ✓    2 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:59:7 › Acrox TV program registry contract › does not collide with current static routes or public-root paths (<duration>)
+  ✓    1 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:29:7 › Acrox TV program registry contract › exposes the two canonical program paths (<duration>)
+  ✓    5 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:63:7 › Acrox TV program registry contract › runs the parallel browser suite against a fresh production server (<duration>)
+  ✓    3 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:35:7 › Acrox TV program registry contract › discovers every registered program through its direct canonical sitemap URL (<duration>)
+  ✓    4 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:48:7 › Acrox TV program registry contract › rejects invalid, static-route, and public-root collisions (<duration>)
+  ✓    6 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:79:7 › Acrox TV program registry contract › pins Turbopack to this absolute project root (<duration>)
+  ✓    7 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:83:7 › Acrox TV program registry contract › documents the registry, media adapter, and scoped feed HTTP contracts (<duration>)
+  ✓    8 [chromium] › tests/e2e/acroxtv-contracts.spec.ts:43:7 › Acrox TV program registry contract › rejects duplicate and reserved slugs (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓   11 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:67:7 › Acrox TV direct program routes › serves the canonical Alta URL and rejects the former direct alias (<duration>)
+  ✓   12 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:76:7 › Acrox TV direct program routes › keeps direct program media scoped while Navbar uses the legacy feed (<duration>)
+  ✓   13 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:106:7 › Acrox TV direct program routes › renders available Instagram items without sibling media (<duration>)
+  ✓    9 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:37:7 › Acrox TV direct program routes › serves registered programs as generated static pages with route metadata (<duration>)
+  ✓   10 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:51:7 › Acrox TV direct program routes › renders every registered program inside the Acrox shell (<duration>)
+  ✓   16 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:205:7 › Acrox TV direct program routes › keeps an available zero-item feed honest (<duration>)
+  ✓   14 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:151:7 › Acrox TV direct program routes › renders unavailable Instagram distinctly with a latest-episode fallback (<duration>)
+  ✓   15 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:175:7 › Acrox TV direct program routes › renders stale Instagram items with a stale indication (<duration>)
+  ✓   18 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:231:9 › Acrox TV direct program routes › keeps a stale empty Instagram feed honest (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓   17 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:231:9 › Acrox TV direct program routes › keeps a available empty Instagram feed honest (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓   19 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:302:7 › Acrox TV direct program routes › leaves explicit static and API routes under their current owners (<duration>)
+  ✓   20 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:250:7 › Acrox TV direct program routes › renders an Instagram error distinctly from the primary episode error (<duration>)
+  ✓   21 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:311:7 › Acrox TV direct program routes › returns the established not-found page for unknown and reserved paths (<duration>)
+  ✓   23 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy (<duration>)
+  ✓   24 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:365:7 › Acrox TV editorial directory › keeps editorial covers in the Tab sequence and activates them with the keyboard (<duration>)
+  ✓   22 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:339:7 › Acrox TV editorial directory › renders equally prominent canonical program covers and keeps the approved-only ribbon off program pages (<duration>)
+  ✓   26 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:393:7 › Acrox TV editorial directory › shows a visible program fallback when artwork fails to load (<duration>)
+  ✓   27 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:411:7 › Acrox TV editorial directory › shows a visible program fallback when artwork failed before hydration (<duration>)
+  ✓   25 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:379:7 › Acrox TV editorial directory › keeps reverse Tab navigation between editorial covers (<duration>)
+  ✓   32 [chromium] › tests/e2e/acroxtv-feed.http.spec.ts:4:7 › program-scoped Acrox TV feed HTTP contract › rejects unknown slugs without reaching a provider (<duration>)
+  ✓   28 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:438:7 › Acrox TV editorial directory › keeps loaded artwork visible (<duration>)
+  ✓   29 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:446:7 › Acrox TV editorial directory › renders neutral sponsorship cells without inventing brands (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   31 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:468:7 › Acrox TV editorial directory › keeps legacy media, live, and feed content out of the home directory (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   30 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:456:7 › Acrox TV editorial directory › pauses the sponsorship ribbon for keyboard and reduced-motion visitors (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   35 [chromium] › tests/e2e/critical.spec.ts:51:7 › Hero CTAs › Solicitar Propuesta lleva a contacto (<duration>)
+  ✓   33 [chromium] › tests/e2e/acroxtv-wp2-program-isolation.spec.ts:20:9 › WP-2 program media isolation › does not render mas-que-nutricion media on /alta-data-te-tire (<duration>)
+  ✓   34 [chromium] › tests/e2e/acroxtv-wp2-program-isolation.spec.ts:20:9 › WP-2 program media isolation › does not render alta-data-te-tire media on /mas-que-nutricion (<duration>)
+  ✓   36 [chromium] › tests/e2e/critical.spec.ts:59:7 › Hero CTAs › Ver Nuestros Proyectos navega a /proyectos (<duration>)
+  ✓   37 [chromium] › tests/e2e/critical.spec.ts:69:7 › Navbar Desktop › links principales navegan a secciones relevantes (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   38 [chromium] › tests/e2e/critical.spec.ts:85:7 › Navbar Desktop › shows the live badge and opens the legacy live stream when the feed is live (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   39 [chromium] › tests/e2e/critical.spec.ts:118:7 › Navbar Desktop › keeps the Acrox TV anchors internal when the legacy feed is not live (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   40 [chromium] › tests/e2e/critical.spec.ts:145:7 › Form Negative Validations › submit vacio no envia (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   42 [chromium] › tests/e2e/critical.spec.ts:171:7 › Form Negative Validations › sin servicio no envia (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   41 [chromium] › tests/e2e/critical.spec.ts:159:7 › Form Negative Validations › sin consentimiento no envia (<duration>)
+  ✓   44 [chromium] › tests/e2e/critical.spec.ts:204:9 › Directorio de programas › la portada de Alta Data ¡Te Tire! lleva a su página canónica (<duration>)
+  ✓   43 [chromium] › tests/e2e/critical.spec.ts:185:7 › Popup Fallback › cuando window.open falla aplica fallback y no rompe flujo (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   49 [chromium] › tests/e2e/smoke.spec.ts:27:5 › sitemap includes proyectos (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   45 [chromium] › tests/e2e/critical.spec.ts:204:9 › Directorio de programas › la portada de Más que Nutrición lleva a su página canónica (<duration>)
+  ✓   46 [chromium] › tests/e2e/smoke.spec.ts:3:5 › home renders key sections (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   48 [chromium] › tests/e2e/smoke.spec.ts:19:5 › terms and privacy pages load (<duration>)
+  ✓   47 [chromium] › tests/e2e/smoke.spec.ts:13:5 › proyectos page loads (<duration>)
+  ✓   51 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:29:7 › Acrox TV program registry contract › exposes the two canonical program paths (<duration>)
+  ✓   52 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:59:7 › Acrox TV program registry contract › does not collide with current static routes or public-root paths (<duration>)
+  ✓   53 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:63:7 › Acrox TV program registry contract › runs the parallel browser suite against a fresh production server (<duration>)
+  ✓   54 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:79:7 › Acrox TV program registry contract › pins Turbopack to this absolute project root (<duration>)
+  ✓   55 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:83:7 › Acrox TV program registry contract › documents the registry, media adapter, and scoped feed HTTP contracts (<duration>)
+  ✓   50 [chromium] › tests/e2e/smoke.spec.ts:34:5 › contact form submits and reaches success state (<duration>)
+  ✓   57 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:35:7 › Acrox TV program registry contract › discovers every registered program through its direct canonical sitemap URL (<duration>)
+  ✓   59 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:43:7 › Acrox TV program registry contract › rejects duplicate and reserved slugs (<duration>)
+  ✓   61 [firefox] › tests/e2e/acroxtv-contracts.spec.ts:48:7 › Acrox TV program registry contract › rejects invalid, static-route, and public-root collisions (<duration>)
+  ✓   56 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:37:7 › Acrox TV direct program routes › serves registered programs as generated static pages with route metadata (<duration>)
+  ✓   60 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:76:7 › Acrox TV direct program routes › keeps direct program media scoped while Navbar uses the legacy feed (<duration>)
+  ✓   62 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:106:7 › Acrox TV direct program routes › renders available Instagram items without sibling media (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓   64 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:151:7 › Acrox TV direct program routes › renders unavailable Instagram distinctly with a latest-episode fallback (<duration>)
+  ✓   58 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:67:7 › Acrox TV direct program routes › serves the canonical Alta URL and rejects the former direct alias (<duration>)
+  ✓   65 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:175:7 › Acrox TV direct program routes › renders stale Instagram items with a stale indication (<duration>)
+  ✓   66 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:205:7 › Acrox TV direct program routes › keeps an available zero-item feed honest (<duration>)
+  ✓   70 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:302:7 › Acrox TV direct program routes › leaves explicit static and API routes under their current owners (<duration>)
+  ✓   68 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:231:9 › Acrox TV direct program routes › keeps a stale empty Instagram feed honest (<duration>)
+  ✓   69 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:250:7 › Acrox TV direct program routes › renders an Instagram error distinctly from the primary episode error (<duration>)
+  ✓   63 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:51:7 › Acrox TV direct program routes › renders every registered program inside the Acrox shell (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓   67 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:231:9 › Acrox TV direct program routes › keeps a available empty Instagram feed honest (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓   71 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:311:7 › Acrox TV direct program routes › returns the established not-found page for unknown and reserved paths (<duration>)
+  ✓   74 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy (<duration>)
+  ✓   73 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:365:7 › Acrox TV editorial directory › keeps editorial covers in the Tab sequence and activates them with the keyboard (<duration>)
+  ✓   75 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:379:7 › Acrox TV editorial directory › keeps reverse Tab navigation between editorial covers (<duration>)
+  ✓   72 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:339:7 › Acrox TV editorial directory › renders equally prominent canonical program covers and keeps the approved-only ribbon off program pages (<duration>)
+  ✓   78 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:438:7 › Acrox TV editorial directory › keeps loaded artwork visible (<duration>)
+  ✓   77 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:411:7 › Acrox TV editorial directory › shows a visible program fallback when artwork failed before hydration (<duration>)
+  ✓   76 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:393:7 › Acrox TV editorial directory › shows a visible program fallback when artwork fails to load (<duration>)
+  ✓   81 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:468:7 › Acrox TV editorial directory › keeps legacy media, live, and feed content out of the home directory (<duration>)
+  ✓   79 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:446:7 › Acrox TV editorial directory › renders neutral sponsorship cells without inventing brands (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   80 [firefox] › tests/e2e/acroxtv-editorial.spec.ts:456:7 › Acrox TV editorial directory › pauses the sponsorship ribbon for keyboard and reduced-motion visitors (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   82 [firefox] › tests/e2e/acroxtv-feed.http.spec.ts:4:7 › program-scoped Acrox TV feed HTTP contract › rejects unknown slugs without reaching a provider (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   83 [firefox] › tests/e2e/acroxtv-wp2-program-isolation.spec.ts:20:9 › WP-2 program media isolation › does not render mas-que-nutricion media on /alta-data-te-tire (<duration>)
+  ✓   85 [firefox] › tests/e2e/critical.spec.ts:51:7 › Hero CTAs › Solicitar Propuesta lleva a contacto (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   84 [firefox] › tests/e2e/acroxtv-wp2-program-isolation.spec.ts:20:9 › WP-2 program media isolation › does not render alta-data-te-tire media on /mas-que-nutricion (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   89 [firefox] › tests/e2e/critical.spec.ts:118:7 › Navbar Desktop › keeps the Acrox TV anchors internal when the legacy feed is not live (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   88 [firefox] › tests/e2e/critical.spec.ts:85:7 › Navbar Desktop › shows the live badge and opens the legacy live stream when the feed is live (<duration>)
+  ✓   86 [firefox] › tests/e2e/critical.spec.ts:59:7 › Hero CTAs › Ver Nuestros Proyectos navega a /proyectos (<duration>)
+  ✓   87 [firefox] › tests/e2e/critical.spec.ts:69:7 › Navbar Desktop › links principales navegan a secciones relevantes (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   90 [firefox] › tests/e2e/critical.spec.ts:145:7 › Form Negative Validations › submit vacio no envia (<duration>)
+  ✓   94 [firefox] › tests/e2e/critical.spec.ts:204:9 › Directorio de programas › la portada de Alta Data ¡Te Tire! lleva a su página canónica (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   91 [firefox] › tests/e2e/critical.spec.ts:159:7 › Form Negative Validations › sin consentimiento no envia (<duration>)
+  ✓   92 [firefox] › tests/e2e/critical.spec.ts:171:7 › Form Negative Validations › sin servicio no envia (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   96 [firefox] › tests/e2e/smoke.spec.ts:3:5 › home renders key sections (<duration>)
+  ✓   99 [firefox] › tests/e2e/smoke.spec.ts:27:5 › sitemap includes proyectos (<duration>)
+  ✓   93 [firefox] › tests/e2e/critical.spec.ts:185:7 › Popup Fallback › cuando window.open falla aplica fallback y no rompe flujo (<duration>)
+  ✓   95 [firefox] › tests/e2e/critical.spec.ts:204:9 › Directorio de programas › la portada de Más que Nutrición lleva a su página canónica (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓   97 [firefox] › tests/e2e/smoke.spec.ts:13:5 › proyectos page loads (<duration>)
+  ✓   98 [firefox] › tests/e2e/smoke.spec.ts:19:5 › terms and privacy pages load (<duration>)
+  ✓  101 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:29:7 › Acrox TV program registry contract › exposes the two canonical program paths (<duration>)
+  ✓  102 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:59:7 › Acrox TV program registry contract › does not collide with current static routes or public-root paths (<duration>)
+  ✓  103 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:35:7 › Acrox TV program registry contract › discovers every registered program through its direct canonical sitemap URL (<duration>)
+  ✓  104 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:63:7 › Acrox TV program registry contract › runs the parallel browser suite against a fresh production server (<duration>)
+  ✓  105 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:79:7 › Acrox TV program registry contract › pins Turbopack to this absolute project root (<duration>)
+  ✓  106 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:83:7 › Acrox TV program registry contract › documents the registry, media adapter, and scoped feed HTTP contracts (<duration>)
+  ✓  109 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:43:7 › Acrox TV program registry contract › rejects duplicate and reserved slugs (<duration>)
+  ✓  111 [webkit] › tests/e2e/acroxtv-contracts.spec.ts:48:7 › Acrox TV program registry contract › rejects invalid, static-route, and public-root collisions (<duration>)
+  ✓  100 [firefox] › tests/e2e/smoke.spec.ts:34:5 › contact form submits and reaches success state (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓  110 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:67:7 › Acrox TV direct program routes › serves the canonical Alta URL and rejects the former direct alias (<duration>)
+  ✓  107 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:37:7 › Acrox TV direct program routes › serves registered programs as generated static pages with route metadata (<duration>)
+  ✓  108 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:51:7 › Acrox TV direct program routes › renders every registered program inside the Acrox shell (<duration>)
+  ✓  112 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:76:7 › Acrox TV direct program routes › keeps direct program media scoped while Navbar uses the legacy feed (<duration>)
+  ✓  113 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:151:7 › Acrox TV direct program routes › renders unavailable Instagram distinctly with a latest-episode fallback (<duration>)
+  ✓  115 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:205:7 › Acrox TV direct program routes › keeps an available zero-item feed honest (<duration>)
+  ✓  114 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:175:7 › Acrox TV direct program routes › renders stale Instagram items with a stale indication (<duration>)
+  ✓  116 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:231:9 › Acrox TV direct program routes › keeps a available empty Instagram feed honest (<duration>)
+  ✓  119 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:302:7 › Acrox TV direct program routes › leaves explicit static and API routes under their current owners (<duration>)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+[WebServer] Error: Internal: NoFallbackError
+[WebServer]     at n (.next/server/chunks/ssr/_1d0189b4._.js:2:1128)
+[WebServer]     at responseGenerator (.next/server/chunks/ssr/_1d0189b4._.js:2:2770)
+  ✓  117 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:231:9 › Acrox TV direct program routes › keeps a stale empty Instagram feed honest (<duration>)
+  ✓  118 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:250:7 › Acrox TV direct program routes › renders an Instagram error distinctly from the primary episode error (<duration>)
+  ✓  120 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:311:7 › Acrox TV direct program routes › returns the established not-found page for unknown and reserved paths (<duration>)
+  ✓  123 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy (<duration>)
+  ✓  121 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:339:7 › Acrox TV editorial directory › renders equally prominent canonical program covers and keeps the approved-only ribbon off program pages (<duration>)
+  ✓  124 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:365:7 › Acrox TV editorial directory › keeps editorial covers in the Tab sequence and activates them with the keyboard (<duration>)
+  ✓  122 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:106:7 › Acrox TV direct program routes › renders available Instagram items without sibling media (<duration>)
+  ✓  125 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:379:7 › Acrox TV editorial directory › keeps reverse Tab navigation between editorial covers (<duration>)
+  ✓  126 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:393:7 › Acrox TV editorial directory › shows a visible program fallback when artwork fails to load (<duration>)
+  ✓  127 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:411:7 › Acrox TV editorial directory › shows a visible program fallback when artwork failed before hydration (<duration>)
+  ✓  128 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:438:7 › Acrox TV editorial directory › keeps loaded artwork visible (<duration>)
+  ✓  131 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:468:7 › Acrox TV editorial directory › keeps legacy media, live, and feed content out of the home directory (<duration>)
+  ✓  129 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:446:7 › Acrox TV editorial directory › renders neutral sponsorship cells without inventing brands (<duration>)
+  ✓  132 [webkit] › tests/e2e/acroxtv-feed.http.spec.ts:4:7 › program-scoped Acrox TV feed HTTP contract › rejects unknown slugs without reaching a provider (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  130 [webkit] › tests/e2e/acroxtv-editorial.spec.ts:456:7 › Acrox TV editorial directory › pauses the sponsorship ribbon for keyboard and reduced-motion visitors (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  133 [webkit] › tests/e2e/acroxtv-wp2-program-isolation.spec.ts:20:9 › WP-2 program media isolation › does not render mas-que-nutricion media on /alta-data-te-tire (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  134 [webkit] › tests/e2e/acroxtv-wp2-program-isolation.spec.ts:20:9 › WP-2 program media isolation › does not render alta-data-te-tire media on /mas-que-nutricion (<duration>)
+  ✓  136 [webkit] › tests/e2e/critical.spec.ts:59:7 › Hero CTAs › Ver Nuestros Proyectos navega a /proyectos (<duration>)
+  ✓  135 [webkit] › tests/e2e/critical.spec.ts:51:7 › Hero CTAs › Solicitar Propuesta lleva a contacto (<duration>)
+  ✓  139 [webkit] › tests/e2e/critical.spec.ts:118:7 › Navbar Desktop › keeps the Acrox TV anchors internal when the legacy feed is not live (<duration>)
+  ✓  138 [webkit] › tests/e2e/critical.spec.ts:85:7 › Navbar Desktop › shows the live badge and opens the legacy live stream when the feed is live (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  137 [webkit] › tests/e2e/critical.spec.ts:69:7 › Navbar Desktop › links principales navegan a secciones relevantes (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  140 [webkit] › tests/e2e/critical.spec.ts:145:7 › Form Negative Validations › submit vacio no envia (<duration>)
+  ✓  144 [webkit] › tests/e2e/critical.spec.ts:204:9 › Directorio de programas › la portada de Alta Data ¡Te Tire! lleva a su página canónica (<duration>)
+  ✓  141 [webkit] › tests/e2e/critical.spec.ts:159:7 › Form Negative Validations › sin consentimiento no envia (<duration>)
+  ✓  142 [webkit] › tests/e2e/critical.spec.ts:171:7 › Form Negative Validations › sin servicio no envia (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  143 [webkit] › tests/e2e/critical.spec.ts:185:7 › Popup Fallback › cuando window.open falla aplica fallback y no rompe flujo (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  149 [webkit] › tests/e2e/smoke.spec.ts:27:5 › sitemap includes proyectos (<duration>)
+  ✓  146 [webkit] › tests/e2e/smoke.spec.ts:3:5 › home renders key sections (<duration>)
+  ✓  147 [webkit] › tests/e2e/smoke.spec.ts:13:5 › proyectos page loads (<duration>)
+  ✓  148 [webkit] › tests/e2e/smoke.spec.ts:19:5 › terms and privacy pages load (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  145 [webkit] › tests/e2e/critical.spec.ts:204:9 › Directorio de programas › la portada de Más que Nutrición lleva a su página canónica (<duration>)
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram fetch failed {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+[WebServer] [acroxtv-feed] Instagram unavailable without snapshot {
+[WebServer]   name: 'Error',
+[WebServer]   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+[WebServer] }
+  ✓  150 [webkit] › tests/e2e/smoke.spec.ts:34:5 › contact form submits and reaches success state (<duration>)
+  ✓  153 [mobile] › tests/e2e/acroxtv-editorial.spec.ts:273:7 › Acrox TV direct program routes › keeps the direct program media hierarchy readable at 380px @mobile (<duration>)
+  ✓  152 [mobile] › tests/e2e/acroxtv-editorial.spec.ts:475:7 › Acrox TV editorial directory › keeps both covers available and readable on mobile @mobile (<duration>)
+  ✓  151 [mobile] › tests/e2e/critical.spec.ts:229:7 › Mobile Critical @mobile › navbar mobile navega a ACROX TV y Contacto @mobile (<duration>)
+  ✓  154 [mobile] › tests/e2e/critical.spec.ts:243:7 › Mobile Critical @mobile › service select mobile abre sheet, selecciona y cierra @mobile (<duration>)
+
+  154 passed (<duration>)
+
+[exit_code=0]

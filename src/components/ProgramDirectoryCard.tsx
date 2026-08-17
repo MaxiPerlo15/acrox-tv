@@ -54,9 +54,11 @@ export default function ProgramDirectoryCard({ program, position }: ProgramDirec
         )}
       </div>
       <div className="program-directory-card-copy">
-        <span>{program.summary}</span>
+        <div>
+          <h3>{program.name}</h3>
+          <p>{program.summary}</p>
+        </div>
         <strong aria-hidden="true">↗</strong>
-        <span className="sr-only">Conocer {program.name}</span>
       </div>
     </Link>
   );

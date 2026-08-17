@@ -6172,7 +6172,9 @@ a {
 .program-directory-card-placeholder strong { font-family: var(--font-display), sans-serif; font-size: clamp(1.25rem, 2.4vw, 1.8rem); letter-spacing: .04em; text-transform: uppercase; }
 .program-directory-card-placeholder small { color: var(--text-tertiary); font-size: .67rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
 .program-directory-card-copy { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 0; background: none; }
-.program-directory-card-copy > span:first-child { max-width: 29ch; color: rgba(243, 246, 255, .86); font-size: .92rem; line-height: 1.45; }
+.program-directory-card-copy > div { max-width: 29ch; }
+.program-directory-card-copy h3 { margin: 0; color: var(--text); font-family: var(--font-display), sans-serif; font-size: clamp(1.35rem, 2.3vw, 2rem); line-height: 1; }
+.program-directory-card-copy p { margin: 10px 0 0; color: rgba(243, 246, 255, .86); font-size: .92rem; line-height: 1.45; }
 .program-directory-card-copy strong { display: grid; flex: 0 0 auto; width: 2.6rem; height: 2.6rem; place-items: center; margin: 0; border: 1px solid currentColor; border-radius: 50%; font-size: 1.3rem; transition: transform .2s ease; }
 .program-directory-card:hover .program-directory-card-copy strong { transform: translate(3px, -3px); }
 .sponsor-ribbon { display: block; margin-top: clamp(24px, 3vw, 40px); padding-top: clamp(20px, 2.5vw, 32px); overflow: hidden; border-color: var(--line); }
