@@ -9,6 +9,7 @@ for (const file of rawFiles) {
   const normalized = (await readFile(`${directory}/${file}`, "utf8"))
     .replace(ansi, "")
     .replace(/\/private\/var\/folders\/[^\s)]+/g, "<temporary-path>")
+    .replace(/✓ Ready in \d+ms/g, "✓ Ready in <startup-time>")
     .replace(/\r\n/g, "\n")
     .replace(/[ \t]+$/gm, "")
     .trimEnd() + "\n";

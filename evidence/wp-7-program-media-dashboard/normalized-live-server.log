@@ -7,7 +7,7 @@
 - Network:       http://192.168.100.68:3027
 
 ✓ Starting...
-✓ Ready in 193ms
+✓ Ready in <startup-time>
 [acroxtv-feed] Instagram fetch failed {
   name: 'Error',
   message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'

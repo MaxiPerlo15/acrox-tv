@@ -31,13 +31,36 @@ Each capture is a dashboard target, not a geometry crop: it includes the dominan
 | `/alta-data-te-tire` | `alta-data-te-tire-desktop-thumbnail.png`, `alta-data-te-tire-desktop-player.png` | `alta-data-te-tire-mobile-thumbnail.png`, `alta-data-te-tire-mobile-player.png` |
 | `/mas-que-nutricion` | `mas-que-nutricion-desktop-thumbnail.png`, `mas-que-nutricion-desktop-player.png` | `mas-que-nutricion-mobile-thumbnail.png`, `mas-que-nutricion-mobile-player.png` |
 
-The live scoped feeds returned 9 Alta episodes and 8 Más que Nutrición episodes. The rendered lead images loaded at non-zero media resolutions, and the player-state captures show the corresponding scoped `youtube-nocookie` embeds. Desktop metadata records the lead above the three aligned panels; mobile metadata records the same-width vertical panel stack.
+The live scoped feeds returned 9 Alta episodes and 8 Más que Nutrición episodes. The thumbnail captures are live: the rendered lead images loaded at non-zero media resolutions. Desktop metadata records the lead above the three aligned panels; mobile metadata records the same-width vertical panel stack.
+
+### Player-state capture fixture (not live playback)
+
+Headless Chromium paints the live YouTube iframe black. For **player-state screenshots only**, `capture-live-dashboard.mjs` installs this deterministic route **before user activation**:
+
+```js
+await context.route("https://www.youtube-nocookie.com/embed/**", async (request) => {
+  await request.fulfill({ contentType: "text/html; charset=utf-8", body: captureOnlyPlayerHtml });
+});
+```
+
+The production application remains untouched. Clicking the real lead control still produces its real `youtube-nocookie` iframe URL; the capture script asserts that its origin is `https://www.youtube-nocookie.com` and that `/embed/<videoId>` matches the scoped leading item before the intercept supplies the following local HTML:
+
+```html
+<main class="player" aria-label="Capture-only YouTube player fixture">
+  <div class="badge" aria-hidden="true"></div>
+  <div class="label">YouTube</div>
+  <div class="notice">Capture-only player fixture</div>
+</main>
+```
+
+The complete deterministic HTML and interception pattern are recorded verbatim in `capture-live-dashboard.mjs` and `capture-metadata.json`. `CAPTURE_PLAYER_FIXTURE=1` also routes only the two program-feed requests to public, previously live-captured leading items so capture can run without credentials; it preserves the prior live thumbnail records and overwrites only the four player-state PNGs. The recognizable red play badge, YouTube label, and fixture notice make the player-state PNGs visibly distinguishable from live playback. They prove activation, production URL/scoped-video binding, and lead-container layout only; they do **not** claim rendered YouTube playback. Thumbnail PNGs remain the live thumbnail evidence.
 
 ## Reproduction
 
 1. Start the already-built candidate with the required public variables and a transient `YOUTUBE_API_KEY`.
-2. Run `BASE_URL=http://127.0.0.1:<port> node evidence/wp-7-program-media-dashboard/capture-live-dashboard.mjs`.
-3. Run `node evidence/wp-7-program-media-dashboard/normalize-output.mjs` and `node evidence/wp-7-program-media-dashboard/create-manifest.mjs`.
+2. For a full run with a transient `YOUTUBE_API_KEY`, run `BASE_URL=http://127.0.0.1:<port> node evidence/wp-7-program-media-dashboard/capture-live-dashboard.mjs`. This captures live thumbnails and capture-only fixture player states.
+3. For the deterministic player-only remediation, run `CAPTURE_PLAYER_FIXTURE=1 BASE_URL=http://127.0.0.1:<port> node evidence/wp-7-program-media-dashboard/capture-live-dashboard.mjs`. This keeps the retained live thumbnail metadata and re-captures only desktop/mobile player states for both routes.
+4. Run `node evidence/wp-7-program-media-dashboard/normalize-output.mjs` and `node evidence/wp-7-program-media-dashboard/create-manifest.mjs`.
 
 ## Rollback
 
