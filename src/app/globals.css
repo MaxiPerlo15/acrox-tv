@@ -561,6 +561,11 @@ a {
   margin-bottom: 0;
 }
 
+#acroxtv.program-directory {
+  border: 0;
+  background: transparent;
+}
+
 .sections-wrapper {
   padding-inline: var(--layout-px-mobile);
 }

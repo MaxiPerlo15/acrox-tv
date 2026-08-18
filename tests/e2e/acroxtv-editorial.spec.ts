@@ -2,6 +2,11 @@ import { expect, test, type Page, type Route } from "@playwright/test";
 import { PROGRAMS } from "@/domain/programs";
 
 const TRANSPARENT_PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLJNgAAAABJRU5ErkJggg==", "base64");
+const PANEL_FREE_PROGRAM_DIRECTORY_STYLES = {
+  backgroundColor: "rgba(0, 0, 0, 0)",
+  backgroundImage: "none",
+  borderTopWidth: "0px"
+};
 const mockExternalThumbnails = async (page: Page) => {
   const fulfillThumbnail = (route: Route) => route.fulfill({ contentType: "image/png", body: TRANSPARENT_PNG });
   await Promise.all([page.route("**/i.ytimg.com/**", fulfillThumbnail), page.route("**/scontent.cdninstagram.com/**", fulfillThumbnail)]);
@@ -362,6 +367,22 @@ test.describe("Acrox TV editorial directory", () => {
     }
   });
 
+  test("places the home program directory directly on the page background", async ({ page }) => {
+    await page.goto("/");
+
+    const directory = page.locator("#acroxtv.program-directory");
+    await expect(directory).toBeVisible();
+    const styles = await directory.evaluate((element) => {
+      const styles = getComputedStyle(element);
+      return {
+        backgroundColor: styles.backgroundColor,
+        backgroundImage: styles.backgroundImage,
+        borderTopWidth: styles.borderTopWidth
+      };
+    });
+    expect(styles).toEqual(PANEL_FREE_PROGRAM_DIRECTORY_STYLES);
+  });
+
   test("keeps editorial covers in the Tab sequence and activates them with the keyboard", async ({ page }) => {
     await page.goto("/");
 
@@ -484,5 +505,21 @@ test.describe("Acrox TV editorial directory", () => {
     expect(altaDataBox?.x).toBe(nutritionBox?.x);
     expect(nutritionBox?.y).toBeGreaterThan(altaDataBox?.y ?? 0);
     await expect(page.getByRole("region", { name: "Nos acompañan" })).toBeVisible();
+  });
+
+  test("keeps the home program directory panel-free on mobile @mobile", async ({ page }) => {
+    await page.goto("/");
+
+    const directory = page.locator("#acroxtv.program-directory");
+    await expect(directory).toBeVisible();
+    const styles = await directory.evaluate((element) => {
+      const styles = getComputedStyle(element);
+      return {
+        backgroundColor: styles.backgroundColor,
+        backgroundImage: styles.backgroundImage,
+        borderTopWidth: styles.borderTopWidth
+      };
+    });
+    expect(styles).toEqual(PANEL_FREE_PROGRAM_DIRECTORY_STYLES);
   });
 });
