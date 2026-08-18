@@ -1,7 +1,8 @@
 # WP-7 program media carousels immutable evidence manifest
 # Product commit: 1f675822ee0b259f960acdf4d1d4011e5708a80a
-# Evidence payload commit: 6b30f350cf0de242fba16fae812afc11232bba2c
+# Evidence payload commit: e25d0ff705c5526b81de512e7a17566e8cdcec45
 # Excluded metadata: create-manifest.mjs, manifest.sha256, report.md
+69f4554fde51b558622cf17723878e2ed1fea6fdf13feaba112e90595d6bf340  .gitattributes
 60f7bfece249237ca82ea577bd6bddfe0d6cda27311d92635c2d37bafc95b0a7  alta-data-te-tire-desktop.png
 8aeb298788626ed8f22311a69a875788360a3e7e116ea3c55da7aa3378b3f0bd  alta-data-te-tire-mobile.png
 ede35b75b76e99bca9e2b6d73af81329a2d2f2a0072ce956fbd8ca64a58bcbe7  capture-metadata.json

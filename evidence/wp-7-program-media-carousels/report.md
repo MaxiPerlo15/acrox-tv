@@ -3,7 +3,7 @@
 ## Binding
 
 - Product implementation: `1f675822ee0b259f960acdf4d1d4011e5708a80a`
-- Immutable evidence payload: `6b30f350cf0de242fba16fae812afc11232bba2c`
+- Immutable evidence payload: `e25d0ff705c5526b81de512e7a17566e8cdcec45`
 - This metadata commit creates `manifest.sha256` and is intentionally excluded from payload hashing.
 
 ## Strict TDD
