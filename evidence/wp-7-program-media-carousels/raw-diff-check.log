@@ -1,5 +1,33 @@
- src/app/globals.css                             |  34 ++++----
- src/components/AcroxTvMediaSection.tsx          | 100 ++++++++++-------------
- src/components/SocialCarousel.tsx               |   6 +-
- tests/e2e/acroxtv-program-media-preview.spec.ts | 104 +++++++++++++-----------
- 4 files changed, 116 insertions(+), 128 deletions(-)
+ .../wp-7-program-media-carousels/.gitattributes    |    1 +
+ .../alta-data-te-tire-desktop.png                  |  Bin 0 -> 1279446 bytes
+ .../alta-data-te-tire-mobile.png                   |  Bin 0 -> 422907 bytes
+ .../capture-metadata.json                          |  194 +++
+ .../capture-program-media-row.mjs                  |   92 ++
+ .../create-manifest.mjs                            |   22 +
+ .../wp-7-program-media-carousels/manifest.sha256   |   28 +
+ .../mas-que-nutricion-desktop.png                  |  Bin 0 -> 607022 bytes
+ .../mas-que-nutricion-mobile.png                   |  Bin 0 -> 192836 bytes
+ .../normalize-output.mjs                           |   15 +
+ .../normalized-build.log                           |   37 +
+ .../normalized-capture.log                         |    1 +
+ .../normalized-contracts.log                       |   32 +
+ .../normalized-diff-check.log                      |    5 +
+ .../normalized-full-e2e.log                        | 1236 ++++++++++++++++++++
+ .../normalized-lint.log                            |    3 +
+ .../normalized-live-server.log                     |   42 +
+ .../normalized-typecheck.log                       |    1 +
+ .../wp-7-program-media-carousels/raw-build.log     |  Bin 0 -> 1014 bytes
+ .../wp-7-program-media-carousels/raw-capture.log   |  Bin
+ .../wp-7-program-media-carousels/raw-contracts.log |  Bin 0 -> 4418 bytes
+ .../raw-diff-check.log                             |  Bin 0 -> 335 bytes
+ .../wp-7-program-media-carousels/raw-full-e2e.log  |  Bin 0 -> 106731 bytes
+ evidence/wp-7-program-media-carousels/raw-lint.log |  Bin 0 -> 43 bytes
+ .../raw-live-server.log                            |  Bin 0 -> 1488 bytes
+ .../wp-7-program-media-carousels/raw-typecheck.log |  Bin
+ evidence/wp-7-program-media-carousels/report.md    |   29 +
+ src/app/globals.css                                |   34 +-
+ src/components/AcroxTvMediaSection.tsx             |  100 +-
+ src/components/SocialCarousel.tsx                  |   10 +-
+ tests/e2e/acroxtv-editorial.spec.ts                |   10 +-
+ tests/e2e/acroxtv-program-media-preview.spec.ts    |  104 +-
+ 32 files changed, 1861 insertions(+), 135 deletions(-)
