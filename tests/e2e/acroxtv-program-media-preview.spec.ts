@@ -133,4 +133,67 @@ test.describe("program media previews", () => {
     await expectPreviewPlayerToFillContainer(latestPreview, "Alta episodio más reciente");
     expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
   });
+
+  test("presents a dominant lead preview above three aligned media panels on desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 960 });
+
+    const dashboard = page.getByRole("region", { name: "Dashboard de medios" });
+    const lead = dashboard.getByRole("region", { name: "Último episodio" });
+    const panels = dashboard.getByRole("region", { name: /Panel (Más visto|Episodios|Instagram)/ });
+
+    await expect(dashboard).toBeVisible();
+    await expect(lead.getByRole("button", { name: /Reproducir Alta episodio más reciente/i })).toBeVisible();
+    await expect(panels).toHaveCount(3);
+
+    const [leadBox, firstPanel, secondPanel, thirdPanel] = await Promise.all([
+      lead.boundingBox(),
+      panels.nth(0).boundingBox(),
+      panels.nth(1).boundingBox(),
+      panels.nth(2).boundingBox()
+    ]);
+
+    expect(leadBox).not.toBeNull();
+    expect(firstPanel).not.toBeNull();
+    expect(secondPanel).not.toBeNull();
+    expect(thirdPanel).not.toBeNull();
+
+    expect(leadBox!.width / leadBox!.height).toBeCloseTo(16 / 9, 1);
+    expect(leadBox!.width).toBeGreaterThan(firstPanel!.width * 2.4);
+    expect(Math.abs(firstPanel!.y - secondPanel!.y)).toBeLessThanOrEqual(2);
+    expect(Math.abs(secondPanel!.y - thirdPanel!.y)).toBeLessThanOrEqual(2);
+    expect(Math.abs(firstPanel!.height - secondPanel!.height)).toBeLessThanOrEqual(2);
+    expect(Math.abs(secondPanel!.height - thirdPanel!.height)).toBeLessThanOrEqual(2);
+    expect(firstPanel!.x).toBeLessThan(secondPanel!.x);
+    expect(secondPanel!.x).toBeLessThan(thirdPanel!.x);
+  });
+
+  test("stacks the dashboard panels without overflow on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+
+    const dashboard = page.getByRole("region", { name: "Dashboard de medios" });
+    const lead = dashboard.getByRole("region", { name: "Último episodio" });
+    const panels = dashboard.getByRole("region", { name: /Panel (Más visto|Episodios|Instagram)/ });
+
+    await expect(lead).toBeVisible();
+    await expect(panels).toHaveCount(3);
+
+    const [leadBox, firstPanel, secondPanel, thirdPanel] = await Promise.all([
+      lead.boundingBox(),
+      panels.nth(0).boundingBox(),
+      panels.nth(1).boundingBox(),
+      panels.nth(2).boundingBox()
+    ]);
+
+    expect(leadBox).not.toBeNull();
+    expect(firstPanel).not.toBeNull();
+    expect(secondPanel).not.toBeNull();
+    expect(thirdPanel).not.toBeNull();
+
+    expect(leadBox!.width / leadBox!.height).toBeCloseTo(16 / 9, 1);
+    expect(Math.abs(firstPanel!.x - secondPanel!.x)).toBeLessThanOrEqual(2);
+    expect(Math.abs(secondPanel!.x - thirdPanel!.x)).toBeLessThanOrEqual(2);
+    expect(firstPanel!.y).toBeLessThan(secondPanel!.y);
+    expect(secondPanel!.y).toBeLessThan(thirdPanel!.y);
+    expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
+  });
 });

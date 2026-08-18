@@ -357,9 +357,10 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
 
   return (
     <section className="program-media" aria-label="Programación del programa">
+      <section className="program-media-dashboard" aria-label="Dashboard de medios">
       <section className="program-latest" aria-labelledby="latest-episode-title">
-        <div>
-          <p>SEÑAL DEL PROGRAMA</p>
+        <div className="program-latest-heading">
+          <p className="program-media-badge">SEÑAL DEL PROGRAMA</p>
           <h2 id="latest-episode-title">Último episodio</h2>
         </div>
         {feed.episodes.state === "error" ? (
@@ -372,24 +373,25 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
           <p>{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
         )}
       </section>
-      <div className="program-media-grid">
-        <section className="program-media-card" aria-labelledby="most-viewed-title">
-          <p>LO MÁS VISTO</p>
+      <div className="program-media-grid" aria-label="Paneles de medios">
+        <section className="program-media-card" aria-label="Panel Más visto">
+          <p className="program-media-badge">YOUTUBE · AUDIENCIA</p>
           <h2 id="most-viewed-title">Más visto</h2>
           {isEpisodeState ? <ProgramEpisodeCarousel title="Más visto" episodes={mostViewed} /> : null}
         </section>
-        <section className="program-media-card" aria-labelledby="episodes-title">
-          <p>ARCHIVO DE LA SEÑAL</p>
+        <section className="program-media-card" aria-label="Panel Episodios">
+          <p className="program-media-badge">YOUTUBE · ARCHIVO</p>
           <h2 id="episodes-title">Episodios</h2>
           {feed.episodes.state === "stale" ? <p>Este contenido puede no estar actualizado.</p> : null}
           {isEpisodeState ? <ProgramEpisodeCarousel title="Episodios" episodes={episodes.slice(0, 4)} /> : null}
         </section>
-        <section className="program-media-card program-instagram-card" aria-labelledby="instagram-title">
-          <p>CUENTA PROFESIONAL</p>
+        <section className="program-media-card program-instagram-card" aria-label="Panel Instagram">
+          <p className="program-media-badge">CUENTA PROFESIONAL</p>
           <h2 id="instagram-title">Instagram</h2>
           <p>Instagram aún no está disponible para este programa.</p>
         </section>
       </div>
+      </section>
     </section>
   );
 };
