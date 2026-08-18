@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000/';
 const outputDirectory = fileURLToPath(new URL('.', import.meta.url));
+const targetSelector = '#acroxtv.program-directory';
 const captures = [
   { name: 'desktop', width: 1440, height: 900 },
   { name: 'mobile', width: 375, height: 812 },
@@ -24,14 +25,25 @@ try {
 
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
-    await page.screenshot({
+    const target = page.locator(targetSelector);
+    await target.scrollIntoViewIfNeeded();
+    await target.screenshot({
       path: `${outputDirectory}po-follow-up-${capture.name}.png`,
-      fullPage: false,
       animations: 'disabled',
     });
+    const { backgroundColor, backgroundImage, borderTopWidth } =
+      await target.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          backgroundColor: style.backgroundColor,
+          backgroundImage: style.backgroundImage,
+          borderTopWidth: style.borderTopWidth,
+        };
+      });
+    const box = await target.boundingBox();
 
     console.log(
-      `${capture.name}=${capture.width}x${capture.height}, fullPage=false`,
+      `${capture.name}: viewport=${capture.width}x${capture.height}, target=${box?.width}x${box?.height}, selector=${targetSelector}, background=${backgroundColor}, image=${backgroundImage}, borderTop=${borderTopWidth}`,
     );
     await context.close();
   }
