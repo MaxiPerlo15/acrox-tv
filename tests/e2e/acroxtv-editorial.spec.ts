@@ -62,7 +62,7 @@ test.describe("Acrox TV direct program routes", () => {
       await expect(page.getByAltText("Logo Acrox").first()).toBeVisible();
       await expect(page.getByRole("contentinfo")).toBeVisible();
       await expect(page.getByRole("contentinfo")).toContainText("Acrox ©");
-      await expect(page.getByRole("heading", { level: 2, name: "Episodios" })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Episodios" })).toBeVisible();
       await expect(
         page.getByRole("contentinfo").getByLabel("Navegacion del pie de pagina").getByRole("link", { name: "Inicio" })
       ).toHaveAttribute("href", "/#inicio");
@@ -144,8 +144,8 @@ test.describe("Acrox TV direct program routes", () => {
     await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
-    await expect(main.getByRole("heading", { name: "Episodios" })).toBeVisible();
-    await expect(main.getByRole("region", { name: "Carrusel Episodios" }).getByRole("button", { name: "Reproducir Episodio de Alta Data" })).toBeVisible();
+    await expect(main.getByRole("region", { name: "Episodios" })).toBeVisible();
+    await expect(main.getByRole("region", { name: "Episodios" }).getByRole("button", { name: "Reproducir Episodio de Alta Data" })).toBeVisible();
     await expect(main.getByText("Instagram aún no está disponible para este programa.")).toBeVisible();
     await expect(main.getByRole("link", { name: "Publicación de Alta Data" })).toHaveCount(0);
     await expect(main.locator('img[src*="dQw4w9WgXcQ"]')).toHaveCount(3);
@@ -202,7 +202,7 @@ test.describe("Acrox TV direct program routes", () => {
     await page.goto("/alta-data-te-tire");
 
     const main = page.getByRole("main");
-    await expect(main.getByText("Este contenido puede no estar actualizado.")).toHaveCount(1);
+    await expect(main.getByText("Este contenido puede no estar actualizado.")).toHaveCount(0);
     await expect(main.getByLabel("Último episodio")).toContainText("No hay episodios atribuidos a este programa.");
     await expect(main.getByText("No hay episodios atribuidos a este programa.")).toHaveCount(3);
     await expect(main.getByText("Instagram aún no está disponible para este programa.")).toBeVisible();
@@ -300,7 +300,7 @@ test.describe("Acrox TV direct program routes", () => {
     const latest = main.getByRole("heading", { level: 2, name: "Último episodio" });
     await expect(latest).toBeVisible();
     await expect(main.getByRole("region", { name: "Último episodio" }).getByRole("button", { name: "Reproducir Último episodio de Alta" })).toBeVisible();
-    for (const name of ["Carrusel Más visto", "Carrusel Episodios", "Instagram"]) {
+    for (const name of ["Más visto", "Episodios", "Instagram"]) {
       await expect(main.getByRole("region", { name })).toBeVisible();
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(380);

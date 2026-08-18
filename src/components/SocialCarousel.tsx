@@ -128,7 +128,7 @@ const SocialCarousel = ({
 
   if (isLoading) {
     return (
-      <section className={`platform-block ${platform}`}>
+      <section className={`platform-block ${platform}`} aria-label={ariaLabel}>
         <div className="social-loading">
           <div className="skeleton-card" />
           <div className="skeleton-card" />
@@ -141,7 +141,7 @@ const SocialCarousel = ({
   if (items.length === 0) {
     const fallbackText = hasIntegrationError ? integrationErrorMessage : emptyMessage;
     return (
-      <section className={`platform-block ${platform}`}>
+      <section className={`platform-block ${platform}`} aria-label={ariaLabel}>
         <div className={`social-fallback social-fallback--${platform}`}>
           <div className="social-fallback-copy">
             <p className="social-fallback-title">
