@@ -2,13 +2,14 @@ import { expect, test } from "@playwright/test";
 
 const programSlug = "alta-data-te-tire";
 const routePath = `/${programSlug}`;
+const fixtureThumbnailUrl = "/e2e-thumbnail.svg";
 
 const episodes = [
   {
     videoId: "alta-latest",
     title: "Alta episodio más reciente",
     watchUrl: "https://youtube.com/watch?v=alta-latest",
-    thumbnailUrl: "https://i.ytimg.com/vi/alta-latest/hqdefault.jpg",
+    thumbnailUrl: fixtureThumbnailUrl,
     publishedAt: "2026-08-18T00:00:00.000Z",
     durationSeconds: 120,
     viewCount: 12
@@ -17,7 +18,7 @@ const episodes = [
     videoId: "alta-popular",
     title: "Alta episodio más visto",
     watchUrl: "https://youtube.com/watch?v=alta-popular",
-    thumbnailUrl: "https://i.ytimg.com/vi/alta-popular/hqdefault.jpg",
+    thumbnailUrl: fixtureThumbnailUrl,
     publishedAt: "2026-08-17T00:00:00.000Z",
     durationSeconds: 120,
     viewCount: 100
@@ -26,7 +27,7 @@ const episodes = [
     videoId: "alta-archive",
     title: "Alta episodio de archivo",
     watchUrl: "https://youtube.com/watch?v=alta-archive",
-    thumbnailUrl: "https://i.ytimg.com/vi/alta-archive/hqdefault.jpg",
+    thumbnailUrl: fixtureThumbnailUrl,
     publishedAt: "2026-08-16T00:00:00.000Z",
     durationSeconds: 120,
     viewCount: 50
@@ -73,6 +74,7 @@ test.describe("program media previews", () => {
 
     await expect(latest).toBeVisible();
     await expect(latest.locator("img")).toHaveAttribute("alt", "Alta episodio más reciente");
+    await expect.poll(() => latest.locator("img").evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     await latest.click();
     await expect(page.locator('iframe[title="Alta episodio más reciente"]')).toHaveAttribute(
       "src",

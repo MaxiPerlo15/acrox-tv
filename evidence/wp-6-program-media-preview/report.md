@@ -3,7 +3,7 @@
 ## Candidate
 
 - Base: `043433e`
-- Reviewed remediation commit: `13bb53d`
+- Base remediation commit: `5e76df7`
 - Branch: `feat/acrox-tv-s1-program-media-preview`
 - Scope: direct program media only; no playlist registry, source service, API, or global-feed changes.
 
@@ -21,20 +21,21 @@ The RED dimension result exposed an invalid border-box expectation, not a produc
 | Command | Result | Raw evidence |
 | --- | --- | --- |
 | `npm run test:contracts` | 23 passed | `raw/contracts.txt` |
+| `npm run test:e2e -- tests/e2e/acroxtv-program-media-preview.spec.ts` | 16 passed | `raw/e2e-focused.txt` |
 | `npm run test:e2e` | 174 passed | `raw/e2e.txt` |
 | `npm run lint` | passed | `raw/lint.txt` |
 | `npx tsc --noEmit` | passed | `raw/typecheck.txt` |
 | `npm run build` with documented public test variables | passed | `raw/build.txt` |
 | `git diff --check 043433e..HEAD` | passed (empty clean transcript) | `raw/diff-check.txt` |
 
-The E2E run logs expected unavailable-Instagram messages and mocked-thumbnail 404 responses; neither changes the passing result. Captured text transcripts were normalized to remove trailing whitespace and EOF blank lines before this SHA-pinned report.
+The program-preview fixture now uses the local `public/e2e-thumbnail.svg` asset and verifies that the rendered thumbnail has a positive natural width. Both focused and full E2E transcripts contain zero `i.ytimg.com` references and zero external-thumbnail 404s. Expected unavailable-Instagram messages remain unrelated to this fixture. Captured text transcripts were normalized to remove trailing whitespace and EOF blank lines before this SHA-pinned report.
 
 ## Captures
 
 - `desktop.png`: 1440×1100 capture of `/alta-data-te-tire` with deterministic scoped feed interception.
 - `mobile.png`: 375×812 capture of the same scoped route and feed interception.
-- `checksums.sha256`: SHA-256 manifest for both captures and every raw verification transcript.
+- `checksums.sha256`: SHA-256 manifest for both captures and every raw verification transcript, including the focused deterministic-thumbnail proof.
 
 ## Rollback
 
-Revert `13bb53d` to remove only this reviewer-remediation test and raw-evidence refresh. The registry, source adapters, API routes, global Acrox TV feed, Instagram behavior, and `ProgramPage` footer remain unchanged.
+Revert this evidence refresh to remove only the local test thumbnail, preview-fixture coverage, and verification evidence. The registry, source adapters, API routes, global Acrox TV feed, Instagram behavior, and `ProgramPage` footer remain unchanged.
