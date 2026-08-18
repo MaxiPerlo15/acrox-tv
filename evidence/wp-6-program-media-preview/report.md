@@ -3,35 +3,38 @@
 ## Candidate
 
 - Base: `043433e`
-- Implementation and raw-evidence commit: `5939f93`
+- Reviewed remediation commit: `13bb53d`
 - Branch: `feat/acrox-tv-s1-program-media-preview`
 - Scope: direct program media only; no playlist registry, source service, API, or global-feed changes.
 
 ## TDD Record
 
-- Safety net: `npm run test:e2e -- tests/e2e/acroxtv-wp2-program-isolation.spec.ts` — 6 passed.
-- RED: `tests/e2e/acroxtv-program-media-preview.spec.ts` — 10 expected failures before production changes.
-- GREEN/refactor: focused preview contract — 13 passed across Chromium, Firefox, WebKit, and mobile.
-- Triangulation: latest preview checks Escape and outside interaction; carousel checks a distinct most-viewed order and keyboard advancement; mobile checks no horizontal overflow.
+| Task | Test file | Layer | Safety net | RED | GREEN | Triangulate | Refactor |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Restore focus to the invoking latest-preview trigger | `tests/e2e/acroxtv-program-media-preview.spec.ts` | E2E | 13 passed | Focus assertions written before validation | 16 passed | Escape and outside-pointer close each return focus to the scoped latest trigger | None needed |
+| Fill the intended latest-preview media container | `tests/e2e/acroxtv-program-media-preview.spec.ts` | E2E | 13 passed | Initial border-box dimension assertion failed in Chromium, Firefox, WebKit, and mobile | 16 passed | Desktop and mobile assert 16:9 container ratio plus iframe dimensions within the 2px border | None needed |
+
+The RED dimension result exposed an invalid border-box expectation, not a product defect: the iframe intentionally fills the container's media area inside its 1px border. The corrected behavioral contract would fail if the player stopped filling that area or the container stopped preserving 16:9.
 
 ## Verification
 
 | Command | Result | Raw evidence |
 | --- | --- | --- |
 | `npm run test:contracts` | 23 passed | `raw/contracts.txt` |
-| `npm run test:e2e` | 171 passed | `raw/e2e.txt` |
+| `npm run test:e2e` | 174 passed | `raw/e2e.txt` |
 | `npm run lint` | passed | `raw/lint.txt` |
 | `npx tsc --noEmit` | passed | `raw/typecheck.txt` |
 | `npm run build` with documented public test variables | passed | `raw/build.txt` |
-| `git diff --check` | passed | `raw/diff-check.txt` |
+| `git diff --check 043433e..HEAD` | passed (empty clean transcript) | `raw/diff-check.txt` |
 
-The E2E run logs expected unavailable-Instagram messages and mocked-thumbnail 404 responses; neither changes the passing result.
+The E2E run logs expected unavailable-Instagram messages and mocked-thumbnail 404 responses; neither changes the passing result. Captured text transcripts were normalized to remove trailing whitespace and EOF blank lines before this SHA-pinned report.
 
 ## Captures
 
 - `desktop.png`: 1440×1100 capture of `/alta-data-te-tire` with deterministic scoped feed interception.
 - `mobile.png`: 375×812 capture of the same scoped route and feed interception.
+- `checksums.sha256`: SHA-256 manifest for both captures and every raw verification transcript.
 
 ## Rollback
 
-Revert `5939f93` to remove only program-page preview/carousel behavior, its contracts, and this evidence set. The registry, source adapters, API routes, global Acrox TV feed, and `ProgramPage` footer remain unchanged.
+Revert `13bb53d` to remove only this reviewer-remediation test and raw-evidence refresh. The registry, source adapters, API routes, global Acrox TV feed, Instagram behavior, and `ProgramPage` footer remain unchanged.
