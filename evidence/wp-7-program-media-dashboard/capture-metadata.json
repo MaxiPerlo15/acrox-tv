@@ -1,0 +1,318 @@
+{
+  "baseUrl": "http://127.0.0.1:3027",
+  "source": "live scoped program-feed API",
+  "captures": [
+    {
+      "route": "alta-data-te-tire",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "state": "thumbnail",
+      "file": "alta-data-te-tire-desktop-thumbnail.png",
+      "feed": {
+        "status": 200,
+        "episodeState": "available",
+        "itemCount": 9,
+        "titles": [
+          "ALTA DATA ¡te tiré!",
+          "ALTA DATA ¡te tiré! Fabi,  Ceci y Santi",
+          "ALTA DATA ¡te tiré! Graciela y Expresar Té"
+        ],
+        "videoIds": [
+          "H5oLwWoIeaI",
+          "x0ns0Nai24Q",
+          "DkRDN1GFXSI"
+        ]
+      },
+      "thumbnail": {
+        "src": "http://127.0.0.1:3027/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=828&q=75",
+        "naturalWidth": 463,
+        "naturalHeight": 347
+      },
+      "layout": {
+        "lead": {
+          "x": 76,
+          "y": 0,
+          "width": 1288,
+          "height": 724.5
+        },
+        "panels": [
+          {
+            "x": 76,
+            "y": 740.5,
+            "width": 385.171875,
+            "height": 486.46875
+          },
+          {
+            "x": 477.171875,
+            "y": 740.5,
+            "width": 485.640625,
+            "height": 486.46875
+          },
+          {
+            "x": 978.8125,
+            "y": 740.5,
+            "width": 385.1875,
+            "height": 486.46875
+          }
+        ]
+      }
+    },
+    {
+      "route": "alta-data-te-tire",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "state": "player",
+      "file": "alta-data-te-tire-desktop-player.png",
+      "player": {
+        "title": "ALTA DATA ¡te tiré!",
+        "src": "https://www.youtube-nocookie.com/embed/H5oLwWoIeaI?rel=0&modestbranding=1&autoplay=1",
+        "box": {
+          "x": 76,
+          "y": 0,
+          "width": 1288,
+          "height": 724.5
+        }
+      }
+    },
+    {
+      "route": "alta-data-te-tire",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "state": "thumbnail",
+      "file": "alta-data-te-tire-mobile-thumbnail.png",
+      "feed": {
+        "status": 200,
+        "episodeState": "available",
+        "itemCount": 9,
+        "titles": [
+          "ALTA DATA ¡te tiré!",
+          "ALTA DATA ¡te tiré! Fabi,  Ceci y Santi",
+          "ALTA DATA ¡te tiré! Graciela y Expresar Té"
+        ],
+        "videoIds": [
+          "H5oLwWoIeaI",
+          "x0ns0Nai24Q",
+          "DkRDN1GFXSI"
+        ]
+      },
+      "thumbnail": {
+        "src": "http://127.0.0.1:3027/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+        "naturalWidth": 281,
+        "naturalHeight": 210
+      },
+      "layout": {
+        "lead": {
+          "x": 16,
+          "y": 0,
+          "width": 343,
+          "height": 192.9375
+        },
+        "panels": [
+          {
+            "x": 16,
+            "y": 208.9375,
+            "width": 343,
+            "height": 406.25
+          },
+          {
+            "x": 16,
+            "y": 631.1875,
+            "width": 343,
+            "height": 384.65625
+          },
+          {
+            "x": 16,
+            "y": 1031.84375,
+            "width": 343,
+            "height": 193.78125
+          }
+        ]
+      }
+    },
+    {
+      "route": "alta-data-te-tire",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "state": "player",
+      "file": "alta-data-te-tire-mobile-player.png",
+      "player": {
+        "title": "ALTA DATA ¡te tiré!",
+        "src": "https://www.youtube-nocookie.com/embed/H5oLwWoIeaI?rel=0&modestbranding=1&autoplay=1",
+        "box": {
+          "x": 16,
+          "y": 0,
+          "width": 343,
+          "height": 192.9375
+        }
+      }
+    },
+    {
+      "route": "mas-que-nutricion",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "state": "thumbnail",
+      "file": "mas-que-nutricion-desktop-thumbnail.png",
+      "feed": {
+        "status": 200,
+        "episodeState": "available",
+        "itemCount": 8,
+        "titles": [
+          "Más que nutrición - Cocinando con Mirko",
+          "Más que nutrición - Kari y el cuidado de la piel",
+          "Más que nutrición - Cumplimos 1 mes"
+        ],
+        "videoIds": [
+          "n3BBkIrSUFc",
+          "CpvxyAdIII4",
+          "XESkn4uduvk"
+        ]
+      },
+      "thumbnail": {
+        "src": "http://127.0.0.1:3027/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=828&q=75",
+        "naturalWidth": 463,
+        "naturalHeight": 347
+      },
+      "layout": {
+        "lead": {
+          "x": 76,
+          "y": 0,
+          "width": 1288,
+          "height": 724.5
+        },
+        "panels": [
+          {
+            "x": 76,
+            "y": 740.5,
+            "width": 385.171875,
+            "height": 486.46875
+          },
+          {
+            "x": 477.171875,
+            "y": 740.5,
+            "width": 485.640625,
+            "height": 486.46875
+          },
+          {
+            "x": 978.8125,
+            "y": 740.5,
+            "width": 385.1875,
+            "height": 486.46875
+          }
+        ]
+      }
+    },
+    {
+      "route": "mas-que-nutricion",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "state": "player",
+      "file": "mas-que-nutricion-desktop-player.png",
+      "player": {
+        "title": "Más que nutrición - Cocinando con Mirko",
+        "src": "https://www.youtube-nocookie.com/embed/n3BBkIrSUFc?rel=0&modestbranding=1&autoplay=1",
+        "box": {
+          "x": 76,
+          "y": 0,
+          "width": 1288,
+          "height": 724.5
+        }
+      }
+    },
+    {
+      "route": "mas-que-nutricion",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "state": "thumbnail",
+      "file": "mas-que-nutricion-mobile-thumbnail.png",
+      "feed": {
+        "status": 200,
+        "episodeState": "available",
+        "itemCount": 8,
+        "titles": [
+          "Más que nutrición - Cocinando con Mirko",
+          "Más que nutrición - Kari y el cuidado de la piel",
+          "Más que nutrición - Cumplimos 1 mes"
+        ],
+        "videoIds": [
+          "n3BBkIrSUFc",
+          "CpvxyAdIII4",
+          "XESkn4uduvk"
+        ]
+      },
+      "thumbnail": {
+        "src": "http://127.0.0.1:3027/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+        "naturalWidth": 281,
+        "naturalHeight": 210
+      },
+      "layout": {
+        "lead": {
+          "x": 16,
+          "y": 0,
+          "width": 343,
+          "height": 192.9375
+        },
+        "panels": [
+          {
+            "x": 16,
+            "y": 208.9375,
+            "width": 343,
+            "height": 406.25
+          },
+          {
+            "x": 16,
+            "y": 631.1875,
+            "width": 343,
+            "height": 406.25
+          },
+          {
+            "x": 16,
+            "y": 1053.4375,
+            "width": 343,
+            "height": 193.78125
+          }
+        ]
+      }
+    },
+    {
+      "route": "mas-que-nutricion",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "state": "player",
+      "file": "mas-que-nutricion-mobile-player.png",
+      "player": {
+        "title": "Más que nutrición - Cocinando con Mirko",
+        "src": "https://www.youtube-nocookie.com/embed/n3BBkIrSUFc?rel=0&modestbranding=1&autoplay=1",
+        "box": {
+          "x": 16,
+          "y": 0,
+          "width": 343,
+          "height": 192.9375
+        }
+      }
+    }
+  ]
+}
