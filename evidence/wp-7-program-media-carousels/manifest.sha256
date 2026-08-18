@@ -1,6 +1,6 @@
 # WP-7 program media carousels immutable evidence manifest
 # Product commit: ea0a637ab4c80af8af1510c085c9c9efab1a82aa
-# Evidence payload commit: d9dada10f63d36f74ba0e3438bf9413e8b072d9c
+# Evidence payload commit: 96b68d981d7d437f1f72497b45a25d9d48bf789e
 # Excluded metadata: create-manifest.mjs, manifest.sha256, report.md
 69f4554fde51b558622cf17723878e2ed1fea6fdf13feaba112e90595d6bf340  .gitattributes
 60f7bfece249237ca82ea577bd6bddfe0d6cda27311d92635c2d37bafc95b0a7  alta-data-te-tire-desktop.png
@@ -14,6 +14,7 @@ a0eb653c133199e3f47fbb1d114120bb2a6d5cd4a0d027d65dac9f404b94f772  mas-que-nutric
 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b  normalized-capture.log
 c52da903698618049e336f8e3dbf9cbe3bd61d53cab96c80fec260b29ddd8889  normalized-contracts.log
 7f4bd24574b814e265512ffc96729bd69d4a1c22570f5c52a5fda16973ae2719  normalized-diff-check.log
+fc659cdeee3c2568a5221b946c48bb9a4db70585f33a020c35a53dcd58ac0dcf  normalized-focused-e2e.log
 f5180c7c0c0583492a81da2e50cc1ffb31c8a47610b28544870360570504adc6  normalized-full-e2e.log
 d65ffc0b494d0e1b9e6084d426559c6380296d7202964b44aeccc5b8bd665e13  normalized-lint.log
 f4738dd75c2198a8a161e26cc9a32e0e15dafa15687b2d820b4009822363f2b6  normalized-live-server.log
@@ -22,6 +23,7 @@ f4738dd75c2198a8a161e26cc9a32e0e15dafa15687b2d820b4009822363f2b6  normalized-liv
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  raw-capture.log
 c52da903698618049e336f8e3dbf9cbe3bd61d53cab96c80fec260b29ddd8889  raw-contracts.log
 7f4bd24574b814e265512ffc96729bd69d4a1c22570f5c52a5fda16973ae2719  raw-diff-check.log
+726064df4b0a4ba380aa81c1524f86177c62375b0c2a61844422552d3b79d4df  raw-focused-e2e.log
 1433b9c1105f09d59d2e032bf94460d36462864451ea69867c8257c3c9199047  raw-full-e2e.log
 6f315f92d55975fad55a328f3df9578c7c478e120f1bd845dcaf8bba54159fcb  raw-lint.log
 f4738dd75c2198a8a161e26cc9a32e0e15dafa15687b2d820b4009822363f2b6  raw-live-server.log
