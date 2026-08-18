@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadAcroxTvFeedClient, loadProgramFeedClient } from "@/application/acroxtv-feed.client";
 import SocialCarousel from "@/components/SocialCarousel";
-import { TvGhostIcon, YouTubeIcon } from "@/components/icons";
+import { InstagramIcon, TvGhostIcon, YouTubeIcon } from "@/components/icons";
 import type { AcroxTvFeedResponse, EpisodeItem, MediaSurface, ProgramFeedResponse } from "@/domain/acroxtv-feed";
 import type { SocialContentItem } from "@/domain/social-content";
 import { publicEnv } from "@/lib/public-env";
@@ -300,44 +300,17 @@ const ProgramEpisodePreview = ({ episode, className }: ProgramEpisodePreviewProp
   );
 };
 
-type ProgramEpisodeCarouselProps = {
-  title: string;
-  episodes: EpisodeItem[];
-};
-
-const ProgramEpisodeCarousel = ({ title, episodes }: ProgramEpisodeCarouselProps) => {
-  const [current, setCurrent] = useState(0);
-  const activeEpisode = episodes[Math.min(current, Math.max(episodes.length - 1, 0))];
-  const hasMultipleEpisodes = episodes.length > 1;
-  const move = (direction: 1 | -1) => {
-    if (!hasMultipleEpisodes) return;
-    setCurrent((value) => (value + direction + episodes.length) % episodes.length);
-  };
-
-  if (!activeEpisode) return <p>No hay episodios atribuidos a este programa.</p>;
-
-  return (
-    <section className="program-episode-carousel" role="region" aria-label={`Carrusel ${title}`}>
-      <div className="program-episode-carousel__viewport">
-        <ProgramEpisodePreview
-          key={activeEpisode.videoId}
-          episode={activeEpisode}
-          className="program-episode-carousel__preview"
-        />
-        <div className="program-episode-carousel__copy">
-          <p aria-live="polite">{current + 1} de {episodes.length}</p>
-          <h3>{activeEpisode.title}</h3>
-        </div>
+const ProgramInstagramUnavailableCard = () => (
+  <section className="platform-block instagram" aria-label="Instagram" aria-live="polite">
+    <article className="social-card program-instagram-unavailable-card">
+      <div className="social-image-wrap program-instagram-unavailable-media">
+        <span className="media-platform-badge instagram">Instagram</span>
+        <span className="program-instagram-unavailable-icon" aria-hidden="true"><InstagramIcon /></span>
+        <p>Instagram aún no está disponible para este programa.</p>
       </div>
-      {hasMultipleEpisodes ? (
-        <div className="program-episode-carousel__controls">
-          <button type="button" onClick={() => move(-1)} aria-label="Episodio anterior">Anterior</button>
-          <button type="button" onClick={() => move(1)} aria-label="Siguiente episodio">Siguiente</button>
-        </div>
-      ) : null}
-    </section>
-  );
-};
+    </article>
+  </section>
+);
 
 export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) => {
   const [feed, setFeed] = useState<ProgramFeedResponse | null>(null);
@@ -357,7 +330,7 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
 
   return (
     <section className="program-media" aria-label="Programación del programa">
-      <section className="program-media-dashboard" aria-label="Dashboard de medios">
+      <section className="program-media-row" aria-label="Medios del programa">
       <section className="program-latest" aria-labelledby="latest-episode-title">
         <div className="program-latest-heading">
           <p className="program-media-badge">SEÑAL DEL PROGRAMA</p>
@@ -373,25 +346,36 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
           <p>{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
         )}
       </section>
-      <div className="program-media-grid" aria-label="Paneles de medios">
-        <section className="program-media-card" aria-label="Panel Más visto">
-          <p className="program-media-badge">YOUTUBE · AUDIENCIA</p>
-          <h2 id="most-viewed-title">Más visto</h2>
-          {isEpisodeState ? <ProgramEpisodeCarousel title="Más visto" episodes={mostViewed} /> : null}
-        </section>
-        <section className="program-media-card" aria-label="Panel Episodios">
-          <p className="program-media-badge">YOUTUBE · ARCHIVO</p>
-          <h2 id="episodes-title">Episodios</h2>
-          {feed.episodes.state === "stale" ? <p>Este contenido puede no estar actualizado.</p> : null}
-          {isEpisodeState ? <ProgramEpisodeCarousel title="Episodios" episodes={episodes.slice(0, 4)} /> : null}
-        </section>
-        <section className="program-media-card program-instagram-card" aria-label="Panel Instagram">
-          <p className="program-media-badge">CUENTA PROFESIONAL</p>
-          <h2 id="instagram-title">Instagram</h2>
-          <p>Instagram aún no está disponible para este programa.</p>
-        </section>
-      </div>
-      </section>
+       <div className="social-feeds-stack social-feeds-stack--three program-media-row__cards">
+         <SocialCarousel
+           title="Más visto"
+           platform="youtube"
+           items={isEpisodeState ? mostViewed.map(mapEpisodeToSocialItem) : []}
+           isLoading={false}
+           emptyMessage="No hay episodios atribuidos a este programa."
+           integrationErrorMessage="No pudimos cargar la programación de YouTube para este programa."
+           hasIntegrationError={feed.episodes.state === "error"}
+           fallbackHref={publicEnv.youtubeUrl}
+           fallbackCtaLabel="Ir al canal de YouTube"
+           showIndicators={false}
+           ariaLabel="Más visto"
+         />
+         <SocialCarousel
+           title="Episodios"
+           platform="youtube"
+           items={isEpisodeState ? episodes.slice(0, 4).map(mapEpisodeToSocialItem) : []}
+           isLoading={false}
+           emptyMessage="No hay episodios atribuidos a este programa."
+           integrationErrorMessage="No pudimos cargar la programación de YouTube para este programa."
+           hasIntegrationError={feed.episodes.state === "error"}
+           fallbackHref={publicEnv.youtubeUrl}
+           fallbackCtaLabel="Ir al canal de YouTube"
+           showIndicators={false}
+           ariaLabel="Episodios"
+         />
+         <ProgramInstagramUnavailableCard />
+       </div>
+       </section>
     </section>
   );
 };

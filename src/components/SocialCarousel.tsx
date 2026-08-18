@@ -20,6 +20,7 @@ type SocialCarouselProps = {
   fallbackHref: string;
   fallbackCtaLabel: string;
   showIndicators?: boolean;
+  ariaLabel?: string;
 };
 
 type PreviewState = {
@@ -49,7 +50,8 @@ const SocialCarousel = ({
   hasIntegrationError,
   fallbackHref,
   fallbackCtaLabel,
-  showIndicators = true
+  showIndicators = true,
+  ariaLabel
 }: SocialCarouselProps) => {
   const rootRef = useRef<HTMLElement | null>(null);
   const [current, setCurrent] = useState(0);
@@ -201,7 +203,7 @@ const SocialCarousel = ({
   };
 
   return (
-    <section ref={rootRef} className={`platform-block ${platform}`} aria-live="polite">
+    <section ref={rootRef} className={`platform-block ${platform}`} aria-label={ariaLabel} aria-live="polite">
       <div
         className="carousel-wrapper"
         onMouseEnter={() => setIsHovering(true)}

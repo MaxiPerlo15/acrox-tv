@@ -105,23 +105,29 @@ test.describe("program media previews", () => {
     await expectPreviewPlayerToFillContainer(latestPreview, "Alta episodio más reciente");
   });
 
-  test("uses keyboard-operable scoped carousels for Más visto and Episodios", async ({ page }) => {
-    const mostViewed = page.getByRole("region", { name: "Carrusel Más visto" });
-    const episodesCarousel = page.getByRole("region", { name: "Carrusel Episodios" });
+  test("reuses the home carousel contract for the scoped YouTube cards without external controls", async ({ page }) => {
+    const mediaRow = page.getByRole("region", { name: "Medios del programa" });
+    const mostViewed = mediaRow.getByRole("region", { name: "Más visto" });
+    const episodesCarousel = mediaRow.getByRole("region", { name: "Episodios" });
 
-    await expect(mostViewed.getByText("Alta episodio más visto")).toBeVisible();
-    await expect(episodesCarousel.getByText("Alta episodio más reciente")).toBeVisible();
+    await expect(mostViewed.getByRole("button", { name: /Reproducir Alta episodio más visto/i })).toBeVisible();
+    await expect(episodesCarousel.getByRole("button", { name: /Reproducir Alta episodio más reciente/i })).toBeVisible();
+    await expect(mostViewed.locator(".media-platform-badge").first()).toHaveText("Más visto");
+    await expect(mostViewed.locator(".inline-play-badge").first()).toHaveText("Reproducir");
+    await expect(episodesCarousel.getByRole("button", { name: /Siguiente|Anterior|Ir al item/i })).toHaveCount(0);
 
-    await episodesCarousel.getByRole("button", { name: "Siguiente episodio" }).focus();
-    await page.keyboard.press("Enter");
-    await expect(episodesCarousel.getByText("Alta episodio más visto")).toBeVisible();
+    await page.waitForTimeout(4_200);
+    await expect(episodesCarousel.getByRole("button", { name: /Reproducir Alta episodio más visto/i })).toBeVisible();
   });
 
-  test("keeps the program feed isolated and preserves unavailable Instagram plus Footer", async ({ page }) => {
+  test("keeps the program feed isolated and renders an honest unavailable Instagram card plus Footer", async ({ page }) => {
     const main = page.getByRole("main");
+    const instagram = page.getByRole("region", { name: "Instagram" });
 
     await expect(main.getByText("Episodio de Más que Nutrición")).toHaveCount(0);
-    await expect(main.getByText("Instagram aún no está disponible para este programa.")).toBeVisible();
+    await expect(instagram.getByText("Instagram aún no está disponible para este programa.")).toBeVisible();
+    await expect(instagram.locator("img")).toHaveCount(0);
+    await expect(instagram.getByRole("button")).toHaveCount(0);
     await expect(page.getByRole("contentinfo")).toBeVisible();
   });
 
@@ -134,66 +140,68 @@ test.describe("program media previews", () => {
     expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
-  test("presents a dominant lead preview above three aligned media panels on desktop", async ({ page }) => {
+  test("presents a dominant lead preview above three equal home-style media cards on desktop", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 });
 
-    const dashboard = page.getByRole("region", { name: "Dashboard de medios" });
-    const lead = dashboard.getByRole("region", { name: "Último episodio" });
-    const panels = dashboard.getByRole("region", { name: /Panel (Más visto|Episodios|Instagram)/ });
+    const media = page.getByRole("region", { name: "Medios del programa" });
+    const lead = media.getByRole("region", { name: "Último episodio" });
+    const cards = media.getByRole("region", { name: /^(Más visto|Episodios|Instagram)$/ });
 
-    await expect(dashboard).toBeVisible();
+    await expect(media).toBeVisible();
     await expect(lead.getByRole("button", { name: /Reproducir Alta episodio más reciente/i })).toBeVisible();
-    await expect(panels).toHaveCount(3);
+    await expect(cards).toHaveCount(3);
 
-    const [leadBox, firstPanel, secondPanel, thirdPanel] = await Promise.all([
+    const [leadBox, firstCard, secondCard, thirdCard] = await Promise.all([
       lead.boundingBox(),
-      panels.nth(0).boundingBox(),
-      panels.nth(1).boundingBox(),
-      panels.nth(2).boundingBox()
+      cards.nth(0).boundingBox(),
+      cards.nth(1).boundingBox(),
+      cards.nth(2).boundingBox()
     ]);
 
     expect(leadBox).not.toBeNull();
-    expect(firstPanel).not.toBeNull();
-    expect(secondPanel).not.toBeNull();
-    expect(thirdPanel).not.toBeNull();
+    expect(firstCard).not.toBeNull();
+    expect(secondCard).not.toBeNull();
+    expect(thirdCard).not.toBeNull();
 
     expect(leadBox!.width / leadBox!.height).toBeCloseTo(16 / 9, 1);
-    expect(leadBox!.width).toBeGreaterThan(firstPanel!.width * 2.4);
-    expect(Math.abs(firstPanel!.y - secondPanel!.y)).toBeLessThanOrEqual(2);
-    expect(Math.abs(secondPanel!.y - thirdPanel!.y)).toBeLessThanOrEqual(2);
-    expect(Math.abs(firstPanel!.height - secondPanel!.height)).toBeLessThanOrEqual(2);
-    expect(Math.abs(secondPanel!.height - thirdPanel!.height)).toBeLessThanOrEqual(2);
-    expect(firstPanel!.x).toBeLessThan(secondPanel!.x);
-    expect(secondPanel!.x).toBeLessThan(thirdPanel!.x);
+    expect(leadBox!.width).toBeGreaterThan(firstCard!.width * 2.4);
+    expect(Math.abs(firstCard!.y - secondCard!.y)).toBeLessThanOrEqual(2);
+    expect(Math.abs(secondCard!.y - thirdCard!.y)).toBeLessThanOrEqual(2);
+    expect(Math.abs(firstCard!.height - secondCard!.height)).toBeLessThanOrEqual(2);
+    expect(Math.abs(secondCard!.height - thirdCard!.height)).toBeLessThanOrEqual(2);
+    expect(Math.abs(firstCard!.width - secondCard!.width)).toBeLessThanOrEqual(2);
+    expect(Math.abs(secondCard!.width - thirdCard!.width)).toBeLessThanOrEqual(2);
+    expect(firstCard!.x).toBeLessThan(secondCard!.x);
+    expect(secondCard!.x).toBeLessThan(thirdCard!.x);
   });
 
-  test("stacks the dashboard panels without overflow on mobile", async ({ page }) => {
+  test("stacks the home-style media cards without overflow on mobile", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
 
-    const dashboard = page.getByRole("region", { name: "Dashboard de medios" });
-    const lead = dashboard.getByRole("region", { name: "Último episodio" });
-    const panels = dashboard.getByRole("region", { name: /Panel (Más visto|Episodios|Instagram)/ });
+    const media = page.getByRole("region", { name: "Medios del programa" });
+    const lead = media.getByRole("region", { name: "Último episodio" });
+    const cards = media.getByRole("region", { name: /^(Más visto|Episodios|Instagram)$/ });
 
     await expect(lead).toBeVisible();
-    await expect(panels).toHaveCount(3);
+    await expect(cards).toHaveCount(3);
 
-    const [leadBox, firstPanel, secondPanel, thirdPanel] = await Promise.all([
+    const [leadBox, firstCard, secondCard, thirdCard] = await Promise.all([
       lead.boundingBox(),
-      panels.nth(0).boundingBox(),
-      panels.nth(1).boundingBox(),
-      panels.nth(2).boundingBox()
+      cards.nth(0).boundingBox(),
+      cards.nth(1).boundingBox(),
+      cards.nth(2).boundingBox()
     ]);
 
     expect(leadBox).not.toBeNull();
-    expect(firstPanel).not.toBeNull();
-    expect(secondPanel).not.toBeNull();
-    expect(thirdPanel).not.toBeNull();
+    expect(firstCard).not.toBeNull();
+    expect(secondCard).not.toBeNull();
+    expect(thirdCard).not.toBeNull();
 
     expect(leadBox!.width / leadBox!.height).toBeCloseTo(16 / 9, 1);
-    expect(Math.abs(firstPanel!.x - secondPanel!.x)).toBeLessThanOrEqual(2);
-    expect(Math.abs(secondPanel!.x - thirdPanel!.x)).toBeLessThanOrEqual(2);
-    expect(firstPanel!.y).toBeLessThan(secondPanel!.y);
-    expect(secondPanel!.y).toBeLessThan(thirdPanel!.y);
+    expect(Math.abs(firstCard!.x - secondCard!.x)).toBeLessThanOrEqual(2);
+    expect(Math.abs(secondCard!.x - thirdCard!.x)).toBeLessThanOrEqual(2);
+    expect(firstCard!.y).toBeLessThan(secondCard!.y);
+    expect(secondCard!.y).toBeLessThan(thirdCard!.y);
     expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
   });
 });
