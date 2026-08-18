@@ -12,12 +12,30 @@
 - Do not modify shared `.section` styling or `ProgramDirectoryCard`.
 - Do not start WP-6 and do not merge `main`.
 
-## Evidence
+## Visual evidence
 
-| Capture | Viewport | Result |
-| --- | --- | --- |
-| `po-follow-up-desktop.png` | 1440 × 900 | The directory heading, two cards, and ribbon sit on the page background; card surfaces remain intact. |
-| `po-follow-up-mobile.png` | 375 × 812 | The panel remains absent while the program cards continue to stack. |
+The captures below are viewport screenshots, not full-page screenshots. They were produced from the local preview of this follow-up (`http://localhost:3000/`) with Playwright's bundled Chromium `145.0.7632.6`. Both use a desktop browser context without device emulation: `deviceScaleFactor: 1`, `isMobile: false`, and `hasTouch: false`.
+
+| Capture | Playwright viewport | `fullPage` | Actual PNG dimensions | SHA-256 | Result |
+| --- | --- | --- | --- | --- | --- |
+| `po-follow-up-desktop.png` | 1440 × 900 | `false` | 1440 × 900 | `08a5774b70daac8fa0feaf854694dcb6f5e575acdc52680ed11852935de0ee69` | The directory heading, two cards, and ribbon sit on the page background; card surfaces remain intact. |
+| `po-follow-up-mobile.png` | 375 × 812 | `false` | 375 × 812 | `4f1f05ef2a9cb9e5c4b2903766dda03d316119724a60f7de0aaf65ed5adab728` | The panel remains absent while the program cards continue to stack. |
+
+### Reproduction recipe
+
+From this worktree, start the local preview on port 3000, then run:
+
+```sh
+node evidence/wp-5-sprint-review/capture-po-follow-up.mjs
+sips -g pixelWidth -g pixelHeight \
+  evidence/wp-5-sprint-review/po-follow-up-desktop.png \
+  evidence/wp-5-sprint-review/po-follow-up-mobile.png
+shasum -a 256 \
+  evidence/wp-5-sprint-review/po-follow-up-desktop.png \
+  evidence/wp-5-sprint-review/po-follow-up-mobile.png
+```
+
+`capture-po-follow-up.mjs` waits for `networkidle` and `document.fonts.ready`, and disables CSS animations during each capture. Set `BASE_URL` to capture a preview on another origin; it defaults to `http://localhost:3000/`.
 
 The live browser capture measured `background-color: rgba(0, 0, 0, 0)`, `background-image: none`, and a `0px` top border on `#acroxtv.program-directory` at both viewports.
 
