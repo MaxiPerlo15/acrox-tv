@@ -2,9 +2,12 @@
 
 ## Binding and Scope
 
-- Product commit: `55f4e33ec21ab04a1d1460b3ed7d28b51995bf50`
-- Evidence payload commit: `73ff1802781464a408b578937dfde2034daea19b`
-- This report and `manifest.sha256` are intentionally self-excluded from the manifest. The manifest hashes every retained payload artifact and binds that payload to both commits above.
+- Product layout commit: `55f4e33ec21ab04a1d1460b3ed7d28b51995bf50`
+- Capture fixture commit: `73ff1802781464a408b578937dfde2034daea19b`
+- Evidence payload commit: `b434e1fe3e9884c199fd447296ed778cfb4a3065`
+- Manifest metadata commit: `22fcd28e6aef9d9f46bd4b9fff97a61de5306916`
+- The evidence payload is the non-metadata artifacts as they exist at `b434e1f`; this explicitly includes the capture-fixture artifacts introduced at `73ff180`. The product layout remains the earlier, distinct `55f4e33` commit.
+- `create-manifest.mjs`, `manifest.sha256`, this report, and the raw/normalized payload-diff logs are metadata and are excluded from payload hashing. This prevents a later manifest generator or self-referential output from being falsely bound to the immutable payload commit.
 - Scope is evidence only. No product layout, registry, feed implementation, or integration code changed.
 
 ## TDD and Gate Outputs
@@ -18,7 +21,7 @@
 | Lint | `raw-lint.log` | `normalized-lint.log` | passed. |
 | Typecheck | `raw-typecheck.log` | `normalized-typecheck.log` | passed. |
 | Build | `raw-build.log` | `normalized-build.log` | passed with public test values. |
-| Diff check | `raw-payload-diff-check.log` | `normalized-payload-diff-check.log` | passed for `55f4e33..17ee917`. |
+| Diff check | `raw-payload-diff-check.log` | `normalized-payload-diff-check.log` | passed for `55f4e33ec21ab04a1d1460b3ed7d28b51995bf50..b434e1fe3e9884c199fd447296ed778cfb4a3065`. |
 
 ## Live Visual Evidence
 
@@ -64,4 +67,4 @@ The complete deterministic HTML and interception pattern are recorded verbatim i
 
 ## Rollback
 
-Revert evidence commits `17ee917` and this binding commit; product commit `55f4e33` remains unchanged.
+Revert the manifest metadata commit `22fcd28` and this report-only commit; the immutable evidence payload `b434e1f`, capture fixture `73ff180`, and product layout `55f4e33` remain unchanged.
