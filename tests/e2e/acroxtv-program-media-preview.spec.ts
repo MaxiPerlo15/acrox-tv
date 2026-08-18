@@ -126,6 +126,7 @@ test.describe("program media previews", () => {
     await expect(episodesCarousel.getByRole("button", { name: /Reproducir Alta episodio más reciente/i })).toBeVisible();
     await expect(mostViewed.locator(".media-platform-badge").first()).toHaveText("Más visto");
     await expect(mostViewed.locator(".inline-play-badge").first()).toHaveText("Reproducir");
+    await expect(mostViewed.getByRole("button", { name: /Siguiente|Anterior|Ir al item/i })).toHaveCount(0);
     await expect(episodesCarousel.getByRole("button", { name: /Siguiente|Anterior|Ir al item/i })).toHaveCount(0);
 
     const beforeAutoSlide = await readCarouselPosition(episodesCarousel);
