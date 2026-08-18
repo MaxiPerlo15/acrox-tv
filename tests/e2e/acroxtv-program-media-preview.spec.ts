@@ -40,6 +40,26 @@ const programFeed = {
   live: { state: "unavailable" }
 };
 
+const expectPreviewPlayerToFillContainer = async (
+  preview: ReturnType<import("@playwright/test").Page["locator"]>,
+  title: string
+) => {
+  const player = preview.locator(`iframe[title="${title}"]`);
+
+  await expect(player).toBeVisible();
+  const dimensions = await preview.evaluate((container) => {
+    const { width, height } = container.getBoundingClientRect();
+    const { width: playerWidth, height: playerHeight } = container.querySelector("iframe")!.getBoundingClientRect();
+    return { width, height, playerWidth, playerHeight };
+  });
+
+  expect(dimensions.width).toBeGreaterThan(0);
+  expect(dimensions.height).toBeGreaterThan(0);
+  expect(dimensions.width / dimensions.height).toBeCloseTo(16 / 9, 2);
+  expect(Math.abs(dimensions.playerWidth - dimensions.width)).toBeLessThanOrEqual(2.5);
+  expect(Math.abs(dimensions.playerHeight - dimensions.height)).toBeLessThanOrEqual(2.5);
+};
+
 test.describe("program media previews", () => {
   test.beforeEach(async ({ page }) => {
     await page.route(`**/api/acroxtv-feed/${programSlug}`, async (route) => {
@@ -62,14 +82,25 @@ test.describe("program media previews", () => {
     await page.keyboard.press("Escape");
     await expect(page.locator('iframe[title="Alta episodio más reciente"]')).toHaveCount(0);
     await expect(latest).toBeVisible();
+    await expect(latest).toBeFocused();
   });
 
   test("closes the latest preview after outside interaction", async ({ page }) => {
-    await page.getByRole("region", { name: "Último episodio" }).getByRole("button", { name: /Reproducir Alta episodio más reciente/i }).click();
+    const latest = page.getByRole("region", { name: "Último episodio" }).getByRole("button", { name: /Reproducir Alta episodio más reciente/i });
+
+    await latest.click();
     await expect(page.locator('iframe[title="Alta episodio más reciente"]')).toBeVisible();
 
     await page.getByRole("heading", { name: "Alta Data ¡Te Tire!" }).click();
     await expect(page.locator('iframe[title="Alta episodio más reciente"]')).toHaveCount(0);
+    await expect(latest).toBeFocused();
+  });
+
+  test("fills the latest preview media container on desktop", async ({ page }) => {
+    const latestPreview = page.locator(".program-latest-preview");
+
+    await latestPreview.getByRole("button", { name: /Reproducir Alta episodio más reciente/i }).click();
+    await expectPreviewPlayerToFillContainer(latestPreview, "Alta episodio más reciente");
   });
 
   test("uses keyboard-operable scoped carousels for Más visto and Episodios", async ({ page }) => {
@@ -92,9 +123,12 @@ test.describe("program media previews", () => {
     await expect(page.getByRole("contentinfo")).toBeVisible();
   });
 
-  test("does not overflow on mobile @mobile", async ({ page }) => {
+  test("fills the latest preview media container without mobile overflow @mobile", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
 
+    const latestPreview = page.locator(".program-latest-preview");
+    await latestPreview.getByRole("button", { name: /Reproducir Alta episodio más reciente/i }).click();
+    await expectPreviewPlayerToFillContainer(latestPreview, "Alta episodio más reciente");
     expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
   });
 });
