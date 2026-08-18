@@ -1,7 +1,11 @@
 import { createServer } from "node:net";
 import { spawn } from "node:child_process";
+import { readFile, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 
 const reservation = createServer();
+const nextEnvPath = fileURLToPath(new URL("../next-env.d.ts", import.meta.url));
+const originalNextEnv = await readFile(nextEnvPath);
 
 reservation.listen(0, "127.0.0.1", () => {
   const address = reservation.address();
@@ -14,7 +18,13 @@ reservation.listen(0, "127.0.0.1", () => {
       stdio: "inherit"
     });
 
-    child.on("exit", (code, signal) => process.exitCode = code ?? (signal ? 1 : 0));
+    child.on("exit", async (code, signal) => {
+      try {
+        await writeFile(nextEnvPath, originalNextEnv);
+      } finally {
+        process.exitCode = code ?? (signal ? 1 : 0);
+      }
+    });
     child.on("error", (error) => {
       console.error(error);
       process.exitCode = 1;

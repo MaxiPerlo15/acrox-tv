@@ -1,0 +1,11 @@
+Review remediation validation — 2026-08-18
+
+$ npm run test:e2e -- tests/e2e/acroxtv-program-media-preview.spec.ts
+22 passed (32.4s)
+
+Auto-slide proof: each desktop browser measured the Episodes carousel track's computed translateX and first card viewport x-coordinate before and after 4,700 ms. Both values moved left by more than 1 px; DOM presence is not used as proof of advance.
+
+$ npm run test:e2e
+180 passed (1.1m)
+
+The E2E runner snapshots the committed next-env.d.ts before Playwright starts and restores it after the child exits. Generated .next artifacts remain gitignored; the focused and full E2E runs left no next-env.d.ts or .next changes. Before this remediation commit, git status contained only the intended test-runner and E2E-test changes.

@@ -61,6 +61,18 @@ const expectPreviewPlayerToFillContainer = async (
   expect(Math.abs(dimensions.playerHeight - dimensions.height)).toBeLessThanOrEqual(2.5);
 };
 
+const readCarouselPosition = async (
+  carousel: ReturnType<import("@playwright/test").Page["locator"]>
+) => carousel.locator(".carousel-track").evaluate((track) => {
+  const firstCard = track.querySelector(".social-card");
+  if (!firstCard) throw new Error("Carousel track has no card to measure.");
+
+  return {
+    translateX: new DOMMatrixReadOnly(getComputedStyle(track).transform).m41,
+    firstCardX: firstCard.getBoundingClientRect().x
+  };
+});
+
 test.describe("program media previews", () => {
   test.beforeEach(async ({ page }) => {
     await page.route(`**/api/acroxtv-feed/${programSlug}`, async (route) => {
@@ -116,8 +128,12 @@ test.describe("program media previews", () => {
     await expect(mostViewed.locator(".inline-play-badge").first()).toHaveText("Reproducir");
     await expect(episodesCarousel.getByRole("button", { name: /Siguiente|Anterior|Ir al item/i })).toHaveCount(0);
 
-    await page.waitForTimeout(4_200);
-    await expect(episodesCarousel.getByRole("button", { name: /Reproducir Alta episodio más visto/i })).toBeVisible();
+    const beforeAutoSlide = await readCarouselPosition(episodesCarousel);
+    await page.waitForTimeout(4_700);
+    const afterAutoSlide = await readCarouselPosition(episodesCarousel);
+
+    expect(afterAutoSlide.translateX).toBeLessThan(beforeAutoSlide.translateX - 1);
+    expect(afterAutoSlide.firstCardX).toBeLessThan(beforeAutoSlide.firstCardX - 1);
   });
 
   test("keeps the program feed isolated and renders an honest unavailable Instagram card plus Footer", async ({ page }) => {
