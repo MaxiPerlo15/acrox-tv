@@ -239,19 +239,105 @@ const unavailableProgramFeed = (programSlug: string): ProgramFeedResponse => ({
   live: { state: "unavailable" }
 });
 
-const EpisodeLink = ({ episode, compact = false }: { episode: EpisodeItem; compact?: boolean }) => (
-  <a className={compact ? "program-episode program-episode--compact" : "program-episode"} href={episode.watchUrl}>
-    <Image src={episode.thumbnailUrl} alt="" width={320} height={180} />
-    <span>{episode.title}</span>
-  </a>
-);
+const youtubeEmbedUrl = (episode: EpisodeItem) =>
+  `https://www.youtube-nocookie.com/embed/${episode.videoId}?rel=0&modestbranding=1&autoplay=1`;
 
-const InstagramLink = ({ item }: { item: SocialContentItem }) => (
-  <a className="program-instagram-item" href={item.url} target="_blank" rel="noopener noreferrer">
-    <Image src={item.thumbnailUrl} alt="" width={320} height={180} unoptimized />
-    <span>{item.title}</span>
-  </a>
-);
+type ProgramEpisodePreviewProps = {
+  episode: EpisodeItem;
+  className: string;
+};
+
+const ProgramEpisodePreview = ({ episode, className }: ProgramEpisodePreviewProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const close = () => {
+    setIsOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (target && !rootRef.current?.contains(target)) close();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown, { capture: true });
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown, { capture: true });
+    };
+  }, [isOpen]);
+
+  return (
+    <div ref={rootRef} className={className}>
+      {isOpen ? (
+        <iframe
+          src={youtubeEmbedUrl(episode)}
+          title={episode.title}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => setIsOpen(true)}
+          aria-label={`Reproducir ${episode.title}`}
+          aria-expanded={isOpen}
+        >
+          <Image src={episode.thumbnailUrl} alt={episode.title} fill sizes="(max-width: 700px) 100vw, 800px" />
+          <span className="inline-play-badge">Reproducir</span>
+        </button>
+      )}
+    </div>
+  );
+};
+
+type ProgramEpisodeCarouselProps = {
+  title: string;
+  episodes: EpisodeItem[];
+};
+
+const ProgramEpisodeCarousel = ({ title, episodes }: ProgramEpisodeCarouselProps) => {
+  const [current, setCurrent] = useState(0);
+  const activeEpisode = episodes[Math.min(current, Math.max(episodes.length - 1, 0))];
+  const hasMultipleEpisodes = episodes.length > 1;
+  const move = (direction: 1 | -1) => {
+    if (!hasMultipleEpisodes) return;
+    setCurrent((value) => (value + direction + episodes.length) % episodes.length);
+  };
+
+  if (!activeEpisode) return <p>No hay episodios atribuidos a este programa.</p>;
+
+  return (
+    <section className="program-episode-carousel" role="region" aria-label={`Carrusel ${title}`}>
+      <div className="program-episode-carousel__viewport">
+        <ProgramEpisodePreview
+          key={activeEpisode.videoId}
+          episode={activeEpisode}
+          className="program-episode-carousel__preview"
+        />
+        <div className="program-episode-carousel__copy">
+          <p aria-live="polite">{current + 1} de {episodes.length}</p>
+          <h3>{activeEpisode.title}</h3>
+        </div>
+      </div>
+      {hasMultipleEpisodes ? (
+        <div className="program-episode-carousel__controls">
+          <button type="button" onClick={() => move(-1)} aria-label="Episodio anterior">Anterior</button>
+          <button type="button" onClick={() => move(1)} aria-label="Siguiente episodio">Siguiente</button>
+        </div>
+      ) : null}
+    </section>
+  );
+};
 
 export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) => {
   const [feed, setFeed] = useState<ProgramFeedResponse | null>(null);
@@ -268,8 +354,6 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
   const latestEpisode = episodes[0];
   const mostViewed = [...episodes].sort((left, right) => right.viewCount - left.viewCount).slice(0, 3);
   const isEpisodeState = feed.episodes.state === "available" || feed.episodes.state === "stale";
-  const instagramItems = "items" in feed.instagram ? feed.instagram.items : [];
-  const isInstagramState = feed.instagram.state === "available" || feed.instagram.state === "stale";
 
   return (
     <section className="program-media" aria-label="Programación del programa">
@@ -283,7 +367,7 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
             No pudimos cargar la programación de YouTube para este programa.
           </p>
         ) : latestEpisode ? (
-          <EpisodeLink episode={latestEpisode} />
+          <ProgramEpisodePreview episode={latestEpisode} className="program-latest-preview" />
         ) : (
           <p>{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
         )}
@@ -292,25 +376,18 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
         <section className="program-media-card" aria-labelledby="most-viewed-title">
           <p>LO MÁS VISTO</p>
           <h2 id="most-viewed-title">Más visto</h2>
-          {mostViewed.map((episode) => <EpisodeLink key={episode.videoId} episode={episode} compact />)}
+          {isEpisodeState ? <ProgramEpisodeCarousel title="Más visto" episodes={mostViewed} /> : null}
         </section>
         <section className="program-media-card" aria-labelledby="episodes-title">
           <p>ARCHIVO DE LA SEÑAL</p>
           <h2 id="episodes-title">Episodios</h2>
           {feed.episodes.state === "stale" ? <p>Este contenido puede no estar actualizado.</p> : null}
-          {isEpisodeState && episodes.length === 0 ? <p>No hay episodios atribuidos a este programa.</p> : null}
-          {episodes.slice(0, 4).map((episode) => <EpisodeLink key={episode.videoId} episode={episode} compact />)}
+          {isEpisodeState ? <ProgramEpisodeCarousel title="Episodios" episodes={episodes.slice(0, 4)} /> : null}
         </section>
         <section className="program-media-card program-instagram-card" aria-labelledby="instagram-title">
           <p>CUENTA PROFESIONAL</p>
           <h2 id="instagram-title">Instagram</h2>
-          {feed.instagram.state === "stale" ? <p>Este contenido puede no estar actualizado.</p> : null}
-          {feed.instagram.state === "unavailable" ? (
-            <p>Instagram aún no está disponible para este programa.</p>
-          ) : feed.instagram.state === "error" ? (
-            <p role="alert">No pudimos cargar Instagram para este programa.</p>
-          ) : isInstagramState && instagramItems.length === 0 ? <p>No hay publicaciones de Instagram atribuidas a este programa.</p> : null}
-          {instagramItems.slice(0, 3).map((item) => <InstagramLink key={item.id} item={item} />)}
+          <p>Instagram aún no está disponible para este programa.</p>
         </section>
       </div>
     </section>

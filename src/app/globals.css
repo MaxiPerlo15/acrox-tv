@@ -173,16 +173,23 @@ a {
 .program-latest > .program-media-error { align-self: center; max-width: 32ch; margin: 0; padding: 20px; border: 1px solid rgba(255, 142, 142, .6); border-radius: 12px; color: #ffe0e0; background: rgba(114, 20, 30, .32); font-weight: 700; line-height: 1.5; }
 .program-latest > div > p, .program-media-card > p { margin: 0 0 8px; color: #9ab6ff; font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 .program-latest h2, .program-media-card h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: clamp(1.4rem, 2.7vw, 2.15rem); line-height: .96; text-transform: uppercase; }
-.program-episode { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(180px, .9fr) minmax(0, 1.1fr); align-items: center; gap: 18px; color: var(--text); text-decoration: none; }
-.program-episode img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid rgba(144, 166, 214, .35); border-radius: 10px; background: #0a0f1f; }
-.program-episode span { font-family: var(--font-display), sans-serif; font-size: clamp(1.2rem, 2vw, 2rem); line-height: 1.08; }
-.program-episode:hover span, .program-episode:focus-visible span { color: #b8ccff; text-decoration: underline; text-underline-offset: 4px; }
 .program-media-grid { display: grid; grid-template-columns: 1fr 1.25fr .8fr; gap: 16px; margin-top: 16px; }
 .program-media-card { min-width: 0; min-height: 286px; padding: clamp(18px, 2vw, 26px); border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
 .program-media-card > p:not(:first-child) { color: var(--text-secondary); font-size: .86rem; line-height: 1.5; }
-.program-episode--compact { grid-template-columns: 68px minmax(0, 1fr); gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(144, 166, 214, .18); }
-.program-episode--compact img { height: 48px; }
-.program-episode--compact span { font-family: var(--font-body), sans-serif; font-size: .8rem; font-weight: 600; line-height: 1.35; }
+.program-latest-preview, .program-episode-carousel__preview { position: relative; overflow: hidden; border: 1px solid rgba(144, 166, 214, .35); border-radius: 12px; background: #050710; aspect-ratio: 16 / 9; }
+.program-latest-preview { align-self: end; }
+.program-latest-preview button, .program-episode-carousel__preview button { position: relative; display: block; width: 100%; height: 100%; border: 0; padding: 0; color: var(--text); background: transparent; cursor: pointer; }
+.program-latest-preview img, .program-episode-carousel__preview img { object-fit: cover; }
+.program-latest-preview iframe, .program-episode-carousel__preview iframe { display: block; width: 100%; height: 100%; border: 0; }
+.program-latest-preview button:focus-visible, .program-episode-carousel__preview button:focus-visible { outline: 3px solid #b8ccff; outline-offset: -3px; }
+.program-episode-carousel { margin-top: 16px; }
+.program-episode-carousel__viewport { display: grid; gap: 12px; }
+.program-episode-carousel__copy { min-width: 0; }
+.program-episode-carousel__copy > p { margin: 0 0 5px; color: var(--text-tertiary); font-size: .74rem; font-weight: 700; }
+.program-episode-carousel__copy h3 { margin: 0; overflow-wrap: anywhere; font-size: 1rem; line-height: 1.35; }
+.program-episode-carousel__controls { display: flex; gap: 8px; margin-top: 12px; }
+.program-episode-carousel__controls button { min-height: 38px; border: 1px solid rgba(144, 166, 214, .35); border-radius: 999px; padding: 0 12px; color: var(--text); background: rgba(18, 29, 56, .6); font-weight: 700; cursor: pointer; }
+.program-episode-carousel__controls button:hover, .program-episode-carousel__controls button:focus-visible { border-color: #b8ccff; outline: 2px solid #b8ccff; outline-offset: 2px; }
 .program-instagram-card { display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(160deg, rgba(22,20,43,.94), rgba(13,20,37,.82)); }
 .program-instagram-card > p:last-child { margin: 24px 0 0; padding: 16px; border: 1px dashed rgba(184,194,218,.38); border-radius: 10px; }
 .program-instagram-item { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(144, 166, 214, .18); color: var(--text); text-decoration: none; }
