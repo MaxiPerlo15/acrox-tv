@@ -3,7 +3,7 @@
 ## Binding and Scope
 
 - Product commit: `55f4e33ec21ab04a1d1460b3ed7d28b51995bf50`
-- Evidence payload commit: `17ee917e1881cc574314d88990a98cbe69534155`
+- Evidence payload commit: `73ff1802781464a408b578937dfde2034daea19b`
 - This report and `manifest.sha256` are intentionally self-excluded from the manifest. The manifest hashes every retained payload artifact and binds that payload to both commits above.
 - Scope is evidence only. No product layout, registry, feed implementation, or integration code changed.
 

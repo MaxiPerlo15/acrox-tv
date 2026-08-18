@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const directory = fileURLToPath(new URL(".", import.meta.url));
 const excluded = new Set(["manifest.sha256", "report.md"]);
 const productCommit = "55f4e33ec21ab04a1d1460b3ed7d28b51995bf50";
-const evidencePayloadCommit = "17ee917e1881cc574314d88990a98cbe69534155";
+const evidencePayloadCommit = "73ff1802781464a408b578937dfde2034daea19b";
 const files = (await readdir(directory)).filter((file) => !excluded.has(file)).sort();
 const hashes = await Promise.all(files.map(async (file) => {
   const contents = await readFile(`${directory}/${file}`);
