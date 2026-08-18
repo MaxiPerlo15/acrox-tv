@@ -10,7 +10,7 @@
 
 The focused cross-browser program-media test was first run after its contract rewrite and failed because the former dashboard did not expose the home-row landmark/cards. The final focused gate is retained as `raw-focused-e2e.log` / `normalized-focused-e2e.log`: **22 passed**.
 
-The contract asserts the scoped YouTube carousel behavior (including automatic advance after 4 seconds), no external arrows or dots, internal title/play badges, an image-free unavailable Instagram card, keyboard-accessible preview control, desktop equal-width cards, and mobile reflow. The auto-slide proof measures the Episodes track's computed `translateX` and first-card viewport x-position before and after 4,700 ms; both must move left by more than 1 px, so DOM presence alone cannot pass the assertion.
+The contract asserts the scoped YouTube carousel behavior (including automatic advance after 4 seconds), no external arrows or dots, internal title/play badges, an image-free unavailable Instagram card, keyboard-accessible preview control, desktop equal-width cards, and mobile reflow. The auto-slide proof measures both Más visto and Episodios tracks' computed `translateX` and first-card viewport x-position before and after 4,700 ms; each must move left by more than 1 px, so DOM presence alone cannot pass the assertion.
 
 ## Quality Gates
 

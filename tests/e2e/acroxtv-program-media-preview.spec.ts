@@ -129,12 +129,16 @@ test.describe("program media previews", () => {
     await expect(mostViewed.getByRole("button", { name: /Siguiente|Anterior|Ir al item/i })).toHaveCount(0);
     await expect(episodesCarousel.getByRole("button", { name: /Siguiente|Anterior|Ir al item/i })).toHaveCount(0);
 
-    const beforeAutoSlide = await readCarouselPosition(episodesCarousel);
+    const beforeMostViewedAutoSlide = await readCarouselPosition(mostViewed);
+    const beforeEpisodesAutoSlide = await readCarouselPosition(episodesCarousel);
     await page.waitForTimeout(4_700);
-    const afterAutoSlide = await readCarouselPosition(episodesCarousel);
+    const afterMostViewedAutoSlide = await readCarouselPosition(mostViewed);
+    const afterEpisodesAutoSlide = await readCarouselPosition(episodesCarousel);
 
-    expect(afterAutoSlide.translateX).toBeLessThan(beforeAutoSlide.translateX - 1);
-    expect(afterAutoSlide.firstCardX).toBeLessThan(beforeAutoSlide.firstCardX - 1);
+    expect(afterMostViewedAutoSlide.translateX).toBeLessThan(beforeMostViewedAutoSlide.translateX - 1);
+    expect(afterMostViewedAutoSlide.firstCardX).toBeLessThan(beforeMostViewedAutoSlide.firstCardX - 1);
+    expect(afterEpisodesAutoSlide.translateX).toBeLessThan(beforeEpisodesAutoSlide.translateX - 1);
+    expect(afterEpisodesAutoSlide.firstCardX).toBeLessThan(beforeEpisodesAutoSlide.firstCardX - 1);
   });
 
   test("keeps the program feed isolated and renders an honest unavailable Instagram card plus Footer", async ({ page }) => {
