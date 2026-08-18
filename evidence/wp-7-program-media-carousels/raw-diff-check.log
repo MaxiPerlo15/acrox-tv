@@ -1,0 +1,5 @@
+ src/app/globals.css                             |  34 ++++----
+ src/components/AcroxTvMediaSection.tsx          | 100 ++++++++++-------------
+ src/components/SocialCarousel.tsx               |   6 +-
+ tests/e2e/acroxtv-program-media-preview.spec.ts | 104 +++++++++++++-----------
+ 4 files changed, 116 insertions(+), 128 deletions(-)
