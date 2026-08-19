@@ -29,8 +29,10 @@ export default function SponsorRibbon({ sponsors = [] }: SponsorRibbonProps) {
     <section className="sponsor-ribbon" aria-label="Nos acompañan" tabIndex={0}>
       <h2>Con el apoyo de</h2>
       <div className="sponsor-ribbon-viewport">
-        {renderCells()}
-        {renderCells(true)}
+        <div className="sponsor-ribbon-motion">
+          {renderCells()}
+          {renderCells(true)}
+        </div>
       </div>
     </section>
   );

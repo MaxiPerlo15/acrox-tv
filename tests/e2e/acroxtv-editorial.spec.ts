@@ -466,11 +466,12 @@ test.describe("Acrox TV editorial directory", () => {
     await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toHaveCount(0);
   });
 
-  test("renders the five approved sponsor logos without placeholder cells", async ({ page }) => {
+  test("renders five approved logos as wide, low marquee slides with one exposed list", async ({ page }) => {
     await page.goto("/");
 
     const ribbon = page.getByRole("region", { name: "Nos acompañan" });
     await expect(ribbon.getByRole("heading", { name: "Con el apoyo de" })).toBeVisible();
+    const lists = ribbon.locator("ul");
     const approvedSponsors = [
       ["Magnus", "/sponsors/logo-magnus.webp"],
       ["FG Beauty", "/sponsors/logo-fg-beauty.webp"],
@@ -479,23 +480,67 @@ test.describe("Acrox TV editorial directory", () => {
       ["Checa", "/sponsors/logo-checa.webp"]
     ] as const;
 
+    await expect(lists).toHaveCount(2);
+    await expect(lists.nth(0)).not.toHaveAttribute("aria-hidden");
+    await expect(lists.nth(1)).toHaveAttribute("aria-hidden", "true");
     await expect(ribbon.getByRole("listitem")).toHaveCount(5);
+    await expect(lists.nth(1).locator("li")).toHaveCount(5);
     for (const [name, src] of approvedSponsors) {
       await expect(ribbon.getByRole("img", { name })).toHaveAttribute("src", new RegExp(encodeURIComponent(src)));
     }
     await expect(ribbon.getByRole("listitem", { name: "Espacio de colaboración" })).toHaveCount(0);
+
+    const geometry = await ribbon.evaluate((element) => {
+      const directoryHeading = document.querySelector<HTMLElement>(".program-directory-heading h2");
+      const slide = element.querySelector<HTMLElement>("li");
+      const logo = slide?.querySelector<HTMLElement>("img");
+      const motion = element.querySelector<HTMLElement>(".sponsor-ribbon-motion");
+      if (!directoryHeading || !slide || !logo || !motion) throw new Error("Sponsor ribbon geometry is missing");
+
+      return {
+        slideWidth: slide.getBoundingClientRect().width,
+        slideHeight: slide.getBoundingClientRect().height,
+        logoWidth: logo.getBoundingClientRect().width,
+        logoHeight: logo.getBoundingClientRect().height,
+        motionName: getComputedStyle(motion).animationName,
+        titleSize: Number.parseFloat(getComputedStyle(element.querySelector("h2")!).fontSize),
+        directoryTitleSize: Number.parseFloat(getComputedStyle(directoryHeading).fontSize)
+      };
+    });
+
+    expect(geometry.slideWidth).toBeGreaterThanOrEqual(220);
+    expect(geometry.slideWidth).toBeLessThanOrEqual(300);
+    expect(geometry.slideHeight).toBeGreaterThanOrEqual(62);
+    expect(geometry.slideHeight).toBeLessThanOrEqual(68);
+    expect(geometry.logoWidth).toBeGreaterThanOrEqual(150);
+    expect(geometry.logoWidth).toBeLessThanOrEqual(180);
+    expect(geometry.logoHeight).toBeGreaterThanOrEqual(36);
+    expect(geometry.logoHeight).toBeLessThanOrEqual(42);
+    expect(geometry.motionName).toBe("sponsor-ribbon-marquee");
+    expect(geometry.titleSize).toBeLessThan(geometry.directoryTitleSize);
   });
 
-  test("pauses the sponsorship ribbon for keyboard and reduced-motion visitors", async ({ page }) => {
+  test("moves seamlessly and pauses for hover, focus, and reduced-motion visitors", async ({ page }) => {
     await page.goto("/");
 
     const ribbon = page.getByRole("region", { name: "Nos acompañan" });
-    const track = ribbon.locator(".sponsor-ribbon-viewport");
+    const track = ribbon.locator(".sponsor-ribbon-motion");
+    const listWidths = await ribbon.locator("ul").evaluateAll((lists) => lists.map((list) => list.getBoundingClientRect().width));
+    expect(listWidths[0]).toBeGreaterThan(0);
+    expect(listWidths[0]).toBeCloseTo(listWidths[1], 3);
+
+    const startTransform = await track.evaluate((element) => getComputedStyle(element).transform);
+    await page.waitForTimeout(180);
+    expect(await track.evaluate((element) => getComputedStyle(element).transform)).not.toBe(startTransform);
+
+    await ribbon.hover();
+    await expect(track).toHaveCSS("animation-play-state", "paused");
     await ribbon.focus();
     await expect(track).toHaveCSS("animation-play-state", "paused");
 
     await page.emulateMedia({ reducedMotion: "reduce" });
     await expect(track).toHaveCSS("animation-name", "none");
+    await expect(track).toHaveCSS("transform", "none");
   });
 
   test("keeps the approved sponsor ribbon inside the mobile viewport @mobile", async ({ page }) => {
@@ -504,6 +549,24 @@ test.describe("Acrox TV editorial directory", () => {
     const ribbon = page.getByRole("region", { name: "Nos acompañan" });
     await expect(ribbon.getByRole("img", { name: "Magnus" })).toBeVisible();
     await expect(ribbon.getByRole("img")).toHaveCount(5);
+    const geometry = await ribbon.evaluate((element) => {
+      const viewport = element.querySelector<HTMLElement>(".sponsor-ribbon-viewport");
+      const slide = element.querySelector<HTMLElement>("li");
+      const logo = slide?.querySelector<HTMLElement>("img");
+      if (!viewport || !slide || !logo) throw new Error("Sponsor ribbon mobile geometry is missing");
+      return {
+        viewportWidth: viewport.getBoundingClientRect().width,
+        slideWidth: slide.getBoundingClientRect().width,
+        slideHeight: slide.getBoundingClientRect().height,
+        logoWidth: logo.getBoundingClientRect().width,
+        logoHeight: logo.getBoundingClientRect().height
+      };
+    });
+    expect(geometry.slideWidth).toBeGreaterThanOrEqual(220);
+    expect(geometry.slideHeight).toBeGreaterThanOrEqual(62);
+    expect(geometry.slideHeight).toBeLessThanOrEqual(68);
+    expect(geometry.logoWidth).toBeGreaterThanOrEqual(150);
+    expect(geometry.logoHeight).toBeGreaterThanOrEqual(36);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
 
