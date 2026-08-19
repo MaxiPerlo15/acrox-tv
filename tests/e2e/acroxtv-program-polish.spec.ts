@@ -23,9 +23,21 @@ const programFeed = {
   instagram: { state: "unavailable" },
   live: { state: "unavailable" }
 };
+const legacyFeed = {
+  liveItem: null,
+  latestEpisode: null,
+  topEpisode: null,
+  episodes: [],
+  instagram: [],
+  youtubeError: false,
+  instagramError: true
+};
 
 test.describe("program visual polish", () => {
   test.beforeEach(async ({ page }) => {
+    await page.route("**/api/acroxtv-feed", async (route) => {
+      await route.fulfill({ contentType: "application/json", body: JSON.stringify(legacyFeed) });
+    });
     await page.route(`**/api/acroxtv-feed/${programSlug}`, async (route) => {
       await route.fulfill({ contentType: "application/json", body: JSON.stringify(programFeed) });
     });

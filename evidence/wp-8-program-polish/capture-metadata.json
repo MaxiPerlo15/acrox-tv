@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://127.0.0.1:3029",
+  "source": "Capture-only legacy and scoped program-feed fixtures; Instagram remains unavailable without provider calls.",
   "captures": [
     {
       "route": "/",

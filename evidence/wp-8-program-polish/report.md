@@ -4,7 +4,7 @@
 
 - Base commit: `2861d2b912de14b47873d3f5823aaf3daa811568`
 - Product commit: `74d98e2`
-- The checksum manifest binds the raw verification output and the four captures to this product commit.
+- The checksum manifest binds the raw verification output and the four captures to this product commit and its deterministic-evidence remediation.
 
 ## Strict TDD
 
@@ -24,7 +24,7 @@
 
 | Gate | Raw evidence | Result |
 | --- | --- | --- |
-| Focused E2E | `raw/focused-e2e.log` | 10 passed |
+| Focused E2E | `raw/focused-e2e.log` | 10 passed; both legacy and scoped feeds intercepted |
 | Full E2E | `raw/full-e2e.log` | 190 passed |
 | Contracts | `raw/contracts.log` | 23 passed |
 | Lint | `raw/lint.log` | passed |
@@ -35,5 +35,6 @@
 ## Visual capture
 
 - `home-desktop.png` and `home-mobile.png` capture `/` at 1440×960 and 375×812.
-- `program-desktop.png` and `program-mobile.png` capture `/alta-data-te-tire` at the same viewports with a local scoped feed fixture.
+- `program-desktop.png` and `program-mobile.png` capture `/alta-data-te-tire` at the same viewports with local legacy and scoped feed fixtures.
+- The Navbar's legacy `/api/acroxtv-feed` request is fulfilled with no live or episode content and `instagramError: true`; the scoped fixture uses `instagram: { state: "unavailable" }`. This preserves the honest unavailable-Instagram state while preventing all provider calls during focused verification and capture.
 - Sponsor data and assets were not altered; sponsor work remains blocked because this worktree has no `logo-*.jpg` assets.

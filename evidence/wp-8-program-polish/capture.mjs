@@ -23,6 +23,15 @@ const programFeed = {
   instagram: { state: "unavailable" },
   live: { state: "unavailable" }
 };
+const legacyFeed = {
+  liveItem: null,
+  latestEpisode: null,
+  topEpisode: null,
+  episodes: [],
+  instagram: [],
+  youtubeError: false,
+  instagramError: true
+};
 const viewports = [
   { name: "desktop", width: 1440, height: 960 },
   { name: "mobile", width: 375, height: 812 }
@@ -34,6 +43,10 @@ const captures = [];
 try {
   for (const viewport of viewports) {
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: "reduce" });
+    await context.route("**/api/acroxtv-feed", (route) => route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify(legacyFeed)
+    }));
     await context.route(`**/api/acroxtv-feed/${programSlug}`, (route) => route.fulfill({
       contentType: "application/json",
       body: JSON.stringify(programFeed)
@@ -53,7 +66,11 @@ try {
     await context.close();
   }
 
-  await writeFile(`${outputDirectory}/capture-metadata.json`, `${JSON.stringify({ baseUrl, captures }, null, 2)}\n`);
+  await writeFile(`${outputDirectory}/capture-metadata.json`, `${JSON.stringify({
+    baseUrl,
+    source: "Capture-only legacy and scoped program-feed fixtures; Instagram remains unavailable without provider calls.",
+    captures
+  }, null, 2)}\n`);
 } finally {
   await browser.close();
 }
