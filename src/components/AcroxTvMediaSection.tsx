@@ -331,22 +331,18 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
   return (
     <section className="program-media" aria-label="Programación del programa">
       <section className="program-media-row" aria-label="Medios del programa">
-      <section className="program-latest" aria-labelledby="latest-episode-title">
-        <div className="program-latest-heading">
-          <p className="program-media-badge">SEÑAL DEL PROGRAMA</p>
-          <h2 id="latest-episode-title">Último episodio</h2>
-        </div>
-        {feed.episodes.state === "error" ? (
-          <p className="program-media-error" role="alert">
-            No pudimos cargar la programación de YouTube para este programa.
-          </p>
-        ) : latestEpisode ? (
-          <ProgramEpisodePreview episode={latestEpisode} className="program-latest-preview" />
-        ) : (
-          <p>{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
-        )}
-      </section>
-       <div className="social-feeds-stack social-feeds-stack--three program-media-row__cards">
+        <section className="program-latest" aria-label="Último episodio">
+          {feed.episodes.state === "error" ? (
+            <p className="program-media-error" role="alert">
+              No pudimos cargar la programación de YouTube para este programa.
+            </p>
+          ) : latestEpisode ? (
+            <ProgramEpisodePreview episode={latestEpisode} className="program-latest-preview" />
+          ) : (
+            <p>{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
+          )}
+        </section>
+        <div className="social-feeds-stack social-feeds-stack--three program-media-row__cards">
          <SocialCarousel
            title="Más visto"
            platform="youtube"
@@ -374,8 +370,8 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
            ariaLabel="Episodios"
          />
          <ProgramInstagramUnavailableCard />
-       </div>
-       </section>
+        </div>
+      </section>
     </section>
   );
 };

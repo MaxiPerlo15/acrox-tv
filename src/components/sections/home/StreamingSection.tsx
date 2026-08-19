@@ -8,7 +8,10 @@ const StreamingSection = () => {
   return (
     <section id="acroxtv" className="section program-directory" aria-labelledby="acroxtv-directory-title">
       <div className="program-directory-heading" data-reveal>
-        <p>ACROX TV / PROGRAMACIÓN ORIGINAL</p>
+        <p className="content-kicker-line">
+          <span aria-hidden="true" />
+          <span>ACROX TV / PROGRAMACIÓN ORIGINAL</span>
+        </p>
         <h2 id="acroxtv-directory-title">Dos programas. <span>Una señal.</span></h2>
         <p>Conversaciones, datos y bienestar con identidad propia. Elegí una señal para conocer su universo.</p>
       </div>

@@ -158,7 +158,7 @@ a {
   letter-spacing: -0.035em;
 }
 
-.program-hero-copy > p:not(.program-hero-kicker):not(.program-hero-presenter) {
+.program-hero-copy > p:not(.program-hero-kicker) {
   max-width: 52ch;
   margin: 26px 0 0;
   color: var(--text-secondary);
@@ -166,14 +166,9 @@ a {
   line-height: 1.65;
 }
 
-.program-hero-presenter { margin: 24px 0 0; color: #dce8ff; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .program-media { margin-top: clamp(24px, 4vw, 48px); }
 .program-latest { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 0; outline: 1px solid var(--line); border-radius: var(--radius); background: #050710; box-shadow: 0 24px 56px rgba(3, 7, 18, .36); }
-.program-latest::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(4, 7, 16, .78) 0%, rgba(4, 7, 16, .16) 52%, transparent 76%), linear-gradient(0deg, rgba(4, 7, 16, .78) 0%, transparent 44%); }
-.program-latest-heading { position: absolute; z-index: 2; left: clamp(18px, 3vw, 36px); bottom: clamp(18px, 3vw, 34px); pointer-events: none; }
-.program-media-badge { width: fit-content; margin: 0 0 10px; border: 1px solid rgba(184, 210, 255, .46); border-radius: 999px; padding: 7px 11px; color: #eef5ff; background: rgba(10, 18, 39, .72); box-shadow: 0 0 16px rgba(74, 147, 255, .18); font-size: .66rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-.program-latest h2, .program-media-card h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: clamp(1.4rem, 2.7vw, 2.35rem); line-height: .96; text-transform: uppercase; }
-.program-latest h2 { max-width: 12ch; text-shadow: 0 3px 18px rgba(0, 0, 0, .72); }
+.program-media-card h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: clamp(1.4rem, 2.7vw, 2.35rem); line-height: .96; text-transform: uppercase; }
 .program-latest > .program-media-error { position: relative; z-index: 2; display: grid; place-self: center; height: 100%; max-width: 32ch; margin: 0; padding: 20px; color: #ffe0e0; font-weight: 700; line-height: 1.5; }
 .program-media-row__cards { margin-top: 16px; }
 .program-media-row__cards.social-feeds-stack--three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; align-items: stretch; gap: 24px; }

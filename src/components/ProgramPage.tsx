@@ -18,7 +18,6 @@ export default function ProgramPage({ program }: ProgramPageProps) {
             <p className="program-hero-kicker">ACROX TV · PROGRAMACIÓN ORIGINAL</p>
             <h1 id="program-title">{program.name}</h1>
             <p>{program.summary}</p>
-            <p className="program-hero-presenter">Conducción Acrox TV</p>
           </div>
           <div className="program-hero-identity" aria-label={`Identidad de ${program.name}`}>
             {program.coverLogoSrc ? (

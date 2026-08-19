@@ -297,9 +297,9 @@ test.describe("Acrox TV direct program routes", () => {
 
     await page.goto("/alta-data-te-tire");
     const main = page.getByRole("main");
-    const latest = main.getByRole("heading", { level: 2, name: "Último episodio" });
+    const latest = main.getByRole("region", { name: "Último episodio" });
     await expect(latest).toBeVisible();
-    await expect(main.getByRole("region", { name: "Último episodio" }).getByRole("button", { name: "Reproducir Último episodio de Alta" })).toBeVisible();
+    await expect(latest.getByRole("button", { name: "Reproducir Último episodio de Alta" })).toBeVisible();
     for (const name of ["Más visto", "Episodios", "Instagram"]) {
       await expect(main.getByRole("region", { name })).toBeVisible();
     }
