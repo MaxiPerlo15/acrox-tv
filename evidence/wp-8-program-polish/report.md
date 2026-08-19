@@ -24,8 +24,8 @@
 
 | Gate | Raw evidence | Result |
 | --- | --- | --- |
-| Focused E2E | `raw/focused-e2e.log` | 10 passed; both legacy and scoped feeds intercepted |
-| Full E2E | `raw/full-e2e.log` | 190 passed |
+| Focused E2E | `raw/focused-e2e.log` | 16 passed; the shared feed and both canonical scoped feeds are intercepted |
+| Full E2E | `raw/full-e2e.log` | 196 passed |
 | Contracts | `raw/contracts.log` | 23 passed |
 | Lint | `raw/lint.log` | passed |
 | Typecheck | `raw/typecheck.log` | passed |
@@ -36,5 +36,6 @@
 
 - `home-desktop.png` and `home-mobile.png` capture `/` at 1440×960 and 375×812.
 - `program-desktop.png` and `program-mobile.png` capture `/alta-data-te-tire` at the same viewports with local legacy and scoped feed fixtures.
-- The Navbar's legacy `/api/acroxtv-feed` request is fulfilled with no live or episode content and `instagramError: true`; the scoped fixture uses `instagram: { state: "unavailable" }`. This preserves the honest unavailable-Instagram state while preventing all provider calls during focused verification and capture.
+- The Navbar's legacy `/api/acroxtv-feed` request is fulfilled with no live or episode content and `instagramError: true`; both canonical scoped feeds (`alta-data-te-tire` and `mas-que-nutricion`) are fulfilled with controlled, per-program responses using `instagram: { state: "unavailable" }`. All HTTPS media requests are locally fulfilled, preventing external provider output during focused verification and capture.
+- Remediation verification: focused E2E passed **16 tests**, full E2E passed **196 tests**, and lint, TypeScript, and the fixture-environment production build passed after this deterministic-fixture update.
 - Sponsor data and assets were not altered; sponsor work remains blocked because this worktree has no `logo-*.jpg` assets.

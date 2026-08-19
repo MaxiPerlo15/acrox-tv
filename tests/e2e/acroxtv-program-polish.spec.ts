@@ -4,25 +4,33 @@ const programSlug = "alta-data-te-tire";
 const programPath = `/${programSlug}`;
 const canonicalProgramPaths = ["/alta-data-te-tire", "/mas-que-nutricion"];
 
-const programFeed = {
-  programSlug,
-  episodes: {
-    state: "available",
-    asOf: "2026-08-18T00:00:00.000Z",
-    items: [
-      {
-        videoId: "alta-latest",
-        title: "Alta episodio más reciente",
-        watchUrl: "https://youtube.com/watch?v=alta-latest",
-        thumbnailUrl: "/e2e-thumbnail.svg",
-        publishedAt: "2026-08-18T00:00:00.000Z",
-        durationSeconds: 120,
-        viewCount: 12
-      }
-    ]
+const programFeeds = {
+  "alta-data-te-tire": {
+    programSlug: "alta-data-te-tire",
+    episodes: {
+      state: "available",
+      asOf: "2026-08-18T00:00:00.000Z",
+      items: [
+        {
+          videoId: "alta-latest",
+          title: "Alta episodio más reciente",
+          watchUrl: "https://youtube.com/watch?v=alta-latest",
+          thumbnailUrl: "/e2e-thumbnail.svg",
+          publishedAt: "2026-08-18T00:00:00.000Z",
+          durationSeconds: 120,
+          viewCount: 12
+        }
+      ]
+    },
+    instagram: { state: "unavailable" },
+    live: { state: "unavailable" }
   },
-  instagram: { state: "unavailable" },
-  live: { state: "unavailable" }
+  "mas-que-nutricion": {
+    programSlug: "mas-que-nutricion",
+    episodes: { state: "unavailable" },
+    instagram: { state: "unavailable" },
+    live: { state: "unavailable" }
+  }
 };
 const legacyFeed = {
   liveItem: null,
@@ -36,12 +44,17 @@ const legacyFeed = {
 
 test.describe("program visual polish", () => {
   test.beforeEach(async ({ page }) => {
+    await page.route("https://**", async (route) => {
+      await route.fulfill({ status: 204, body: "" });
+    });
     await page.route("**/api/acroxtv-feed", async (route) => {
       await route.fulfill({ contentType: "application/json", body: JSON.stringify(legacyFeed) });
     });
-    await page.route(`**/api/acroxtv-feed/${programSlug}`, async (route) => {
-      await route.fulfill({ contentType: "application/json", body: JSON.stringify(programFeed) });
-    });
+    await Promise.all(Object.entries(programFeeds).map(async ([slug, feed]) => {
+      await page.route(`**/api/acroxtv-feed/${slug}`, async (route) => {
+        await route.fulfill({ contentType: "application/json", body: JSON.stringify(feed) });
+      });
+    }));
   });
 
   test("removes program-only copy while preserving an accessible, closable latest preview", async ({ page }) => {
