@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const programSlug = "alta-data-te-tire";
 const programPath = `/${programSlug}`;
@@ -41,6 +41,55 @@ const legacyFeed = {
   youtubeError: false,
   instagramError: true
 };
+
+const footerParityCases = [
+  { name: "desktop", viewport: { width: 1440, height: 900 }, tag: "" },
+  { name: "mobile", viewport: { width: 375, height: 812 }, tag: " @mobile" }
+];
+
+const geometryTolerance = 1;
+
+type FooterMetrics = {
+  x: number;
+  width: number;
+  right: number;
+  height: number;
+  styles: Record<string, string>;
+};
+
+async function readFooterMetrics(locator: Locator): Promise<FooterMetrics> {
+  return locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const styles = getComputedStyle(element);
+
+    return {
+      x: rect.x,
+      width: rect.width,
+      right: rect.right,
+      height: rect.height,
+      styles: {
+        display: styles.display,
+        gridTemplateColumns: styles.gridTemplateColumns,
+        backgroundImage: styles.backgroundImage,
+        borderTopColor: styles.borderTopColor,
+        paddingTop: styles.paddingTop,
+        paddingInlineStart: styles.paddingInlineStart,
+        paddingInlineEnd: styles.paddingInlineEnd
+      }
+    };
+  });
+}
+
+function expectWithinGeometryTolerance(actual: number, expected: number) {
+  expect(Math.abs(actual - expected)).toBeLessThanOrEqual(geometryTolerance);
+}
+
+async function waitForStableFooterLayout(page: Page) {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+}
 
 test.describe("program visual polish", () => {
   test.beforeEach(async ({ page }) => {
@@ -144,4 +193,84 @@ test.describe("program visual polish", () => {
     await expect(main.getByText("Conducción Acrox TV", { exact: true })).toHaveCount(0);
     expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
   });
+
+  for (const footerParityCase of footerParityCases) {
+    test(`matches home footer shell geometry for both program routes on ${footerParityCase.name}${footerParityCase.tag}`, async ({ page }, testInfo) => {
+      await page.setViewportSize(footerParityCase.viewport);
+      await page.goto("/");
+      await waitForStableFooterLayout(page);
+
+      const homeShell = page.locator(".site-shell.home-page");
+      const homeFooter = page.getByRole("contentinfo");
+      await homeFooter.scrollIntoViewIfNeeded();
+      await expect(homeFooter).toHaveClass(/is-visible/);
+
+      const homeFooterMetrics = await readFooterMetrics(homeFooter);
+      const homeShellMetrics = await homeShell.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const styles = getComputedStyle(element);
+        return {
+          x: rect.x,
+          width: rect.width,
+          right: rect.right,
+          paddingTop: styles.paddingTop,
+          paddingInlineStart: styles.paddingInlineStart,
+          paddingInlineEnd: styles.paddingInlineEnd,
+          maxWidth: styles.maxWidth
+        };
+      });
+
+      for (const canonicalProgramPath of canonicalProgramPaths) {
+        await page.goto(canonicalProgramPath);
+        await waitForStableFooterLayout(page);
+
+        const programShell = page.locator(".program-page > .program-footer-shell");
+        const programFooter = page.getByRole("contentinfo");
+        await programFooter.scrollIntoViewIfNeeded();
+        await expect(programShell).toBeVisible();
+        await expect(programFooter).toHaveClass(/is-visible/);
+
+        await expect.poll(async () => {
+          const box = await programFooter.boundingBox();
+          return box ? Math.abs(box.height - homeFooterMetrics.height) : Number.POSITIVE_INFINITY;
+        }).toBeLessThanOrEqual(geometryTolerance);
+
+        const programFooterMetrics = await readFooterMetrics(programFooter);
+        const programShellMetrics = await programShell.evaluate((element) => {
+          const rect = element.getBoundingClientRect();
+          const styles = getComputedStyle(element);
+          return {
+            x: rect.x,
+            width: rect.width,
+            right: rect.right,
+            paddingTop: styles.paddingTop,
+            paddingInlineStart: styles.paddingInlineStart,
+            paddingInlineEnd: styles.paddingInlineEnd,
+            maxWidth: styles.maxWidth
+          };
+        });
+
+        for (const property of ["x", "width", "right", "height"] as const) {
+          expectWithinGeometryTolerance(programFooterMetrics[property], homeFooterMetrics[property]);
+        }
+        expect(programFooterMetrics.styles).toEqual(homeFooterMetrics.styles);
+        expect(programShellMetrics).toMatchObject({
+          maxWidth: homeShellMetrics.maxWidth,
+          paddingTop: "0px",
+          paddingInlineStart: homeShellMetrics.paddingInlineStart,
+          paddingInlineEnd: homeShellMetrics.paddingInlineEnd
+        });
+        for (const property of ["x", "width", "right"] as const) {
+          expectWithinGeometryTolerance(programShellMetrics[property], homeShellMetrics[property]);
+        }
+
+        const screenshot = testInfo.outputPath(`footer-parity-${footerParityCase.name}-${canonicalProgramPath.slice(1)}.png`);
+        await programFooter.screenshot({ animations: "disabled", path: screenshot });
+        await testInfo.attach(`footer-parity-${footerParityCase.name}-${canonicalProgramPath.slice(1)}`, {
+          path: screenshot,
+          contentType: "image/png"
+        });
+      }
+    });
+  }
 });

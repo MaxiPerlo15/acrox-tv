@@ -32,7 +32,9 @@ export default function ProgramPage({ program }: ProgramPageProps) {
         </section>
         <ProgramMediaSection programSlug={program.slug} />
       </main>
-      <Footer anchorPrefix="/" />
+      <div className="site-shell program-footer-shell">
+        <Footer anchorPrefix="/" />
+      </div>
     </div>
   );
 }

@@ -113,6 +113,10 @@ a {
   min-height: 100vh;
 }
 
+.program-page > .program-footer-shell {
+  padding-top: 0;
+}
+
 .program-page-main {
   width: min(100%, var(--layout-container-max));
   margin: 0 auto;
