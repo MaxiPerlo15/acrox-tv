@@ -466,14 +466,24 @@ test.describe("Acrox TV editorial directory", () => {
     await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toHaveCount(0);
   });
 
-  test("renders neutral sponsorship cells without inventing brands", async ({ page }) => {
+  test("renders the five approved sponsor logos without placeholder cells", async ({ page }) => {
     await page.goto("/");
 
     const ribbon = page.getByRole("region", { name: "Nos acompañan" });
     await expect(ribbon.getByRole("heading", { name: "Con el apoyo de" })).toBeVisible();
-    await expect(ribbon.getByRole("listitem", { name: "Espacio de colaboración" })).toHaveCount(5);
-    await expect(ribbon).not.toContainText("Logos de referencia");
-    await expect(ribbon).not.toContainText("Espacio reservado para aliados aprobados");
+    const approvedSponsors = [
+      ["Magnus", "/sponsors/logo-magnus.webp"],
+      ["FG Beauty", "/sponsors/logo-fg-beauty.webp"],
+      ["Noe Peluquería", "/sponsors/logo-noe-peluqueria.webp"],
+      ["San José", "/sponsors/logo-san-jose.webp"],
+      ["Checa", "/sponsors/logo-checa.webp"]
+    ] as const;
+
+    await expect(ribbon.getByRole("listitem")).toHaveCount(5);
+    for (const [name, src] of approvedSponsors) {
+      await expect(ribbon.getByRole("img", { name })).toHaveAttribute("src", new RegExp(encodeURIComponent(src)));
+    }
+    await expect(ribbon.getByRole("listitem", { name: "Espacio de colaboración" })).toHaveCount(0);
   });
 
   test("pauses the sponsorship ribbon for keyboard and reduced-motion visitors", async ({ page }) => {
@@ -486,6 +496,15 @@ test.describe("Acrox TV editorial directory", () => {
 
     await page.emulateMedia({ reducedMotion: "reduce" });
     await expect(track).toHaveCSS("animation-name", "none");
+  });
+
+  test("keeps the approved sponsor ribbon inside the mobile viewport @mobile", async ({ page }) => {
+    await page.goto("/");
+
+    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
+    await expect(ribbon.getByRole("img", { name: "Magnus" })).toBeVisible();
+    await expect(ribbon.getByRole("img")).toHaveCount(5);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
 
   test("keeps legacy media, live, and feed content out of the home directory", async ({ page }) => {
