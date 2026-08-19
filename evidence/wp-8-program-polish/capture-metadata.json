@@ -1,0 +1,41 @@
+{
+  "baseUrl": "http://127.0.0.1:3029",
+  "captures": [
+    {
+      "route": "/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "file": "home-desktop.png"
+    },
+    {
+      "route": "/alta-data-te-tire",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "file": "program-desktop.png"
+    },
+    {
+      "route": "/",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "file": "home-mobile.png"
+    },
+    {
+      "route": "/alta-data-te-tire",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "file": "program-mobile.png"
+    }
+  ]
+}

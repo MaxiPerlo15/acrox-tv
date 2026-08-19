@@ -1,0 +1,19 @@
+
+> acrox-tv-landing@0.1.0 test:e2e
+> node scripts/run-e2e.mjs tests/e2e/acroxtv-program-polish.spec.ts
+
+
+Running 10 tests using 5 workers
+
+  ✓   5 [chromium] › tests/e2e/acroxtv-program-polish.spec.ts:68:7 › program visual polish › uses the same rendered kicker treatment for the home program directory as Quiénes Somos (1.1s)
+  ✓   2 [chromium] › tests/e2e/acroxtv-program-polish.spec.ts:34:7 › program visual polish › removes program-only copy while preserving an accessible, closable latest preview (1.3s)
+  ✓   4 [chromium] › tests/e2e/acroxtv-program-polish.spec.ts:55:7 › program visual polish › keeps the shared Footer navigating from a program page to home anchors (1.4s)
+  ✓   7 [webkit] › tests/e2e/acroxtv-program-polish.spec.ts:34:7 › program visual polish › removes program-only copy while preserving an accessible, closable latest preview (1.1s)
+  ✓   3 [firefox] › tests/e2e/acroxtv-program-polish.spec.ts:34:7 › program visual polish › removes program-only copy while preserving an accessible, closable latest preview (3.7s)
+  ✓   8 [webkit] › tests/e2e/acroxtv-program-polish.spec.ts:55:7 › program visual polish › keeps the shared Footer navigating from a program page to home anchors (1.5s)
+  ✓   9 [webkit] › tests/e2e/acroxtv-program-polish.spec.ts:68:7 › program visual polish › uses the same rendered kicker treatment for the home program directory as Quiénes Somos (743ms)
+  ✓   1 [firefox] › tests/e2e/acroxtv-program-polish.spec.ts:55:7 › program visual polish › keeps the shared Footer navigating from a program page to home anchors (3.2s)
+  ✓   6 [firefox] › tests/e2e/acroxtv-program-polish.spec.ts:68:7 › program visual polish › uses the same rendered kicker treatment for the home program directory as Quiénes Somos (2.1s)
+  ✓  10 [mobile] › tests/e2e/acroxtv-program-polish.spec.ts:94:7 › program visual polish › keeps the polished direct-program layout free of horizontal overflow on mobile @mobile (591ms)
+
+  10 passed (11.7s)
