@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const programSlug = "alta-data-te-tire";
 const programPath = `/${programSlug}`;
+const canonicalProgramPaths = ["/alta-data-te-tire", "/mas-que-nutricion"];
 
 const programFeed = {
   programSlug,
@@ -76,6 +77,23 @@ test.describe("program visual polish", () => {
     await expect(page).toHaveURL(/\/#quienes-somos$/);
     await expect(page.locator("#quienes-somos")).toBeVisible();
   });
+
+  for (const canonicalProgramPath of canonicalProgramPaths) {
+    test(`reveals the shared Footer and keeps its root anchors on ${canonicalProgramPath}`, async ({ page }) => {
+      await page.goto(canonicalProgramPath);
+
+      const footer = page.getByRole("contentinfo");
+      const aboutLink = footer.getByRole("link", { name: "Nosotros" });
+
+      await footer.scrollIntoViewIfNeeded();
+      await expect(footer).toHaveClass(/is-visible/);
+      await expect.poll(() => footer.evaluate((element) => getComputedStyle(element).opacity)).toBe("1");
+      await expect(aboutLink).toHaveAttribute("href", "/#quienes-somos");
+
+      await aboutLink.click();
+      await expect(page).toHaveURL(/\/#quienes-somos$/);
+    });
+  }
 
   test("uses the same rendered kicker treatment for the home program directory as Quiénes Somos", async ({ page }) => {
     await page.goto("/");

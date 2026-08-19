@@ -2,6 +2,7 @@ import Image from "next/image";
 import Footer from "@/components/Footer";
 import { ProgramMediaSection } from "@/components/AcroxTvMediaSection";
 import Navbar from "@/components/Navbar";
+import ScrollReveal from "@/components/ScrollReveal";
 import type { Program } from "@/domain/programs";
 
 type ProgramPageProps = {
@@ -12,6 +13,7 @@ export default function ProgramPage({ program }: ProgramPageProps) {
   return (
     <div className="program-page">
       <Navbar />
+      <ScrollReveal />
       <main className="program-page-main">
         <section className="program-hero" aria-labelledby="program-title">
           <div className="program-hero-copy">
