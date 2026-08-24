@@ -512,8 +512,8 @@ test.describe("Acrox TV editorial directory", () => {
     expect(geometry.slideWidth).toBeLessThanOrEqual(300);
     expect(geometry.slideHeight).toBeGreaterThanOrEqual(62);
     expect(geometry.slideHeight).toBeLessThanOrEqual(68);
-    expect(geometry.logoWidth).toBeGreaterThanOrEqual(150);
-    expect(geometry.logoWidth).toBeLessThanOrEqual(180);
+    expect(geometry.logoWidth).toBeGreaterThanOrEqual(36);
+    expect(geometry.logoWidth).toBeLessThanOrEqual(42);
     expect(geometry.logoHeight).toBeGreaterThanOrEqual(36);
     expect(geometry.logoHeight).toBeLessThanOrEqual(42);
     expect(geometry.motionName).toBe("sponsor-ribbon-marquee");
@@ -565,9 +565,49 @@ test.describe("Acrox TV editorial directory", () => {
     expect(geometry.slideWidth).toBeGreaterThanOrEqual(220);
     expect(geometry.slideHeight).toBeGreaterThanOrEqual(62);
     expect(geometry.slideHeight).toBeLessThanOrEqual(68);
-    expect(geometry.logoWidth).toBeGreaterThanOrEqual(150);
+    expect(geometry.logoWidth).toBeGreaterThanOrEqual(36);
     expect(geometry.logoHeight).toBeGreaterThanOrEqual(36);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  });
+
+  test("does not emit aspect-ratio warnings for program or sponsor images", async ({ page }) => {
+    const affectedSources = [
+      "/alta-data-logo.png",
+      "/sponsors/logo-magnus.webp",
+      "/sponsors/logo-fg-beauty.webp",
+      "/sponsors/logo-noe-peluqueria.webp",
+      "/sponsors/logo-san-jose.webp",
+      "/sponsors/logo-checa.webp"
+    ];
+    const imageWarnings: string[] = [];
+
+    page.on("console", (message) => {
+      const text = message.text();
+      if (text.includes("Image with src") && affectedSources.some((source) => text.includes(source))) {
+        imageWarnings.push(text);
+      }
+    });
+
+    await page.goto("/");
+    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
+    await expect(ribbon).toBeVisible();
+    const sponsorBoxes = await ribbon.getByRole("img").evaluateAll((images) =>
+      images.map((image) => {
+        const box = image.getBoundingClientRect();
+        return { width: box.width, height: box.height };
+      })
+    );
+    expect(sponsorBoxes).toHaveLength(5);
+    for (const box of sponsorBoxes) {
+      expect(box.width).toBeCloseTo(box.height, 3);
+    }
+
+    await page.goto("/alta-data-te-tire");
+    const programLogo = page.getByRole("img", { name: "Alta Data ¡Te Tire!" });
+    await expect(programLogo).toBeVisible();
+    await expect(programLogo).toHaveAttribute("height", "250");
+
+    expect(imageWarnings).toEqual([]);
   });
 
   test("keeps legacy media, live, and feed content out of the home directory", async ({ page }) => {

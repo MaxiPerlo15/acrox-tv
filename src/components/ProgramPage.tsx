@@ -24,7 +24,7 @@ export default function ProgramPage({ program }: ProgramPageProps) {
           <div className="program-hero-identity" aria-label={`Identidad de ${program.name}`}>
             {program.coverLogoSrc ? (
               // This is the only approved program identity asset currently available.
-              <Image src={program.coverLogoSrc} alt={program.name} width={250} height={160} />
+              <Image src={program.coverLogoSrc} alt={program.name} width={250} height={250} />
             ) : (
               <span>{program.name}</span>
             )}

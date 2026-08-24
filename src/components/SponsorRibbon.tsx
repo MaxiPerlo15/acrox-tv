@@ -18,7 +18,7 @@ export default function SponsorRibbon({ sponsors = [] }: SponsorRibbonProps) {
       {hasApprovedSponsors
         ? sponsors.map((sponsor) => (
             <li key={sponsor.name} aria-label={sponsor.name}>
-              {sponsor.logoSrc ? <Image src={sponsor.logoSrc} alt={sponsor.name} width={180} height={72} /> : <span>{sponsor.name}</span>}
+              {sponsor.logoSrc ? <Image src={sponsor.logoSrc} alt={sponsor.name} width={180} height={180} /> : <span>{sponsor.name}</span>}
             </li>
           ))
         : NEUTRAL_CELLS.map((cell) => <li key={cell} aria-label="Espacio de colaboración" />)}
