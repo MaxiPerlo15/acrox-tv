@@ -1,0 +1,32 @@
+
+> acrox-tv-landing@0.1.0 test:contracts
+> NODE_OPTIONS=--conditions=react-server playwright test --config=playwright.contracts.config.ts
+
+
+Running 23 tests using 4 workers
+
+  ✓   1 [contracts] › tests/contracts/acroxtv-feed.service.test.ts:13:7 › program-scoped media service › rejects an unknown slug before it can reach the provider (2ms)
+  ✓   2 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:29:7 › Acrox TV program registry contract › exposes the two canonical program paths (2ms)
+  ✓   3 [contracts] › tests/contracts/acroxtv-feed.service.test.ts:26:7 › program-scoped media service › keeps program cache/single-flight isolated and asOf stable (3ms)
+  ✓   5 [contracts] › tests/contracts/acroxtv-feed.route.test.ts:19:7 › program-scoped Acrox TV feed route › registers the canonical Alta route with its existing playlist (2ms)
+  ✓   4 [contracts] › tests/contracts/youtube.client.test.ts:64:7 › program YouTube provider contract › selects Alta Data's exact playlist and normalizes its attributable episode (3ms)
+  ✓   6 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:35:7 › Acrox TV program registry contract › discovers every registered program through its direct canonical sitemap URL (1ms)
+  ✓   8 [contracts] › tests/contracts/acroxtv-feed.service.test.ts:73:7 › program-scoped media service › returns a stale cached surface after a refresh failure and no items on an uncached error (2ms)
+  ✓   9 [contracts] › tests/contracts/youtube.client.test.ts:86:7 › program YouTube provider contract › selects Más que Nutrición's exact playlist without returning Alta Data items (1ms)
+  ✓   7 [contracts] › tests/contracts/acroxtv-feed.route.test.ts:29:7 › program-scoped Acrox TV feed route › returns an available response with no-store caching from an injected service (3ms)
+  ✓  10 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:43:7 › Acrox TV program registry contract › rejects duplicate and reserved slugs (2ms)
+  ✓  11 [contracts] › tests/contracts/youtube.client.test.ts:99:7 › program YouTube provider contract › propagates provider failures instead of returning another program's episodes (2ms)
+  ✓  13 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:48:7 › Acrox TV program registry contract › rejects invalid, static-route, and public-root collisions (1ms)
+  ✓  12 [contracts] › tests/contracts/acroxtv-feed.route.test.ts:48:7 › program-scoped Acrox TV feed route › returns stale cached episodes when the service refresh fails (4ms)
+  ✓  14 [contracts] › tests/contracts/youtube.client.test.ts:114:7 › program YouTube provider contract › returns no episodes when the assigned playlist response is empty (1ms)
+  ✓  15 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:59:7 › Acrox TV program registry contract › does not collide with current static routes or public-root paths (0ms)
+  ✓  16 [contracts] › tests/contracts/acroxtv-feed.route.test.ts:88:7 › program-scoped Acrox TV feed route › returns an error surface when the service has no attributable cache (0ms)
+  ✓  17 [contracts] › tests/contracts/youtube.client.test.ts:126:7 › program YouTube provider contract › ignores malformed playlist items without requesting video details (0ms)
+  ✓  18 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:63:7 › Acrox TV program registry contract › runs the parallel browser suite against a fresh production server (1ms)
+  ✓  19 [contracts] › tests/contracts/acroxtv-feed.route.test.ts:103:7 › program-scoped Acrox TV feed route › returns 404 when the injected service rejects an unknown slug (0ms)
+  ✓  21 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:79:7 › Acrox TV program registry contract › pins Turbopack to this absolute project root (0ms)
+  ✓  20 [contracts] › tests/contracts/youtube.client.test.ts:138:7 › program YouTube provider contract › propagates a video-details failure after accepting its assigned playlist (1ms)
+  ✓  22 [contracts] › tests/e2e/acroxtv-contracts.spec.ts:83:7 › Acrox TV program registry contract › documents the registry, media adapter, and scoped feed HTTP contracts (3ms)
+  ✓  23 [contracts] › tests/contracts/youtube.client.test.ts:161:7 › program YouTube provider contract › does not let a scoped quota failure block the legacy Acrox feed (11ms)
+
+  23 passed (545ms)

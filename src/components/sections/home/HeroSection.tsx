@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { HomeMetric } from "@/domain/home-content";
 
 type HeroSectionProps = {
@@ -35,10 +36,10 @@ const HeroSection = ({ brandLogoSrc, metrics }: HeroSectionProps) => {
           <a href="#contacto" className="btn primary">
             Solicitar Propuesta
           </a>
-          <a href="/proyectos" className="btn ghost hero-projects-cta">
+          <Link href="/proyectos" className="btn ghost hero-projects-cta">
             <span>Ver Nuestros Proyectos</span>
             <span aria-hidden="true">→</span>
-          </a>
+          </Link>
         </div>
       </div>
       <div className="hero-panel" aria-hidden="true">

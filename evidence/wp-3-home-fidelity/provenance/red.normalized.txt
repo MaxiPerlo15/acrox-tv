@@ -1,0 +1,51 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy (<duration>)
+
+
+  1) [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Programas de Acrox TV' }).getByRole('heading', { name: 'Alta Data ¡Te Tire!', level: 3 })
+    Expected: visible
+    Timeout: <duration>
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout <duration>
+      - waiting for getByRole('region', { name: 'Programas de Acrox TV' }).getByRole('heading', { name: 'Alta Data ¡Te Tire!', level: 3 })
+
+
+      359 |     const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+      360 |     for (const program of PROGRAMS) {
+    > 361 |       await expect(directory.getByRole("heading", { level: 3, name: program.name })).toBeVisible();
+          |                                                                                      ^
+      362 |     }
+      363 |   });
+      364 |
+        at <BASE_WORKTREE>/tests/e2e/acroxtv-editorial.spec.ts:361:86
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/acroxtv-editorial-Acrox-TV-eab3f-visible-editorial-hierarchy-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/acroxtv-editorial-Acrox-TV-eab3f-visible-editorial-hierarchy-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/acroxtv-editorial-Acrox-TV-eab3f-visible-editorial-hierarchy-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/acroxtv-editorial-Acrox-TV-eab3f-visible-editorial-hierarchy-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/acroxtv-editorial-Acrox-TV-eab3f-visible-editorial-hierarchy-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy 
+
+[exit_code=1]

@@ -1,0 +1,8 @@
+# WP-2 immutable TDD provenance manifest
+# SHA-256 checksums, captured 2026-08-11. Paths are relative to repository root.
+# Revision linkage: RED parent da69785a6b37458ba7435e3b3bff7677df05a8cf;
+# GREEN f5bcca0bb47878f7bac56ba47372908ba22d8115;
+# safety-test blob 8670b661aad0ce6cb9a76a623effffed19f51ceb.
+3122cd2a63d5a6aba920485918339f52505a61da520bd6e1ba27f44ab77b50bc  evidence/wp-2-program-template/provenance-red-playwright-output.txt
+8a13dd8a8f27c21e0dbf6c9b577dcf4be60d7d869c70ef24be47ff35f79bc9e1  evidence/wp-2-program-template/provenance-green-playwright-output.txt
+77e82aed6b302cd2c85dbf5510d85c3956e6e3c00c3449bdd0cfdc2c96b498d8  evidence/wp-2-program-template/report.md

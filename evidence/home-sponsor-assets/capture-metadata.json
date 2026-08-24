@@ -1,0 +1,24 @@
+{
+  "baseUrl": "http://127.0.0.1:3030",
+  "source": "Home legacy feed is locally fulfilled; no direct-program feeds or external media are requested.",
+  "captures": [
+    {
+      "route": "/#acroxtv",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "file": "home-ribbon-desktop.png"
+    },
+    {
+      "route": "/#acroxtv",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "file": "home-ribbon-mobile.png"
+    }
+  ]
+}

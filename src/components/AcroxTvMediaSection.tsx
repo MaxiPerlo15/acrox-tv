@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { loadAcroxTvFeedClient } from "@/application/acroxtv-feed.client";
+import { loadAcroxTvFeedClient, loadProgramFeedClient } from "@/application/acroxtv-feed.client";
 import SocialCarousel from "@/components/SocialCarousel";
-import { TvGhostIcon, YouTubeIcon } from "@/components/icons";
-import type { AcroxTvFeedResponse, EpisodeItem } from "@/domain/acroxtv-feed";
+import { InstagramIcon, TvGhostIcon, YouTubeIcon } from "@/components/icons";
+import type { AcroxTvFeedResponse, EpisodeItem, MediaSurface, ProgramFeedResponse } from "@/domain/acroxtv-feed";
 import type { SocialContentItem } from "@/domain/social-content";
 import { publicEnv } from "@/lib/public-env";
 
@@ -227,3 +227,151 @@ const AcroxTvMediaSection = () => {
 };
 
 export default AcroxTvMediaSection;
+
+type ProgramMediaSectionProps = { programSlug: string };
+
+const episodeItems = (surface: MediaSurface<EpisodeItem[]>) => ("items" in surface ? surface.items : []);
+
+const unavailableProgramFeed = (programSlug: string): ProgramFeedResponse => ({
+  programSlug,
+  episodes: { state: "unavailable" },
+  instagram: { state: "unavailable" },
+  live: { state: "unavailable" }
+});
+
+const youtubeEmbedUrl = (episode: EpisodeItem) =>
+  `https://www.youtube-nocookie.com/embed/${episode.videoId}?rel=0&modestbranding=1&autoplay=1`;
+
+type ProgramEpisodePreviewProps = {
+  episode: EpisodeItem;
+  className: string;
+};
+
+const ProgramEpisodePreview = ({ episode, className }: ProgramEpisodePreviewProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const close = () => {
+    setIsOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (target && !rootRef.current?.contains(target)) close();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown, { capture: true });
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown, { capture: true });
+    };
+  }, [isOpen]);
+
+  return (
+    <div ref={rootRef} className={className}>
+      {isOpen ? (
+        <iframe
+          src={youtubeEmbedUrl(episode)}
+          title={episode.title}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => setIsOpen(true)}
+          aria-label={`Reproducir ${episode.title}`}
+          aria-expanded={isOpen}
+        >
+          <Image src={episode.thumbnailUrl} alt={episode.title} fill sizes="(max-width: 700px) 100vw, 800px" />
+          <span className="inline-play-badge">Reproducir</span>
+        </button>
+      )}
+    </div>
+  );
+};
+
+const ProgramInstagramUnavailableCard = () => (
+  <section className="platform-block instagram" aria-label="Instagram" aria-live="polite">
+    <article className="social-card program-instagram-unavailable-card">
+      <div className="social-image-wrap program-instagram-unavailable-media">
+        <span className="media-platform-badge instagram">Instagram</span>
+        <span className="program-instagram-unavailable-icon" aria-hidden="true"><InstagramIcon /></span>
+        <p>Instagram aún no está disponible para este programa.</p>
+      </div>
+    </article>
+  </section>
+);
+
+export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) => {
+  const [feed, setFeed] = useState<ProgramFeedResponse | null>(null);
+
+  useEffect(() => {
+    void loadProgramFeedClient(programSlug).then((response) => {
+      setFeed(response.programSlug === programSlug ? response : unavailableProgramFeed(programSlug));
+    });
+  }, [programSlug]);
+
+  if (!feed) return <p>Cargando programación...</p>;
+
+  const episodes = episodeItems(feed.episodes);
+  const latestEpisode = episodes[0];
+  const mostViewed = [...episodes].sort((left, right) => right.viewCount - left.viewCount).slice(0, 3);
+  const isEpisodeState = feed.episodes.state === "available" || feed.episodes.state === "stale";
+
+  return (
+    <section className="program-media" aria-label="Programación del programa">
+      <section className="program-media-row" aria-label="Medios del programa">
+        <section className="program-latest" aria-label="Último episodio">
+          {feed.episodes.state === "error" ? (
+            <p className="program-media-error" role="alert">
+              No pudimos cargar la programación de YouTube para este programa.
+            </p>
+          ) : latestEpisode ? (
+            <ProgramEpisodePreview episode={latestEpisode} className="program-latest-preview" />
+          ) : (
+            <p>{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
+          )}
+        </section>
+        <div className="social-feeds-stack social-feeds-stack--three program-media-row__cards">
+         <SocialCarousel
+           title="Más visto"
+           platform="youtube"
+           items={isEpisodeState ? mostViewed.map(mapEpisodeToSocialItem) : []}
+           isLoading={false}
+           emptyMessage="No hay episodios atribuidos a este programa."
+           integrationErrorMessage="No pudimos cargar la programación de YouTube para este programa."
+           hasIntegrationError={feed.episodes.state === "error"}
+           fallbackHref={publicEnv.youtubeUrl}
+           fallbackCtaLabel="Ir al canal de YouTube"
+           showIndicators={false}
+           ariaLabel="Más visto"
+         />
+         <SocialCarousel
+           title="Episodios"
+           platform="youtube"
+           items={isEpisodeState ? episodes.slice(0, 4).map(mapEpisodeToSocialItem) : []}
+           isLoading={false}
+           emptyMessage="No hay episodios atribuidos a este programa."
+           integrationErrorMessage="No pudimos cargar la programación de YouTube para este programa."
+           hasIntegrationError={feed.episodes.state === "error"}
+           fallbackHref={publicEnv.youtubeUrl}
+           fallbackCtaLabel="Ir al canal de YouTube"
+           showIndicators={false}
+           ariaLabel="Episodios"
+         />
+         <ProgramInstagramUnavailableCard />
+        </div>
+      </section>
+    </section>
+  );
+};

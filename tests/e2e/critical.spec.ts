@@ -1,4 +1,5 @@
 import { devices, expect, test, type Page } from "@playwright/test";
+import { PROGRAMS, programPath } from "@/domain/programs";
 
 const fillContactForm = async (page: Page, options?: { includeConsent?: boolean; includeService?: boolean }) => {
   const includeConsent = options?.includeConsent ?? true;
@@ -80,6 +81,64 @@ test.describe("Navbar Desktop", () => {
     await expect(page).toHaveURL(/#contacto$/);
     await expect(page.locator("#contacto")).toBeVisible();
   });
+
+  test("shows the live badge and opens the legacy live stream when the feed is live", async ({ page }) => {
+    const liveUrl = "https://youtube.com/watch?v=live-acrox";
+    await page.route("**/api/acroxtv-feed", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          liveItem: {
+            videoId: "live-acrox",
+            title: "Acrox en vivo",
+            publishedAt: "2026-08-01T12:00:00.000Z",
+            thumbnailUrl: "https://example.com/live.jpg",
+            watchUrl: liveUrl,
+            isLive: true
+          },
+          latestEpisode: null,
+          topEpisode: null,
+          episodes: [],
+          instagram: [],
+          youtubeError: false,
+          instagramError: false
+        })
+      });
+    });
+
+    await page.goto("/");
+
+    const streamLink = page.locator("header .nav-links").getByRole("link", { name: "ACROX TV EN VIVO" });
+    await expect(streamLink).toHaveAttribute("href", liveUrl);
+    await expect(streamLink).toHaveAttribute("target", "_blank");
+    await expect(streamLink).toHaveAttribute("rel", "noopener noreferrer");
+    await expect(page.locator("header .nav-stream-mobile")).toHaveAttribute("href", liveUrl);
+  });
+
+  test("keeps the Acrox TV anchors internal when the legacy feed is not live", async ({ page }) => {
+    await page.route("**/api/acroxtv-feed", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          liveItem: null,
+          latestEpisode: null,
+          topEpisode: null,
+          episodes: [],
+          instagram: [],
+          youtubeError: false,
+          instagramError: false
+        })
+      });
+    });
+
+    await page.goto("/");
+
+    const streamLink = page.locator("header .nav-links").getByRole("link", { name: "ACROX TV", exact: true });
+    await expect(streamLink).toHaveAttribute("href", "/#acroxtv");
+    await expect(streamLink).not.toHaveAttribute("target", "_blank");
+    await expect(page.locator("header .nav-stream-mobile")).toHaveAttribute("href", "/#acroxtv");
+    await expect(page.getByText("EN VIVO", { exact: true })).toHaveCount(0);
+  });
 });
 
 test.describe("Form Negative Validations", () => {
@@ -140,15 +199,21 @@ test.describe("Popup Fallback", () => {
   });
 });
 
-test.describe("CTA Invitado", () => {
-  test("Postularse como invitado aplica preset y lleva al formulario", async ({ page }) => {
-    await page.goto("/");
+test.describe("Directorio de programas", () => {
+  for (const program of PROGRAMS) {
+    test(`la portada de ${program.name} lleva a su página canónica`, async ({ page }) => {
+      await page.goto("/");
 
-    await page.getByRole("link", { name: "Postularse como invitado" }).click();
-    await expect(page).toHaveURL(/#contacto$/);
-    await expect(page.locator("#contacto")).toBeVisible();
-    await expect(page.locator(".service-select-trigger")).toContainText("Postularse como invitado");
-  });
+      const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+      const programCover = directory.getByRole("link", { name: new RegExp(program.name) });
+      await expect(programCover).toHaveAttribute("href", programPath(program.slug));
+      await programCover.click();
+
+      await expect(page).toHaveURL(new RegExp(`${programPath(program.slug)}$`));
+      await expect(page.getByRole("heading", { level: 1, name: program.name })).toBeVisible();
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`${programPath(program.slug)}$`));
+    });
+  }
 });
 
 test.describe("Mobile Critical @mobile", () => {

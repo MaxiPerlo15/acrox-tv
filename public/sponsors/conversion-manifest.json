@@ -1,0 +1,35 @@
+{
+  "converter": "sharp webp quality=86 effort=6 metadata=stripped",
+  "assets": [
+    {
+      "source": "logo-magnus.jpg",
+      "sourceSha256": "9452d105842add9ccb263cdd4e8c945d5a4597d1079b6ff3a427699961a42509",
+      "output": "logo-magnus.webp",
+      "outputSha256": "98a1101b9dc52d67ccac33d569d4071bd8910c5c16dc3c7fe0ba4d4d27193644"
+    },
+    {
+      "source": "logo-fg-beauty.jpg",
+      "sourceSha256": "2c5213fe0c0e31d523639929072e293dcf77a6eb7db3609fa339e9adc9e0c7cb",
+      "output": "logo-fg-beauty.webp",
+      "outputSha256": "8fb3540439b63254d7626a0c7868ca52b8eb10ba3efbd90a3c1a8682cb347b7d"
+    },
+    {
+      "source": "logo-noe-peluqueria.jpg",
+      "sourceSha256": "688d4e909e527ce4d33ee3e37d7d95ce8d6baf90a65e958e0d4e116992e0c415",
+      "output": "logo-noe-peluqueria.webp",
+      "outputSha256": "ea4276e7b3a41150f649d8e346b363b504436a81ddb016faf96ff2260f6d6f52"
+    },
+    {
+      "source": "logo-san-jose.jpg",
+      "sourceSha256": "bf999f9663a02979ce5783420fe40ec5d6c49324ee1e74ab0b6efd8d3565b955",
+      "output": "logo-san-jose.webp",
+      "outputSha256": "c3fcaaa158aac4dbb08b82f0b1a4df95d7cfafb5fc29692d0a57bb8614980c21"
+    },
+    {
+      "source": "logo-checa.jpg",
+      "sourceSha256": "f0d630cd9ecdc329618d31d44276f94425660f584db06d225c1c8c372215e103",
+      "output": "logo-checa.webp",
+      "outputSha256": "c2c7a5211f694c672ff8f56da77402e9cfcf84dfb6756d6d195aa124229f2877"
+    }
+  ]
+}

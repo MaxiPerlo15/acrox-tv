@@ -1,0 +1,10 @@
+
+> acrox-tv-landing@0.1.0 start
+> next start -p 3029
+
+▲ Next.js 16.1.6
+- Local:         http://localhost:3029
+- Network:       http://192.168.100.68:3029
+
+✓ Starting...
+✓ Ready in 258ms

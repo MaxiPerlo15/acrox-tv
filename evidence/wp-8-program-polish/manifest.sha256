@@ -1,0 +1,17 @@
+c2ccf4a572bae7b5037f9fae25479482f6f1067138c3e6ed9f1e3475029768f4  evidence/wp-8-program-polish/.gitattributes
+cad3f8ce9fa9347d98d582c4659daaf2ad0645344471ea0c35063e1558c1a37a  evidence/wp-8-program-polish/capture.mjs
+7285acdcb398c253e869b0b928f0fa33979cf7a10cd89431b016abd12564d8ec  evidence/wp-8-program-polish/capture-metadata.json
+40929fde3ee385873ec7d7b45c9fe0df60bc2b31883e86a56900e2c8daec8b59  evidence/wp-8-program-polish/home-desktop.png
+83611fddb4d9a9d22d1eebc912cee41a28595ca4284e6faf7ed4a0ac3e32a978  evidence/wp-8-program-polish/home-mobile.png
+88eac31c6883b349eec5affbfc4c95c1ca2588149fa0144b3f71227367dc1115  evidence/wp-8-program-polish/program-desktop.png
+736154f25b630caedede045d5a1c599382d6e5c697f93b1e3db99f4aaea217e0  evidence/wp-8-program-polish/program-mobile.png
+24841288aaec85cd8807e3d6c8ac01c924bb7ab878541ed1049471a8c94fc9bb  evidence/wp-8-program-polish/raw/build.log
+01b00fa69e167106798f89db5a0c552c9063e9a60de417dac5cea84692a3f006  evidence/wp-8-program-polish/raw/capture-server.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/wp-8-program-polish/raw/capture.log
+cb43f5ea9d374efe625aad9978804f6097b80321311910531c3398aaf9b15120  evidence/wp-8-program-polish/raw/contracts.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/wp-8-program-polish/raw/diff-check.log
+38d0d6f389c18e9371d13ec8bc9187b05d86f566b8b96e7617ebc3e46b488d49  evidence/wp-8-program-polish/raw/focused-e2e.log
+9a1da0efc69ce92499e13f0988ad149705bbb29a2e44aca1f0a74243662ae016  evidence/wp-8-program-polish/raw/full-e2e.log
+6f315f92d55975fad55a328f3df9578c7c478e120f1bd845dcaf8bba54159fcb  evidence/wp-8-program-polish/raw/lint.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/wp-8-program-polish/raw/typecheck.log
+fd4ff9b3cc7852f2ccbe69995a2c4f0316f33397139ed30e45d518f0d057c324  evidence/wp-8-program-polish/report.md

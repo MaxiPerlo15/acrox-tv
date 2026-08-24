@@ -1,0 +1,194 @@
+{
+  "baseUrl": "http://127.0.0.1:3028",
+  "source": "Capture-only scoped program-feed fixtures with public per-program YouTube thumbnails; Instagram remains unavailable.",
+  "captures": [
+    {
+      "programSlug": "alta-data-te-tire",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "file": "alta-data-te-tire-desktop.png",
+      "cards": 3,
+      "thumbnails": [
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=828&q=75",
+          "width": 463,
+          "height": 347
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=828&q=75",
+          "width": 359,
+          "height": 269
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        }
+      ]
+    },
+    {
+      "programSlug": "alta-data-te-tire",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "file": "alta-data-te-tire-mobile.png",
+      "cards": 3,
+      "thumbnails": [
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+          "width": 281,
+          "height": 210
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=640&q=75",
+          "width": 281,
+          "height": 210
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FH5oLwWoIeaI%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        }
+      ]
+    },
+    {
+      "programSlug": "mas-que-nutricion",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 960
+      },
+      "file": "mas-que-nutricion-desktop.png",
+      "cards": 3,
+      "thumbnails": [
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=828&q=75",
+          "width": 463,
+          "height": 347
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=828&q=75",
+          "width": 359,
+          "height": 269
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+          "width": 465,
+          "height": 348
+        }
+      ]
+    },
+    {
+      "programSlug": "mas-que-nutricion",
+      "viewport": {
+        "name": "mobile",
+        "width": 375,
+        "height": 812
+      },
+      "file": "mas-que-nutricion-mobile.png",
+      "cards": 3,
+      "thumbnails": [
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+          "width": 281,
+          "height": 210
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=640&q=75",
+          "width": 281,
+          "height": 210
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        },
+        {
+          "src": "http://127.0.0.1:3028/_next/image?url=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fn3BBkIrSUFc%2Fhqdefault.jpg&w=384&q=75",
+          "width": 374,
+          "height": 281
+        }
+      ]
+    }
+  ]
+}

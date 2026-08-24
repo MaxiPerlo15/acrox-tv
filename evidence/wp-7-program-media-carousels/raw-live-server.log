@@ -1,0 +1,42 @@
+
+> acrox-tv-landing@0.1.0 start
+> next start -p 3028
+
+▲ Next.js 16.1.6
+- Local:         http://localhost:3028
+- Network:       http://192.168.100.68:3028
+
+✓ Starting...
+✓ Ready in 195ms
+[acroxtv-feed] Instagram fetch failed {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}
+[acroxtv-feed] Instagram unavailable without snapshot {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}
+[acroxtv-feed] Instagram fetch failed {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}
+[acroxtv-feed] Instagram unavailable without snapshot {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}
+[acroxtv-feed] Instagram fetch failed {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}
+[acroxtv-feed] Instagram unavailable without snapshot {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}
+[acroxtv-feed] Instagram fetch failed {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}
+[acroxtv-feed] Instagram unavailable without snapshot {
+  name: 'Error',
+  message: 'Instagram feed misconfigured: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID'
+}

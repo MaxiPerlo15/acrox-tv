@@ -10,6 +10,7 @@ type CacheState = "fresh" | "stale" | "revalidated" | "snapshot";
 export type SWRResult<T> = {
   value: T;
   state: CacheState;
+  updatedAt: number;
 };
 
 type SWRGetParams<T> = {
@@ -17,10 +18,11 @@ type SWRGetParams<T> = {
   ttlMs: number;
   staleMs: number;
   load: () => Promise<T>;
+  now?: () => number;
   shouldRefresh?: (ctx: { now: number; entry: CacheEntry<T> }) => boolean;
 };
 
-type SWRStore = {
+export type SWRStore = {
   get<T>(key: string): CacheEntry<T> | undefined;
   set<T>(key: string, entry: CacheEntry<T>): void;
   getSnapshot<T>(key: string): T | undefined;
@@ -65,15 +67,24 @@ class MemorySWRStore implements SWRStore {
   }
 }
 
-const defaultStore = new MemorySWRStore();
+export const createSWRStore = (): SWRStore => new MemorySWRStore();
 
-const persistValue = <T>(store: SWRStore, key: string, value: T, ttlMs: number, staleMs: number) => {
-  const now = Date.now();
+const defaultStore = createSWRStore();
+
+const persistValue = <T>(
+  store: SWRStore,
+  key: string,
+  value: T,
+  ttlMs: number,
+  staleMs: number,
+  now: () => number
+) => {
+  const updatedAt = now();
   store.set<T>(key, {
     value,
-    updatedAt: now,
-    expiresAt: now + ttlMs,
-    staleUntil: now + staleMs
+    updatedAt,
+    expiresAt: updatedAt + ttlMs,
+    staleUntil: updatedAt + staleMs
   });
   store.setSnapshot(key, value);
 };
@@ -83,7 +94,8 @@ const loadWithSingleFlight = async <T>(
   key: string,
   ttlMs: number,
   staleMs: number,
-  load: () => Promise<T>
+  load: () => Promise<T>,
+  now: () => number
 ) => {
   const existing = store.getInFlight<T>(key);
   if (existing) {
@@ -92,7 +104,7 @@ const loadWithSingleFlight = async <T>(
 
   const promise = load()
     .then((value) => {
-      persistValue(store, key, value, ttlMs, staleMs);
+      persistValue(store, key, value, ttlMs, staleMs, now);
       return value;
     })
     .finally(() => {
@@ -107,31 +119,31 @@ export const getSWRResource = async <T>(
   params: SWRGetParams<T>,
   store: SWRStore = defaultStore
 ): Promise<SWRResult<T>> => {
-  const { key, ttlMs, staleMs, load, shouldRefresh } = params;
-  const now = Date.now();
+  const { key, ttlMs, staleMs, load, now = Date.now, shouldRefresh } = params;
+  const currentTime = now();
   const entry = store.get<T>(key);
 
-  if (entry && now <= entry.expiresAt) {
-    return { value: entry.value, state: "fresh" };
+  if (entry && currentTime <= entry.expiresAt) {
+    return { value: entry.value, state: "fresh", updatedAt: entry.updatedAt };
   }
 
-  if (entry && now <= entry.staleUntil) {
-    const refreshAllowed = shouldRefresh ? shouldRefresh({ now, entry }) : true;
+  if (entry && currentTime <= entry.staleUntil) {
+    const refreshAllowed = shouldRefresh ? shouldRefresh({ now: currentTime, entry }) : true;
     if (refreshAllowed && !store.getInFlight(key)) {
-      void loadWithSingleFlight(store, key, ttlMs, staleMs, load).catch(() => {
+      void loadWithSingleFlight(store, key, ttlMs, staleMs, load, now).catch(() => {
         // stale data is already returned; refresh failures are tolerated here.
       });
     }
-    return { value: entry.value, state: "stale" };
+    return { value: entry.value, state: "stale", updatedAt: entry.updatedAt };
   }
 
   try {
-    const loaded = await loadWithSingleFlight(store, key, ttlMs, staleMs, load);
-    return { value: loaded, state: "revalidated" };
+    const loaded = await loadWithSingleFlight(store, key, ttlMs, staleMs, load, now);
+    return { value: loaded, state: "revalidated", updatedAt: store.get<T>(key)!.updatedAt };
   } catch (error) {
     const snapshot = store.getSnapshot<T>(key);
-    if (snapshot !== undefined) {
-      return { value: snapshot, state: "snapshot" };
+    if (snapshot !== undefined && entry) {
+      return { value: snapshot, state: "snapshot", updatedAt: entry.updatedAt };
     }
     throw error;
   }
