@@ -4,7 +4,7 @@ Running 1 test using 1 worker
   ✘  1 [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy (10.8s)
 
 
-  1) [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy 
+  1) [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy
 
     Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
 
@@ -46,6 +46,6 @@ Running 1 test using 1 worker
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
   1 failed
-    [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy 
+    [chromium] › tests/e2e/acroxtv-editorial.spec.ts:356:7 › Acrox TV editorial directory › keeps each canonical program name in the visible editorial hierarchy
 
 [exit_code=1]

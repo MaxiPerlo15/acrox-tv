@@ -401,6 +401,7 @@ test.describe("Acrox TV editorial directory", () => {
 
   test("keeps reverse Tab navigation between editorial covers", async ({ page }) => {
     await page.goto("/");
+    await page.waitForTimeout(1_000);
 
     const firstCover = page.getByRole("link", { name: new RegExp(PROGRAMS[0].name) });
     const secondCover = page.getByRole("link", { name: new RegExp(PROGRAMS[1].name) });
