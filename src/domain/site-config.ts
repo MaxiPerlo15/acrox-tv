@@ -6,6 +6,13 @@ export const BRAND_LOGO_ICON_SRC = "/logo-acrox-icon-192.png";
 export const BRAND_OG_IMAGE_SRC = "/og-acrox.jpg";
 export const ABOUT_IMAGE_SRC = "/willy-2.jpg";
 
+export const BUSINESS = {
+  name: "Acrox",
+  category: "Produccion audiovisual",
+  phone: "+54 9 3533 58-9122",
+  phoneHref: "+5493533589122"
+} as const;
+
 export const BRAND_COPY = {
   footerDescription:
     "Produccion audiovisual para marcas, eventos y proyectos que buscan verse profesionales en el entorno digital.",
@@ -21,8 +28,8 @@ export const BRAND_COPY = {
 } as const;
 
 export const OFFICE = {
-  mapsQuery: "Tucuman 32, X5941 Las Varillas, Cordoba, Argentina",
-  cityLine: "Las Varillas, Cordoba, AR",
+  mapsQuery: "Tucuman 32, Las Varillas, Cordoba, Argentina",
+  cityLine: "Tucuman 32, Las Varillas, Cordoba, Argentina",
   address: {
     streetAddress: "Tucuman 32",
     addressLocality: "Las Varillas",

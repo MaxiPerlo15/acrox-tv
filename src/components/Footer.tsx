@@ -8,7 +8,7 @@ import {
   WhatsAppIcon,
   YouTubeIcon
 } from "@/components/icons";
-import { BRAND_COPY, BRAND_LOGO_SRC, OFFICE } from "@/domain/site-config";
+import { BRAND_COPY, BRAND_LOGO_SRC, BUSINESS, OFFICE } from "@/domain/site-config";
 import { env } from "@/lib/env";
 
 type FooterProps = {
@@ -90,6 +90,9 @@ const Footer = ({ anchorPrefix = "", brandHref = `${anchorPrefix}#inicio` }: Foo
             </a>
           </nav>
           <p className="footer-contact-line">{OFFICE.cityLine}</p>
+          <a className="footer-contact-line" href={`tel:${BUSINESS.phoneHref}`}>
+            {BUSINESS.phone}
+          </a>
         </section>
 
         <section className="footer-col footer-map-col">
