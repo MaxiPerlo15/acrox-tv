@@ -10,6 +10,7 @@ import {
   BUSINESS,
   BRAND_LOGO_HERO_SRC,
   BRAND_LOGO_SRC,
+  GOOGLE_BUSINESS_PROFILE_URL,
   OFFICE,
   SITE_URL
 } from "@/domain/site-config";
@@ -106,6 +107,7 @@ export const buildLocalBusinessJsonLd = (env: HomeEnvLinks) => ({
       logo: `${SITE_URL}${BRAND_LOGO_SRC}`,
       category: BUSINESS.category,
       telephone: BUSINESS.phone,
+      hasMap: GOOGLE_BUSINESS_PROFILE_URL,
       description:
         "Produccion audiovisual en Las Varillas, Cordoba. Cobertura de eventos, books, cortos, streaming y contenido para redes.",
       areaServed: ["Las Varillas", "Cordoba", "Argentina"],
@@ -113,7 +115,13 @@ export const buildLocalBusinessJsonLd = (env: HomeEnvLinks) => ({
         "@type": "PostalAddress",
         ...OFFICE.address
       },
-      sameAs: [env.instagramUrl, env.tiktokUrl, env.youtubeUrl, `https://wa.me/${env.whatsappNumber}`],
+      sameAs: [
+        env.instagramUrl,
+        env.tiktokUrl,
+        env.youtubeUrl,
+        `https://wa.me/${env.whatsappNumber}`,
+        GOOGLE_BUSINESS_PROFILE_URL
+      ],
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer service",
@@ -127,7 +135,7 @@ export const buildLocalBusinessJsonLd = (env: HomeEnvLinks) => ({
       name: BUSINESS.name,
       url: SITE_URL,
       logo: `${SITE_URL}${BRAND_LOGO_SRC}`,
-      sameAs: [env.instagramUrl, env.tiktokUrl, env.youtubeUrl]
+      sameAs: [env.instagramUrl, env.tiktokUrl, env.youtubeUrl, GOOGLE_BUSINESS_PROFILE_URL]
     },
     {
       "@type": "WebSite",

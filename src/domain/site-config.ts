@@ -1,4 +1,5 @@
 export const SITE_URL = "https://acrox.com.ar";
+export const GOOGLE_BUSINESS_PROFILE_URL = "https://maps.app.goo.gl/arCeG8gFUdbLLaY48";
 export const BRAND_LOGO_SRC = "/logo-acrox-blanco.png";
 export const BRAND_LOGO_HERO_SRC = "/logo-acrox-hero.png";
 export const BRAND_LOGO_NAV_SRC = "/logo-acrox-navbar.png";
@@ -33,7 +34,7 @@ export const OFFICE = {
   address: {
     streetAddress: "Tucuman 32",
     addressLocality: "Las Varillas",
-    postalCode: "X5941",
+    postalCode: "5940",
     addressRegion: "Cordoba",
     addressCountry: "AR"
   }
