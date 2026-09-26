@@ -25,10 +25,13 @@ test.describe("Local SEO business identity", () => {
       name: "Acrox",
       category: "Produccion audiovisual",
       telephone: "+54 9 3533 58-9122",
+      hasMap: "https://maps.app.goo.gl/arCeG8gFUdbLLaY48",
+      sameAs: expect.arrayContaining(["https://maps.app.goo.gl/arCeG8gFUdbLLaY48"]),
       address: {
         "@type": "PostalAddress",
         streetAddress: "Tucuman 32",
         addressLocality: "Las Varillas",
+        postalCode: "5940",
         addressRegion: "Cordoba",
         addressCountry: "AR"
       },
