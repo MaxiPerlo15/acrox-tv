@@ -7,10 +7,8 @@ import {
 } from "@/components/icons";
 import {
   ABOUT_IMAGE_SRC,
-  BUSINESS,
   BRAND_LOGO_HERO_SRC,
   BRAND_LOGO_SRC,
-  GOOGLE_BUSINESS_PROFILE_URL,
   OFFICE,
   SITE_URL
 } from "@/domain/site-config";
@@ -101,47 +99,38 @@ export const buildLocalBusinessJsonLd = (env: HomeEnvLinks) => ({
     {
       "@type": "ProfessionalService",
       "@id": `${SITE_URL}/#organization`,
-      name: BUSINESS.name,
+      name: "Acrox",
       url: SITE_URL,
       image: `${SITE_URL}${ABOUT_IMAGE_SRC}`,
       logo: `${SITE_URL}${BRAND_LOGO_SRC}`,
-      category: BUSINESS.category,
-      telephone: BUSINESS.phone,
-      hasMap: GOOGLE_BUSINESS_PROFILE_URL,
       description:
-        "Produccion audiovisual en Las Varillas, Cordoba. Cobertura de eventos, books, cortos, streaming y contenido para redes.",
+        "Productora audiovisual de Las Varillas, Cordoba. Cobertura de eventos, books, cortos, streaming y contenido para redes.",
       areaServed: ["Las Varillas", "Cordoba", "Argentina"],
       address: {
         "@type": "PostalAddress",
         ...OFFICE.address
       },
-      sameAs: [
-        env.instagramUrl,
-        env.tiktokUrl,
-        env.youtubeUrl,
-        `https://wa.me/${env.whatsappNumber}`,
-        GOOGLE_BUSINESS_PROFILE_URL
-      ],
+      sameAs: [env.instagramUrl, env.tiktokUrl, env.youtubeUrl, `https://wa.me/${env.whatsappNumber}`],
       contactPoint: {
         "@type": "ContactPoint",
-        contactType: "customer service",
+        contactType: "customer support",
         email: env.contactEmail,
-        telephone: BUSINESS.phone
+        telephone: `+${env.whatsappNumber}`
       }
     },
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#brand`,
-      name: BUSINESS.name,
+      name: "Acrox",
       url: SITE_URL,
       logo: `${SITE_URL}${BRAND_LOGO_SRC}`,
-      sameAs: [env.instagramUrl, env.tiktokUrl, env.youtubeUrl, GOOGLE_BUSINESS_PROFILE_URL]
+      sameAs: [env.instagramUrl, env.tiktokUrl, env.youtubeUrl]
     },
     {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: BUSINESS.name,
+      name: "Acrox",
       publisher: {
         "@id": `${SITE_URL}/#organization`
       }
