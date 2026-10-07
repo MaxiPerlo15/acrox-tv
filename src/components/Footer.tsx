@@ -10,7 +10,6 @@ import {
 } from "@/components/icons";
 import { BRAND_COPY, BRAND_LOGO_SRC, BUSINESS, OFFICE } from "@/domain/site-config";
 import { env } from "@/lib/env";
-import AnalyticsPreferencesButton from "@/components/AnalyticsPreferencesButton";
 
 type FooterProps = {
   anchorPrefix?: string;
@@ -126,7 +125,6 @@ const Footer = ({ anchorPrefix = "", brandHref = `${anchorPrefix}#inicio` }: Foo
         <nav className="footer-legal" aria-label="Enlaces legales">
           <Link href="/privacy">Politica de privacidad</Link>
           <Link href="/terms">Terminos de servicio</Link>
-          <AnalyticsPreferencesButton />
         </nav>
       </div>
     </footer>

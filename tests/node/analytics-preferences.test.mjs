@@ -12,7 +12,9 @@ const analytics = read("src/lib/google-analytics.ts");
 
 test("analytics preferences reopen in-flow without a permanent floating trigger", () => {
   assert.match(button, /AnalyticsPreferencesButton/);
-  assert.match(footer, /AnalyticsPreferencesButton/);
+  assert.doesNotMatch(footer, /AnalyticsPreferencesButton/);
+  assert.match(footer, /Politica de privacidad/);
+  assert.match(footer, /Terminos de servicio/);
   assert.match(privacy, /AnalyticsPreferencesButton/);
   assert.match(consent, /acrox:open-analytics-preferences/);
   assert.doesNotMatch(consent, /position:\s*fixed/);
