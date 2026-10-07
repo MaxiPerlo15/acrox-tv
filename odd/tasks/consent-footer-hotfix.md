@@ -13,8 +13,8 @@ Remove the permanent analytics-preferences button from the shared footer. Show i
 - Delivery strategy: ask-on-risk; forecast fewer than 200 authored diff lines, generated files excluded.
 
 ## Tasks
-- [ ] T1 — Remove the footer trigger and verify initial/persisted consent. **In progress.** Route: delegated writer; source plus deterministic regression tests requires multi-file writing. Observe a failing updated footer contract before the fix, then passing focused node/browser checks, lint and build. Commit behavior and tests as one work unit.
-- [ ] T2 — Review the isolated candidate and integrate/push main. Route: parent Git delivery plus delegated independent verification if assessment requires it. Only exact reviewed hotfix commits may reach main; verify remote SHA after a non-force push.
+- [x] T1 — Remove the footer trigger and verify initial/persisted consent. Route: delegated writer; source plus deterministic regression tests required multi-file writing. Observed RED/GREEN, 16 desktop/mobile browser cases, lint/build and independent verification passed. Work-unit commit: c68a059568b87186cb66bad92a5b2e7124f3473d.
+- [ ] T2 — Review the isolated candidate and integrate/push main. **In progress.** Route: parent Git delivery; independent verification completed. Only exact reviewed hotfix commits may reach main; verify remote SHA after a non-force push.
 
 ## Acceptance criteria
 - Shared footer has no analytics preferences control; privacy and terms links remain.
@@ -33,6 +33,6 @@ Remove the permanent analytics-preferences button from the shared footer. Show i
 - Independent verification: 1 Node contract and 8 desktop Chromium cases passed; diff whitespace check passed. The isolated server used port 53451, not the primary checkout's port 3000.
 - Earlier failed attempts: a Playwright contract was initially invoked incorrectly through Node; an initial build lacked environment configuration. Both were corrected and final applicable checks passed. Existing environment and dependencies were linked, not installed.
 - Dev-server Instagram token errors are pre-existing external logs; mocked consent tests passed. No passing screenshots captured; Firefox/WebKit and deployed production ingestion were not tested.
-- Native review switch: on. Initial assessment was unassessable due to undeclared untracked task document; independent verification completed. Inspect subsequently selected exactly this document and three hotfix paths; ready for native START, no approval claimed.
-- Commit identities: pending.
-- Next: review the isolated candidate, then commit and integrate main without the primary checkout's UI changes.
+- Native review switch: on. Initial assessment was unassessable due to undeclared untracked task document; independent verification completed. The committed candidate was subsequently assessed medium, reviewed through review-reliability and approved. Exact acknowledgement succeeded for lineage review-78e3a638865c0d7c; authority burned. Read-only assessment confirmed candidate.consumed=true, nativeReviewOutcome=closed and reviewDue=false.
+- Commit identity: c68a059568b87186cb66bad92a5b2e7124f3473d. Authored scope: 79 additions and 7 deletions including this document; 2 source deletions only.
+- Next: integrate only the approved hotfix and passive evidence-document update into main, push without force, and verify remote SHA. Main and remote still match the original baseline.
