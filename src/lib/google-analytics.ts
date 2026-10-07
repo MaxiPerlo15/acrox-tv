@@ -36,7 +36,7 @@ function purgeQueuedGaCommands(target: AnalyticsWindow): void {
     if (!entry || typeof entry !== "object" || !("0" in entry)) return true;
     const command = entry as { 0?: unknown; 1?: unknown; 2?: { analytics_storage?: unknown } };
     if (command[0] === "config" && command[1] === GA_ID) return false;
-    if (command[0] === "event" && (command[1] === "page_view" || command[1] === "click_enviar_whatsapp")) return false;
+    if (command[0] === "event" && (command[1] === "page_view" || command[1] === "click_enviar_whatsapp" || command[1] === "contact_form_start" || command[1] === "contact_form_invalid_submit")) return false;
     return !(command[0] === "consent" && command[1] === "update" && command[2]?.analytics_storage === "granted");
   });
   target.dataLayer.splice(0, target.dataLayer.length, ...retained);
@@ -81,6 +81,21 @@ export function trackPageView(url: string): void {
   if (explicitlyGranted && !target[`ga-disable-${GA_ID}`] && typeof target.gtag === "function") {
     target.gtag("event", "page_view", { page_location: url });
   }
+}
+
+function trackContactFormEvent(eventName: "contact_form_start" | "contact_form_invalid_submit"): void {
+  const target = window as unknown as AnalyticsWindow;
+  if (explicitlyGranted && !target[`ga-disable-${GA_ID}`] && typeof target.gtag === "function") {
+    target.gtag("event", eventName, { channel: "contact_form" });
+  }
+}
+
+export function trackContactFormStart(): void {
+  trackContactFormEvent("contact_form_start");
+}
+
+export function trackContactFormInvalidSubmit(): void {
+  trackContactFormEvent("contact_form_invalid_submit");
 }
 
 export function trackWhatsAppClick(): void {

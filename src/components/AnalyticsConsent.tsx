@@ -63,7 +63,7 @@ export default function AnalyticsConsent() {
     <section ref={panel} className={styles.panel} role="dialog" aria-modal="false" aria-labelledby="consent-title">
       {choice && <button className={styles.close} type="button" onClick={close}>Cerrar</button>}
       <h2 id="consent-title">Tu privacidad importa</h2>
-      <p>Google Analytics nos ayuda a medir visitas y clics en WhatsApp, solo si aceptás.</p>
+      <p>Solo si aceptás, Google Analytics mide visitas, el inicio de edición, los intentos de envío inválidos y los intentos de abrir WhatsApp. Registramos métricas agregadas, sin nombres, mensajes ni datos del formulario.</p>
       <div className={styles.actions}>
         <button type="button" onClick={() => choose("accepted")}>Aceptar analítica</button>
         <button type="button" onClick={() => choose("rejected")}>Rechazar</button>

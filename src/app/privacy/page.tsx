@@ -72,7 +72,7 @@ export default function PrivacyPage() {
 
       <h2 style={{ fontSize: 24, marginBottom: 12 }}>Analítica y preferencias</h2>
       <p style={{ marginBottom: 24 }}>
-        Google Analytics (GA4) se carga únicamente si aceptás su uso. Puede medir páginas visitadas y clics en el botón de WhatsApp, sin incluir datos del formulario. Podés rechazarlo o retirar tu elección desde “Preferencias de analítica”. Al retirar el consentimiento detenemos el envío futuro desde este sitio e intentamos borrar las cookies de Google Analytics accesibles en tu navegador; no podemos borrar registros ya recibidos por Google. Esta preferencia se refiere solo a Google Analytics: la telemetría de Vercel y Google Maps no se modifica.
+        Google Analytics (GA4) se carga únicamente si aceptás su uso. Mide páginas visitadas, el inicio de edición del formulario, los intentos de envío inválidos y los intentos de abrir WhatsApp. Son métricas agregadas: no enviamos nombres, identidad, valores o errores de campos, servicio seleccionado, mensajes ni URL de WhatsApp; un intento de apertura no confirma que se haya enviado un mensaje. Podés rechazarlo o retirar tu elección desde “Preferencias de analítica”. Al retirar el consentimiento detenemos el envío futuro desde este sitio e intentamos borrar las cookies de Google Analytics accesibles en tu navegador; no podemos borrar registros ya recibidos por Google. Esta preferencia se refiere solo a Google Analytics: la telemetría de Vercel y Google Maps no se modifica.
       </p>
 
       <AnalyticsPreferencesButton />
