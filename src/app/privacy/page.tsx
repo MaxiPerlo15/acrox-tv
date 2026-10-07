@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BRAND_OG_IMAGE_SRC } from "@/domain/site-config";
 import { env } from "@/lib/env";
+import AnalyticsPreferencesButton from "@/components/AnalyticsPreferencesButton";
 
 export const metadata: Metadata = {
   title: {
@@ -68,6 +69,13 @@ export default function PrivacyPage() {
         como WhatsApp o servicios de correo electrónico. Estas plataformas procesan la información
         según sus propias políticas de privacidad.
       </p>
+
+      <h2 style={{ fontSize: 24, marginBottom: 12 }}>Analítica y preferencias</h2>
+      <p style={{ marginBottom: 24 }}>
+        Google Analytics (GA4) se carga únicamente si aceptás su uso. Puede medir páginas visitadas y clics en el botón de WhatsApp, sin incluir datos del formulario. Podés rechazarlo o retirar tu elección desde “Preferencias de analítica”. Al retirar el consentimiento detenemos el envío futuro desde este sitio e intentamos borrar las cookies de Google Analytics accesibles en tu navegador; no podemos borrar registros ya recibidos por Google. Esta preferencia se refiere solo a Google Analytics: la telemetría de Vercel y Google Maps no se modifica.
+      </p>
+
+      <AnalyticsPreferencesButton />
 
       <h2 style={{ fontSize: 24, marginBottom: 12 }}>Conservación de datos</h2>
       <p style={{ marginBottom: 24 }}>

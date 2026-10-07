@@ -103,6 +103,21 @@ a {
   color: inherit;
 }
 
+.analytics-preferences-link {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.analytics-preferences-link:hover { color: var(--text); border-color: rgba(154, 188, 255, .64); }
+.analytics-preferences-link:focus-visible { outline: 2px solid rgba(154, 188, 255, .9); outline-offset: 3px; }
+.footer-legal .analytics-preferences-link { color: inherit; font-size: inherit; }
+
 .site-shell {
   max-width: var(--layout-container-max);
   margin: 0 auto;

@@ -11,6 +11,7 @@ import {
 } from "@/domain/contact";
 import { CONTACT_PRESET_EVENT, CONTACT_PRESET_KEY } from "@/domain/contact-preset";
 import { WhatsAppIcon } from "@/components/icons";
+import { trackWhatsAppClick } from "@/lib/google-analytics";
 
 type ContactFormProps = {
   whatsappNumber: string;
@@ -77,26 +78,7 @@ const ContactForm = ({ whatsappNumber }: ContactFormProps) => {
 
   const trackWhatsAppSubmit = () => {
     try {
-      const analyticsData = {
-        event: "click_enviar_whatsapp",
-        channel: "contact_form",
-        platform: "whatsapp"
-      };
-      const typedWindow = window as Window & {
-        dataLayer?: unknown;
-        gtag?: (...args: unknown[]) => void;
-      };
-
-      if (Array.isArray(typedWindow.dataLayer)) {
-        typedWindow.dataLayer.push(analyticsData);
-      }
-
-      if (typeof typedWindow.gtag === "function") {
-        typedWindow.gtag("event", "click_enviar_whatsapp", {
-          channel: "contact_form",
-          platform: "whatsapp"
-        });
-      }
+      trackWhatsAppClick();
     } catch {
       // Nunca bloquear la navegacion a WhatsApp por fallas de analytics.
     }
