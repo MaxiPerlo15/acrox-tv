@@ -141,12 +141,8 @@ test.describe("program hero reference adaptation", () => {
       });
       if (program === programs[0]) await page.screenshot({ path: "/tmp/program-surface-spacing/program-hero-home-ds-1440.png" });
       await page.goto(program.path);
-      if (program.path === "/alta-data-te-tire") {
-        await expect(page.locator(".sponsor-ribbon")).toBeVisible();
-        await expect(page.locator(".sponsor-ribbon-track:not([aria-hidden]) li")).toHaveCount(5);
-      } else {
-        await expect(page.locator(".sponsor-ribbon")).toHaveCount(0);
-      }
+      await expect(page.locator(".sponsor-ribbon")).toBeVisible();
+      await expect(page.locator(".sponsor-ribbon-track:not([aria-hidden]) li")).toHaveCount(program.path === "/alta-data-te-tire" ? 6 : 7);
       await expect(page.locator(".program-media-heading")).toBeVisible();
       const hero = page.locator(".program-hero");
       const schedule = hero.locator(".program-schedule");

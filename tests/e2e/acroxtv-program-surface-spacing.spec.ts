@@ -177,8 +177,8 @@ for (const viewport of [
       expect(geometry.after).toBe("none");
     }
 
-    await expect(originalTrack.locator("a")).toHaveCount(5);
-    expect(await originalTrack.locator("a").evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).tabIndex))).toEqual([0, 0, 0, 0, 0]);
+    await expect(originalTrack.locator("a")).toHaveCount(6);
+    expect(await originalTrack.locator("a").evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).tabIndex))).toEqual([0, 0, 0, 0, 0, 0]);
     const firstLink = originalTrack.locator("a").first();
     await firstLink.focus();
     await expect(firstLink).toBeFocused();

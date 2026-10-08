@@ -166,13 +166,13 @@ test.describe("program media previews", () => {
     await expect(page.locator(".sponsor-ribbon-placeholder")).toHaveCount(0);
     const sponsorNames = ["Pinar Tenis Las Varillas", "Magnus", "FG Beauty", "San José", "Sharol moda"];
     const visibleSponsors = sponsors.locator(".sponsor-ribbon-track:not([aria-hidden]) li");
-    await expect(visibleSponsors).toHaveCount(sponsorNames.length);
-    const renderedSponsorNames = await visibleSponsors.evaluateAll((items) => items.map((item) => {
+    await expect(visibleSponsors).toHaveCount(sponsorNames.length + 1);
+    const renderedSponsorNames = await visibleSponsors.evaluateAll((items) => items.slice(0, 5).map((item) => {
       const link = item.querySelector("a");
       return link?.getAttribute("aria-label") ?? item.querySelector("img")?.getAttribute("alt");
     }));
     expect(renderedSponsorNames).toEqual(sponsorNames);
-    const sponsorLinks = await visibleSponsors.evaluateAll((items) => items.map((item) => item.querySelector("a")?.getAttribute("href")));
+    const sponsorLinks = await visibleSponsors.evaluateAll((items) => items.slice(0, 5).map((item) => item.querySelector("a")?.getAttribute("href")));
     expect(new Set(sponsorLinks).size).toBe(5);
     expect(sponsorLinks).toEqual([
       "https://www.instagram.com/pinartenislasvarillas/",
@@ -182,7 +182,7 @@ test.describe("program media previews", () => {
       "https://www.instagram.com/sharolmoda/"
     ]);
     const duplicateTrack = sponsors.locator('.sponsor-ribbon-track[aria-hidden="true"]');
-    await expect(duplicateTrack.locator("a")).toHaveCount(5);
+    await expect(duplicateTrack.locator("a")).toHaveCount(6);
     for (const link of await duplicateTrack.locator("a").all()) await expect(link).toHaveAttribute("tabindex", "-1");
     await expect(sponsors.locator("a[target='_blank']:not([rel~='noopener'])")).toHaveCount(0);
     await expect(sponsors.locator("a[target='_blank']:not([rel~='noreferrer'])")).toHaveCount(0);

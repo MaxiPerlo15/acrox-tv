@@ -8,10 +8,9 @@ import { programPath } from "@/domain/programs";
 
 type ProgramDirectoryCardProps = {
   program: Program;
-  position: number;
 };
 
-export default function ProgramDirectoryCard({ program, position }: ProgramDirectoryCardProps) {
+export default function ProgramDirectoryCard({ program }: ProgramDirectoryCardProps) {
   const [isArtworkUnavailable, setIsArtworkUnavailable] = useState(false);
   const artworkRef = useRef<HTMLImageElement>(null);
 
@@ -31,8 +30,7 @@ export default function ProgramDirectoryCard({ program, position }: ProgramDirec
   }, []);
 
   return (
-    <Link href={programPath(program.slug)} className="program-directory-card" data-program-cover tabIndex={0}>
-      <span className="program-directory-card-meta">{String(position).padStart(2, "0")} / ACROX TV</span>
+    <Link href={programPath(program.slug)} className="program-directory-card home-projects-teaser-card" data-program-cover data-reveal tabIndex={0}>
       <div className="program-directory-card-art" aria-hidden={!program.coverLogoSrc || isArtworkUnavailable}>
         {program.coverLogoSrc && !isArtworkUnavailable ? (
           <Image
@@ -53,7 +51,7 @@ export default function ProgramDirectoryCard({ program, position }: ProgramDirec
           </span>
         )}
       </div>
-      <div className="program-directory-card-copy">
+      <div className="program-directory-card-copy home-projects-teaser-copy">
         <div>
           <h3>{program.name}</h3>
           <p>{program.summary}</p>

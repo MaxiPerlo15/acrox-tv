@@ -7,20 +7,18 @@
 
 .hero:global(.program-hero) {
   --program-accent: #617dff;
-  --program-hero-former-row-gap: clamp(36px, 5vw, 64px);
-  --program-hero-art-lower-shift: clamp(20px, 1.667vw, 24px);
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  align-items: start;
-  align-content: start;
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  align-content: center;
   column-gap: clamp(30px, 5vw, 72px);
   row-gap: 0;
   width: 100%;
   min-height: 0;
   margin: 0 0 clamp(32px, 5vw, 68px);
-  padding: 88px max(var(--layout-px-mobile), calc((100vw - 1240px) / 2)) calc(clamp(32px, 4vw, 56px) + var(--program-hero-former-row-gap) + var(--program-hero-art-lower-shift));
+  padding: 88px max(var(--layout-px-mobile), calc((100vw - 1240px) / 2)) 56px;
   overflow: hidden;
   isolation: isolate;
   border-radius: 0;
@@ -45,13 +43,13 @@
 
 .hero:global(.program-hero)::after { content: none; }
 
-.copy:global(.program-hero-copy) { z-index: 2; grid-column: 1; grid-row: 2; max-width: 620px; }
-.hero .kicker:global(.program-hero-kicker) { grid-column: 1; grid-row: 1; margin: 16px 0 0; color: var(--type-label-color); font-family: var(--type-body-family); font-size: var(--type-eyebrow-size); font-weight: var(--type-eyebrow-weight); letter-spacing: var(--type-eyebrow-tracking); }
+.hero .kicker:global(.program-hero-kicker) { grid-column: 1; grid-row: 1; margin: 16px 0 18px; color: var(--type-label-color); font-family: var(--type-body-family); font-size: var(--type-eyebrow-size); font-weight: var(--type-eyebrow-weight); letter-spacing: var(--type-eyebrow-tracking); }
 .hero .kicker:global(.program-hero-kicker) > span { background: linear-gradient(180deg, #7e9eff, #9468ff 52%, #e182ff); box-shadow: 0 0 18px rgba(132, 152, 255, .28); }
-.hero .title { max-width: 13ch; margin: 14px 0; color: #f5f7ff; font-family: var(--type-display-family); font-size: clamp(3rem, 6vw, 5.25rem); line-height: 1.04; letter-spacing: -.02em; text-wrap: balance; }
-.titleLine { display: block; }
-.titleAccent { color: #617dff; background: linear-gradient(100deg, rgba(97, 125, 255, 1) 0%, rgba(198, 108, 255, .98) 100%); background-clip: text; -webkit-text-fill-color: transparent; }
-.copy .summary { max-width: 48ch; margin: 18px 0 0; color: var(--type-body-color); font-family: var(--type-body-family); font-size: clamp(1rem, 1.25vw, 1.12rem); font-weight: var(--type-body-weight); letter-spacing: normal; line-height: 1.6; text-transform: none; }
+.hero .title { grid-column: 1; grid-row: 2; width: min(100%, 330px); justify-self: center; margin: 0 0 20px; }
+.hero .title :global(.program-hero-logo) { display: block; width: 100%; height: auto; max-height: none; object-fit: contain; object-position: center; }
+.visuallyHidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.copy:global(.program-hero-copy) { z-index: 2; grid-column: 1; grid-row: 3; max-width: 620px; justify-self: center; }
+.copy .summary { max-width: 48ch; margin: 0; color: var(--type-body-color); font-family: var(--type-body-family); font-size: clamp(1rem, 1.25vw, 1.12rem); font-weight: var(--type-body-weight); letter-spacing: normal; line-height: 1.6; text-transform: none; }
 .schedule { display: inline-flex; align-items: center; gap: 11px; margin: 20px 0 0; color: var(--text-secondary); font-size: .82rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
 .schedule > span { width: 9px; height: 9px; flex: 0 0 9px; border-radius: 50%; background: #b84cff; box-shadow: 0 0 16px rgba(184, 76, 255, .65); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 26px; }
@@ -60,10 +58,10 @@
 .instagramAction:hover, .instagramAction:focus-visible { transform: translateY(-1px) scale(1.035); }
 .instagramAction:focus-visible, .actions .btn:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 
-.artwork:global(.program-hero-identity) { z-index: 1; position: absolute; top: calc(104px + var(--program-hero-art-lower-shift)); right: max(var(--layout-px-mobile), calc((100vw - 1240px) / 2)); bottom: clamp(32px, 4vw, 56px); display: grid; grid-template-rows: minmax(0, 1fr) auto; justify-items: center; align-items: center; width: min(42vw, 520px); min-width: 0; min-height: 0; background: transparent; }
+.artwork:global(.program-hero-identity) { z-index: 1; position: relative; grid-column: 2; grid-row: 1 / 4; display: grid; grid-template-rows: auto auto; justify-items: center; align-items: center; align-content: center; row-gap: 0; width: 100%; max-width: 520px; height: auto; min-width: 0; min-height: 0; justify-self: end; background: transparent; }
 .artwork:global(.program-hero-identity)::before { content: none; }
-.artwork:global(.program-hero-identity) .cover:global(.program-hero-cover) { position: relative; z-index: 0; display: block; width: min(100%, 370px); height: 100%; min-height: 0; aspect-ratio: auto; object-fit: contain; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .22)); }
-.artwork .hostName:global(.program-host-name) { position: relative; z-index: 1; display: block; width: min(100%, 430px); height: auto; margin: 0; object-fit: contain; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .2)); }
+.artwork:global(.program-hero-identity) .cover:global(.program-hero-cover) { position: relative; z-index: 0; display: block; width: min(100%, 390px); height: auto; min-height: 0; aspect-ratio: auto; object-fit: contain; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .22)); }
+.artwork .hostName:global(.program-host-name) { position: relative; z-index: 1; display: block; width: min(100%, 430px); aspect-ratio: 2101 / 259; height: auto; margin: 0; object-fit: contain; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .2)); }
 
 .supporting { width: min(calc(100% - 2 * var(--layout-px-mobile)), 1240px); margin-inline: auto; }
 .supporting :global(.program-latest-section) { width: 100%; margin-inline: auto; }
@@ -76,18 +74,19 @@
 .latestEyebrow.latestEyebrow.latestEyebrow::before { width: 4px; height: 1.8em; flex: 0 0 4px; border-radius: 999px; background: linear-gradient(180deg, #7e9eff, #9468ff 52%, #e182ff); content: ""; }
 
 @media (max-width: 800px) {
-  .hero:global(.program-hero) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; gap: 0; min-height: 0; padding: 88px 22px 36px; }
+  .hero:global(.program-hero) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto; gap: 0; min-height: 0; padding: 88px 22px 36px; }
   .hero .kicker:global(.program-hero-kicker) { grid-column: 1; grid-row: 1; margin-top: 16px; }
-  .hero .title { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-  .copy .summary { margin-top: 16px; font-size: 1rem; }
+  .hero .title { grid-column: 1; grid-row: 2; width: min(100%, 280px); justify-self: center; margin: 0 auto 14px; }
+  .hero .title :global(.program-hero-logo) { max-height: 160px; object-position: center; }
+  .copy .summary { margin-top: 0; font-size: 1rem; }
   .schedule { margin-top: 17px; font-size: .72rem; }
   .actions { gap: 9px; margin-top: 22px; }
   .actions .btn.primary { font-size: .9rem; }
   .instagramAction { font-size: .9rem; }
-  .artwork:global(.program-hero-identity) { position: relative; top: auto; right: auto; bottom: auto; grid-column: 1; grid-row: 2; grid-template-rows: minmax(0, 1fr) auto; width: min(100%, 440px); height: 365px; justify-self: center; padding-top: 12px; }
+  .artwork:global(.program-hero-identity) { grid-column: 1; grid-row: 3; width: min(100%, 440px); height: auto; justify-self: center; padding-top: 6px; }
   .artwork:global(.program-hero-identity) .cover:global(.program-hero-cover) { width: min(100%, 300px); }
   .artwork .hostName:global(.program-host-name) { width: min(100%, 360px); }
-  .copy:global(.program-hero-copy) { grid-column: 1; grid-row: 3; }
+  .copy:global(.program-hero-copy) { grid-column: 1; grid-row: 4; }
   .supporting :global(.program-latest) { height: auto; aspect-ratio: 16 / 9; }
   .supporting :global(.program-latest-preview) { inset: 0; width: 100%; height: 100%; transform: none; }
   .supporting :global(.program-latest-preview button), .supporting :global(.program-latest-preview iframe) { width: 100%; height: 100%; }
@@ -95,7 +94,6 @@
 }
 
 @media (forced-colors: active) {
-  .titleAccent { color: CanvasText; background: none; -webkit-text-fill-color: CanvasText; }
   .schedule > span { background: CanvasText; box-shadow: none; }
   .hero:global(.program-hero) { border: 1px solid CanvasText; }
   .instagramAction { border: 2px solid ButtonText; color: ButtonText; }

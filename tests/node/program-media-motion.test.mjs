@@ -45,9 +45,12 @@ test("shared observer retains one-shot behavior and async insertion support", ()
 
 test("program sponsor waits for mounted media and latest/sponsor motion is perceptible", () => {
   const observer = read("src/components/ScrollReveal.tsx");
-  assert.match(sponsor, /if \(sponsors\.length === 0\) return null/);
+  assert.doesNotMatch(sponsor, /if \(sponsors\.length === 0\) return null/);
   assert.match(sponsor, /sponsors\.map\(/);
-  assert.match(sponsor, /tabIndex=\{isDuplicate \? -1 : undefined\}/);
+  assert.match(sponsor, /publicEnv\.whatsappNumber\.replace\(\/\\D\/g, ""\)/);
+  assert.match(sponsor, /encodeURIComponent\(invitationMessage\)/);
+  assert.match(sponsor, /sponsor-ribbon-invitation/);
+  assert.match(sponsor, /tabIndex=\{canonical \? undefined : -1\}/);
   assert.match(observer, /program-media/);
   assert.match(observer, /program-sponsors/);
   assert.match(observer, /programMediaReady\s*=\s*true;[\s\S]*?programPage\?\.querySelectorAll\(\s*['"]\[data-reveal="program-sponsors"\]['"]\s*\)\.forEach\(\(element\)\s*=>\s*observeElement\(element\)\)/);

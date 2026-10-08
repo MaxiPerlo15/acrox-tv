@@ -366,7 +366,7 @@ test.describe("Acrox TV editorial directory", () => {
     });
   });
 
-  test("keeps the directory sponsor-free and renders program-owned waiting ribbons", async ({ page }) => {
+  test("keeps the directory sponsor-free and renders program-owned sponsor invitations", async ({ page }) => {
     await page.goto("/");
 
     const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
@@ -383,10 +383,11 @@ test.describe("Acrox TV editorial directory", () => {
       await page.goto(`/${program.slug}`);
       const sponsors = page.getByRole("region", { name: "Nos acompañan" });
       await expect(sponsors).toHaveCount(1);
-      await expect(sponsors.getByText("Estamos preparando este espacio para futuras colaboraciones.")).toBeVisible();
-      await expect(sponsors.locator("img")).toHaveCount(0);
+      await expect(sponsors.getByRole("link", { name: /Próximamente.*Tu marca acá.*Ser sponsor de ACROX TV/ })).toHaveCount(1);
+      await expect(sponsors.locator(".sponsor-ribbon-invitation")).toHaveCount(program.slug === "alta-data-te-tire" ? 2 : 14);
+      await expect(sponsors.locator("img")).toHaveCount(program.slug === "alta-data-te-tire" ? 10 : 0);
       const isAfterMedia = await page.evaluate(() => {
-        const media = document.querySelector('[aria-label="Medios del programa"]');
+        const media = document.querySelector(".program-media");
         const sponsors = document.querySelector('[aria-label="Nos acompañan"]');
         const footer = document.querySelector("footer");
         return Boolean(media && sponsors && footer && media.compareDocumentPosition(sponsors) & Node.DOCUMENT_POSITION_FOLLOWING && sponsors.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING);
@@ -502,7 +503,7 @@ test.describe("Acrox TV editorial directory", () => {
     await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toHaveCount(0);
   });
 
-  test("uses the shared kicker treatment and an honest sponsor placeholder on both program routes", async ({ page }) => {
+  test("uses the shared kicker treatment and repeated sponsor invitations on both program routes", async ({ page }) => {
     for (const program of PROGRAMS) {
       await page.setViewportSize({ width: 380, height: 812 });
       await page.goto(`/${program.slug}`);
@@ -513,10 +514,10 @@ test.describe("Acrox TV editorial directory", () => {
       const title = hero.getByRole("heading", { level: 1, name: program.name });
       const sponsors = main.getByRole("region", { name: "Nos acompañan" });
       const sponsorHeading = sponsors.getByRole("heading", { level: 2, name: "Con el apoyo de" });
-      const tile = sponsors.getByRole("listitem");
+      const tile = sponsors.locator(".sponsor-ribbon-track:not([aria-hidden]) li").first();
 
       await expect(title).toBeVisible();
-      await expect(programKicker).toHaveText("ACROX TV · PROGRAMACIÓN ORIGINAL");
+      await expect(programKicker).toHaveText("ACROX TV");
       await expect(programKicker.locator("span")).toHaveCount(1);
       await expect(sponsorHeading).toBeVisible();
       const kickerTypography = await Promise.all([programKicker, sponsorHeading].map((element) => element.evaluate((node) => {
@@ -526,9 +527,9 @@ test.describe("Acrox TV editorial directory", () => {
       expect(kickerTypography[1]).toEqual(kickerTypography[0]);
       await expect(sponsorHeading.locator("span")).toHaveCount(1);
       await expect(tile).toHaveCount(1);
-      await expect(tile).toHaveText("Próximamente");
-      await expect(sponsors.locator(".sponsor-ribbon-motion")).toHaveCount(0);
-      await expect(sponsors).not.toHaveClass(/sponsor-ribbon-empty/);
+      await expect(sponsors.getByRole("link", { name: /Próximamente.*Tu marca acá.*Ser sponsor de ACROX TV/ })).toHaveCount(1);
+      await expect(sponsors.locator(".sponsor-ribbon-track:not([aria-hidden]) li")).toHaveCount(program.slug === "alta-data-te-tire" ? 6 : 7);
+      await expect(sponsors.locator(".sponsor-ribbon-motion")).toHaveCount(1);
 
       const marker = await programKicker.locator("span").first().evaluate((element) => {
         const style = getComputedStyle(element);
@@ -551,14 +552,14 @@ test.describe("Acrox TV editorial directory", () => {
     }
   });
 
-  test("renders square sponsor brand tiles with a tight rail on desktop and mobile", async ({ page }) => {
+  test("renders sponsor and invitation tiles with a tight rail on desktop and mobile", async ({ page }) => {
     for (const program of PROGRAMS) {
       for (const viewport of [{ width: 1440, height: 900 }, { width: 380, height: 812 }]) {
         await page.setViewportSize(viewport);
         await page.goto(`/${program.slug}`);
 
         const sponsors = page.getByRole("region", { name: "Nos acompañan" });
-        const tile = sponsors.getByRole("listitem");
+        const tile = sponsors.locator(".sponsor-ribbon-track:not([aria-hidden]) li").first();
         const metrics = await tile.evaluate((element) => {
           const rect = element.getBoundingClientRect();
           const listStyle = getComputedStyle(element.parentElement!);
@@ -566,6 +567,7 @@ test.describe("Acrox TV editorial directory", () => {
         });
 
         const expectedTileSize = viewport.width < 700 ? 180 : 300;
+        await expect(sponsors.locator(".sponsor-ribbon-track:not([aria-hidden]) li")).toHaveCount(program.slug === "alta-data-te-tire" ? 6 : 7);
         expect(metrics).toEqual({ width: expectedTileSize, height: expectedTileSize, gap: "2px" });
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
       }

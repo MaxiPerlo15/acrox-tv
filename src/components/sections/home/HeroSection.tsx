@@ -1,13 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { HomeMetric } from "@/domain/home-content";
-
 type HeroSectionProps = {
   brandLogoSrc: string;
-  metrics: HomeMetric[];
 };
 
-const HeroSection = ({ brandLogoSrc, metrics }: HeroSectionProps) => {
+const HeroSection = ({ brandLogoSrc }: HeroSectionProps) => {
   return (
     <section id="inicio" className="hero" data-reveal>
       <div className="hero-copy">
@@ -54,14 +51,6 @@ const HeroSection = ({ brandLogoSrc, metrics }: HeroSectionProps) => {
             priority
           />
         </div>
-      </div>
-      <div className="hero-metrics projects-stats" aria-label="Métricas de trayectoria de Acrox">
-        {metrics.map((metric) => (
-          <article key={metric.value}>
-            <strong>{metric.value}</strong>
-            {metric.label ? <span>{metric.label}</span> : null}
-          </article>
-        ))}
       </div>
     </section>
   );

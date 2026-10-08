@@ -11,7 +11,6 @@ import StreamingSection from "@/components/sections/home/StreamingSection";
 import {
   ABOUT_IMAGE_SRC,
   BRAND_LOGO_HERO_SRC,
-  HOME_METRICS,
   HOME_SERVICES
 } from "@/domain/home-content";
 import { env } from "@/lib/env";
@@ -33,7 +32,7 @@ export default function HomePage() {
 
       <main>
         <div className="sections-wrapper" data-reveal>
-          <HeroSection brandLogoSrc={BRAND_LOGO_HERO_SRC} metrics={HOME_METRICS} />
+          <HeroSection brandLogoSrc={BRAND_LOGO_HERO_SRC} />
           <AboutSection aboutImageSrc={ABOUT_IMAGE_SRC} />
           <StreamingSection />
           <HomeProjectsTeaser />

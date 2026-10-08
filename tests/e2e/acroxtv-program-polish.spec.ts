@@ -191,7 +191,7 @@ test.describe("program visual polish", () => {
     await page.goto("/");
 
     const aboutKicker = page.getByText("QUIÉNES SOMOS", { exact: true });
-    const programKicker = page.getByText("ACROX TV / PROGRAMACIÓN ORIGINAL", { exact: true });
+    const programKicker = page.getByText("ACROX TV", { exact: true });
 
     await expect(aboutKicker).toBeVisible();
     await expect(programKicker).toBeVisible();
@@ -258,7 +258,7 @@ test.describe("program visual polish", () => {
       else expect(alignment.artTop).toBeLessThan(alignment.copyTop);
       expect(alignment.titleSize).toBeGreaterThanOrEqual(44);
       expect(alignment.kickerTop - alignment.heroTop).toBeLessThan(120);
-      await expect(artworkImage).toHaveAttribute("src", canonicalProgramPath.includes("alta-data") ? /caratula-altadata-trimmed\.webp/ : /caratula-masquenutricion-trimmed\.webp/);
+      await expect(artworkImage).toHaveAttribute("src", canonicalProgramPath.includes("alta-data") ? /silueta-luichi\.webp/ : /silueta-conductora-masnutri\.webp/);
       await expect(hostName).toHaveAttribute("src", canonicalProgramPath.includes("alta-data") ? /nombre-conductora-adtt-trimmed\.webp/ : /nombre-conductora-masnutri-trimmed\.webp/);
 
       const identityStyles = await identity.evaluate((element) => {

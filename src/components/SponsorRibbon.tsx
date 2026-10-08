@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ProgramSponsor } from "@/domain/programs";
+import { publicEnv } from "@/lib/public-env";
 
 type SponsorRibbonProps = {
   sponsors?: readonly ProgramSponsor[];
@@ -7,7 +8,9 @@ type SponsorRibbonProps = {
 };
 
 export default function SponsorRibbon({ sponsors = [], reveal = false }: SponsorRibbonProps) {
-  if (sponsors.length === 0) return null;
+  const invitationMessage = "Hola, quiero conocer las opciones para ser sponsor de ACROX TV";
+  const whatsappHref = `https://wa.me/${publicEnv.whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(invitationMessage)}`;
+  const emptySlots = Math.max(0, 7 - sponsors.length);
 
   const renderCells = (isDuplicate = false) => (
     <ul className="sponsor-ribbon-track" aria-hidden={isDuplicate || undefined}>
@@ -22,6 +25,18 @@ export default function SponsorRibbon({ sponsors = [], reveal = false }: Sponsor
           )}
         </li>
       ))}
+      {Array.from({ length: sponsors.length ? 1 : emptySlots }, (_, index) => {
+        const canonical = !isDuplicate && index === 0;
+        return (
+          <li key={`invitation-${index}`} className="sponsor-ribbon-invitation-cell" aria-hidden={canonical ? undefined : true}>
+            <a className="sponsor-ribbon-invitation" href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Próximamente. Tu marca acá. Ser sponsor de ACROX TV" tabIndex={canonical ? undefined : -1} aria-hidden={canonical ? undefined : true}>
+              <span>Próximamente</span>
+              <strong>Tu marca acá</strong>
+              <span>Ser sponsor de ACROX TV</span>
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 
