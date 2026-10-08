@@ -1,0 +1,36 @@
+.panel {
+  position: fixed;
+  z-index: 1000;
+  inset: auto 1rem 1rem auto;
+  width: min(38rem, calc(100vw - 2rem));
+  max-height: min(80vh, 36rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  color: var(--text);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .48);
+  font: 400 .95rem/1.55 var(--font-body), sans-serif;
+}
+.panel h2 { margin: 0 0 .5rem; font-size: 1.2rem; }
+.panel p { margin: 0 0 1rem; color: var(--text-secondary); }
+.panel a { display: inline-flex; align-items: center; min-height: 2.75rem; color: #b8caff; text-underline-offset: .2em; }
+.actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: .6rem; }
+.actions button, .close {
+  min-height: 2.75rem;
+  padding: .55rem .9rem;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+}
+.actions button:first-child { background: linear-gradient(95deg, var(--blue), var(--violet)); border-color: transparent; }
+.actions button:focus-visible, .close:focus-visible { outline: 3px solid #b8caff; outline-offset: 3px; }
+.close { float: right; margin: 0 0 .5rem .75rem; }
+@media (max-width: 480px) {
+  .panel { inset: auto .5rem .5rem; width: calc(100vw - 1rem); max-height: min(80dvh, 36rem); padding: 1rem; }
+  .actions button { flex: 1 1 100%; }
+}

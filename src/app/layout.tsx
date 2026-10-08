@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Exo_2, Montserrat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import AnalyticsConsent from "@/components/AnalyticsConsent";
 import { BRAND_COPY, BRAND_LOGO_ICON_SRC, BRAND_OG_IMAGE_SRC, SITE_URL } from "@/domain/site-config";
 import "./globals.css";
 
@@ -90,6 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-AR">
       <body className={`${display.variable} ${body.variable}`}>
         {children}
+        <Suspense fallback={null}><AnalyticsConsent /></Suspense>
         <Analytics />
         <SpeedInsights />
       </body>

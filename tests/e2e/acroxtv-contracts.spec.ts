@@ -10,6 +10,7 @@ import {
   programPath,
   type Program
 } from "@/domain/programs";
+import { selectYouTubeThumbnail } from "@/domain/youtube-thumbnails";
 
 const validProgram: Program = {
   slug: "programa-prueba",
@@ -24,6 +25,39 @@ const staticRouteSegments = readdirSync(resolve(process.cwd(), "src/app"), { wit
 const publicRootPaths = readdirSync(resolve(process.cwd(), "public"), { withFileTypes: true })
   .filter((entry) => entry.isFile() || entry.isDirectory())
   .map((entry) => entry.name);
+
+test.describe("YouTube thumbnail selection contract", () => {
+  test("prefers the highest-resolution thumbnail supplied by YouTube", () => {
+    expect(selectYouTubeThumbnail({
+      high: { url: "https://i.ytimg.com/high.jpg" },
+      standard: { url: "https://i.ytimg.com/standard.jpg" },
+      maxres: { url: "https://i.ytimg.com/maxres.jpg" },
+      medium: { url: "https://i.ytimg.com/medium.jpg" },
+      default: { url: "https://i.ytimg.com/default.jpg" }
+    })).toBe("https://i.ytimg.com/maxres.jpg");
+    expect(selectYouTubeThumbnail({
+      high: { url: "https://i.ytimg.com/high.jpg" },
+      standard: { url: "https://i.ytimg.com/standard.jpg" },
+      medium: { url: "https://i.ytimg.com/medium.jpg" },
+      default: { url: "https://i.ytimg.com/default.jpg" }
+    })).toBe("https://i.ytimg.com/standard.jpg");
+  });
+
+  test("falls back through supplied thumbnail sizes without guessing URLs", () => {
+    expect(selectYouTubeThumbnail({ maxres: { url: "" }, standard: { url: "standard" } })).toBe("standard");
+    expect(selectYouTubeThumbnail({ high: { url: "high" }, medium: { url: "medium" }, default: { url: "default" } }))
+      .toBe("high");
+    expect(selectYouTubeThumbnail({ medium: { url: "medium" }, default: { url: "default" } })).toBe("medium");
+    expect(selectYouTubeThumbnail({ default: { url: "default" } })).toBe("default");
+    expect(selectYouTubeThumbnail({})).toBe("");
+  });
+
+  test("uses the selector when parsing YouTube API thumbnail metadata", () => {
+    const clientSource = readFileSync(resolve(process.cwd(), "src/infrastructure/youtube.client.ts"), "utf8");
+    expect(clientSource).toMatch(/import \{ selectYouTubeThumbnail(?:, type YouTubeThumbnails)? \} from "@\/domain\/youtube-thumbnails"/);
+    expect(clientSource).toContain("selectYouTubeThumbnail(item.snippet?.thumbnails ?? {})");
+  });
+});
 
 test.describe("Acrox TV program registry contract", () => {
   test("exposes the two canonical program paths", () => {

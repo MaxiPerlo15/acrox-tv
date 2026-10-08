@@ -1,33 +1,33 @@
 import Image from "next/image";
-
-export type ApprovedSponsor = {
-  name: string;
-  logoSrc?: string;
-};
+import type { ProgramSponsor } from "@/domain/programs";
 
 type SponsorRibbonProps = {
-  sponsors?: readonly ApprovedSponsor[];
+  sponsors?: readonly ProgramSponsor[];
+  reveal?: boolean;
 };
 
-const NEUTRAL_CELLS = Array.from({ length: 5 }, (_, index) => index);
+export default function SponsorRibbon({ sponsors = [], reveal = false }: SponsorRibbonProps) {
+  if (sponsors.length === 0) return null;
 
-export default function SponsorRibbon({ sponsors = [] }: SponsorRibbonProps) {
-  const hasApprovedSponsors = sponsors.length > 0;
   const renderCells = (isDuplicate = false) => (
     <ul className="sponsor-ribbon-track" aria-hidden={isDuplicate || undefined}>
-      {hasApprovedSponsors
-        ? sponsors.map((sponsor) => (
-            <li key={sponsor.name} aria-label={sponsor.name}>
+      {sponsors.map((sponsor) => (
+        <li key={sponsor.name}>
+          {sponsor.instagramUrl ? (
+            <a href={sponsor.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label={sponsor.name} tabIndex={isDuplicate ? -1 : undefined}>
               {sponsor.logoSrc ? <Image src={sponsor.logoSrc} alt={sponsor.name} width={180} height={180} /> : <span>{sponsor.name}</span>}
-            </li>
-          ))
-        : NEUTRAL_CELLS.map((cell) => <li key={cell} aria-label="Espacio de colaboración" />)}
+            </a>
+          ) : (
+            sponsor.logoSrc ? <Image src={sponsor.logoSrc} alt={sponsor.name} width={180} height={180} /> : <span>{sponsor.name}</span>
+          )}
+        </li>
+      ))}
     </ul>
   );
 
   return (
-    <section className="sponsor-ribbon" aria-label="Nos acompañan" tabIndex={0}>
-      <h2>Con el apoyo de</h2>
+    <section className="sponsor-ribbon" aria-label="Nos acompañan" tabIndex={0} data-reveal={reveal ? "program-sponsors" : undefined}>
+      <h2><span aria-hidden="true" />Con el apoyo de</h2>
       <div className="sponsor-ribbon-viewport">
         <div className="sponsor-ribbon-motion">
           {renderCells()}

@@ -1,0 +1,46 @@
+schema: spec-driven
+
+context: |
+  Project: Acrox TV landing site.
+  Stack: Next.js 16 App Router, React 19, TypeScript 5.9, Node.js 20+.
+  Architecture: Layered monolith with presentation, application, domain, infrastructure, and API route boundaries.
+  Testing: Playwright end-to-end suite; no unit or integration runner detected.
+  Quality: ESLint and TypeScript strict mode; no dedicated formatter configured.
+  Persistence: No user or application database; external social APIs use server-side credentials and in-memory cache.
+  UI language: Existing product and architecture documentation are primarily Spanish.
+
+strict_tdd: true
+
+testing:
+  runner: Playwright
+  test_command: npm run test:e2e
+  unit: false
+  integration: false
+  e2e: true
+  coverage: false
+  lint_command: npm run lint
+  typecheck_command: npx tsc --noEmit
+  format_command: ""
+  build_command: npm run build
+  environment_status: dependencies are not installed in the current checkout; commands were detected but could not execute
+
+rules:
+  proposal:
+    - Include rollback plans for risky changes.
+  specs:
+    - Use Given/When/Then scenarios and RFC 2119 keywords.
+  design:
+    - Preserve the existing layered boundaries and document architectural rationale.
+  tasks:
+    - Group tasks by phase with hierarchical numbering; keep tasks completable in one session.
+  apply:
+    - Follow existing Next.js App Router and TypeScript patterns.
+    - Use RED-GREEN-REFACTOR when the target behavior has an available test layer.
+    - test_command: npm run test:e2e
+  verify:
+    - test_command: npm run test:e2e
+    - build_command: npm run build
+    - lint_command: npm run lint
+    - typecheck_command: npx tsc --noEmit
+  archive:
+    - Warn before merging destructive deltas.

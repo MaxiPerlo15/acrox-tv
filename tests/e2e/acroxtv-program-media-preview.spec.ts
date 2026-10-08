@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const programSlug = "alta-data-te-tire";
 const routePath = `/${programSlug}`;
@@ -61,6 +61,15 @@ const expectPreviewPlayerToFillContainer = async (
   expect(Math.abs(dimensions.playerHeight - dimensions.height)).toBeLessThanOrEqual(2.5);
 };
 
+const settleRevealedCards = async (cards: Locator) => {
+  for (const card of await cards.all()) {
+    await card.scrollIntoViewIfNeeded();
+    await expect.poll(() => card.evaluate((element) => element.closest("[data-reveal]")?.classList.contains("is-visible"))).toBe(true);
+    await expect.poll(() => card.evaluate((element) => getComputedStyle(element.closest("[data-reveal]")!).opacity)).toBe("1");
+    await expect.poll(() => card.evaluate((element) => getComputedStyle(element.closest("[data-reveal]")!).transform)).toBe("none");
+  }
+};
+
 const readCarouselPosition = async (
   carousel: ReturnType<import("@playwright/test").Page["locator"]>
 ) => carousel.locator(".carousel-track").evaluate((track) => {
@@ -75,6 +84,7 @@ const readCarouselPosition = async (
 
 test.describe("program media previews", () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem("acrox-ga-consent", "rejected"));
     await page.route(`**/api/acroxtv-feed/${programSlug}`, async (route) => {
       await route.fulfill({ contentType: "application/json", body: JSON.stringify(programFeed) });
     });
@@ -150,6 +160,42 @@ test.describe("program media previews", () => {
     await expect(instagram.locator("img")).toHaveCount(0);
     await expect(instagram.getByRole("button")).toHaveCount(0);
     await expect(page.getByRole("contentinfo")).toBeVisible();
+    const sponsors = page.getByRole("region", { name: "Nos acompañan" });
+    await expect(sponsors).toHaveCount(1);
+    await expect(page.getByText("Estamos preparando este espacio para futuras colaboraciones.", { exact: true })).toHaveCount(0);
+    await expect(page.locator(".sponsor-ribbon-placeholder")).toHaveCount(0);
+    const sponsorNames = ["Pinar Tenis Las Varillas", "Magnus", "FG Beauty", "San José", "Sharol moda"];
+    const visibleSponsors = sponsors.locator(".sponsor-ribbon-track:not([aria-hidden]) li");
+    await expect(visibleSponsors).toHaveCount(sponsorNames.length);
+    const renderedSponsorNames = await visibleSponsors.evaluateAll((items) => items.map((item) => {
+      const link = item.querySelector("a");
+      return link?.getAttribute("aria-label") ?? item.querySelector("img")?.getAttribute("alt");
+    }));
+    expect(renderedSponsorNames).toEqual(sponsorNames);
+    const sponsorLinks = await visibleSponsors.evaluateAll((items) => items.map((item) => item.querySelector("a")?.getAttribute("href")));
+    expect(new Set(sponsorLinks).size).toBe(5);
+    expect(sponsorLinks).toEqual([
+      "https://www.instagram.com/pinartenislasvarillas/",
+      "https://www.instagram.com/empanadasmagnus/",
+      "https://www.instagram.com/fgbeautyday/",
+      "https://www.instagram.com/distribuidora_sanjose/",
+      "https://www.instagram.com/sharolmoda/"
+    ]);
+    const duplicateTrack = sponsors.locator('.sponsor-ribbon-track[aria-hidden="true"]');
+    await expect(duplicateTrack.locator("a")).toHaveCount(5);
+    for (const link of await duplicateTrack.locator("a").all()) await expect(link).toHaveAttribute("tabindex", "-1");
+    await expect(sponsors.locator("a[target='_blank']:not([rel~='noopener'])")).toHaveCount(0);
+    await expect(sponsors.locator("a[target='_blank']:not([rel~='noreferrer'])")).toHaveCount(0);
+    const [mediaBox, sponsorsBox, footerBox] = await Promise.all([
+      page.getByRole("region", { name: "Medios del programa" }).boundingBox(),
+      sponsors.boundingBox(),
+      page.getByRole("contentinfo").boundingBox()
+    ]);
+    expect(mediaBox).not.toBeNull();
+    expect(sponsorsBox).not.toBeNull();
+    expect(footerBox).not.toBeNull();
+    expect(sponsorsBox!.y).toBeGreaterThanOrEqual(mediaBox!.y + mediaBox!.height);
+    expect(sponsorsBox!.y).toBeLessThan(footerBox!.y);
   });
 
   test("fills the latest preview media container without mobile overflow @mobile", async ({ page }) => {
@@ -171,27 +217,37 @@ test.describe("program media previews", () => {
     await expect(media).toBeVisible();
     await expect(lead.getByRole("button", { name: /Reproducir Alta episodio más reciente/i })).toBeVisible();
     await expect(cards).toHaveCount(3);
+    await settleRevealedCards(cards);
 
-    const [leadBox, firstCard, secondCard, thirdCard] = await Promise.all([
+    const [leadBox, outerFrame, previewBox, firstCard, secondCard, thirdCard] = await Promise.all([
       lead.boundingBox(),
+      lead.locator(".program-latest").boundingBox(),
+      lead.locator(".program-latest-preview").boundingBox(),
       cards.nth(0).boundingBox(),
       cards.nth(1).boundingBox(),
       cards.nth(2).boundingBox()
     ]);
 
     expect(leadBox).not.toBeNull();
+    expect(outerFrame).not.toBeNull();
+    expect(previewBox).not.toBeNull();
     expect(firstCard).not.toBeNull();
     expect(secondCard).not.toBeNull();
     expect(thirdCard).not.toBeNull();
 
-    expect(leadBox!.width / leadBox!.height).toBeCloseTo(16 / 9, 1);
-    expect(leadBox!.width).toBeGreaterThan(firstCard!.width * 2.4);
+    expect(previewBox!.width / previewBox!.height).toBeCloseTo(16 / 9, 1);
+    expect(outerFrame!.height).toBeLessThanOrEqual(495.1);
+    expect(Math.abs(outerFrame!.x - firstCard!.x)).toBeLessThanOrEqual(2);
+    expect(Math.abs(outerFrame!.x + outerFrame!.width - (thirdCard!.x + thirdCard!.width))).toBeLessThanOrEqual(2);
+    expect(leadBox!.width).toBeGreaterThan(firstCard!.width * 1.8);
+    expect(Math.abs(leadBox!.width - await media.evaluate((element) => element.getBoundingClientRect().width))).toBeLessThanOrEqual(2);
     expect(Math.abs(firstCard!.y - secondCard!.y)).toBeLessThanOrEqual(2);
     expect(Math.abs(secondCard!.y - thirdCard!.y)).toBeLessThanOrEqual(2);
     expect(Math.abs(firstCard!.height - secondCard!.height)).toBeLessThanOrEqual(2);
     expect(Math.abs(secondCard!.height - thirdCard!.height)).toBeLessThanOrEqual(2);
     expect(Math.abs(firstCard!.width - secondCard!.width)).toBeLessThanOrEqual(2);
     expect(Math.abs(secondCard!.width - thirdCard!.width)).toBeLessThanOrEqual(2);
+    await page.screenshot({ path: "test-results/program-latest-aligned-desktop.png" });
     expect(firstCard!.x).toBeLessThan(secondCard!.x);
     expect(secondCard!.x).toBeLessThan(thirdCard!.x);
   });
@@ -205,20 +261,23 @@ test.describe("program media previews", () => {
 
     await expect(lead).toBeVisible();
     await expect(cards).toHaveCount(3);
+    await settleRevealedCards(cards);
 
-    const [leadBox, firstCard, secondCard, thirdCard] = await Promise.all([
+    const [leadBox, previewBox, firstCard, secondCard, thirdCard] = await Promise.all([
       lead.boundingBox(),
+      lead.locator(".program-latest-preview").boundingBox(),
       cards.nth(0).boundingBox(),
       cards.nth(1).boundingBox(),
       cards.nth(2).boundingBox()
     ]);
 
     expect(leadBox).not.toBeNull();
+    expect(previewBox).not.toBeNull();
     expect(firstCard).not.toBeNull();
     expect(secondCard).not.toBeNull();
     expect(thirdCard).not.toBeNull();
 
-    expect(leadBox!.width / leadBox!.height).toBeCloseTo(16 / 9, 1);
+    expect(previewBox!.width / previewBox!.height).toBeCloseTo(16 / 9, 1);
     expect(Math.abs(firstCard!.x - secondCard!.x)).toBeLessThanOrEqual(2);
     expect(Math.abs(secondCard!.x - thirdCard!.x)).toBeLessThanOrEqual(2);
     expect(firstCard!.y).toBeLessThan(secondCard!.y);

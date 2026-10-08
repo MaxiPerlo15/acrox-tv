@@ -2,6 +2,7 @@ import { env } from "@/lib/env";
 import type { EpisodeItem, LiveItem } from "@/domain/acroxtv-feed";
 import { getSWRResource } from "@/infrastructure/swr-cache";
 import type { ProgramYouTubeSource } from "@/infrastructure/program-media-sources";
+import { selectYouTubeThumbnail, type YouTubeThumbnails } from "@/domain/youtube-thumbnails";
 
 type YouTubeSearchResponse = {
   items?: Array<{
@@ -9,10 +10,7 @@ type YouTubeSearchResponse = {
     snippet?: {
       title?: string;
       publishedAt?: string;
-      thumbnails?: {
-        medium?: { url?: string };
-        high?: { url?: string };
-      };
+      thumbnails?: YouTubeThumbnails;
     };
   }>;
 };
@@ -23,10 +21,7 @@ type YouTubeVideoDetailsWithStatsResponse = {
     snippet?: {
       title?: string;
       publishedAt?: string;
-      thumbnails?: {
-        medium?: { url?: string };
-        high?: { url?: string };
-      };
+      thumbnails?: YouTubeThumbnails;
     };
     contentDetails?: {
       duration?: string;
@@ -248,7 +243,7 @@ const fetchCurrentYouTubeLive = async (): Promise<LiveItem | null> => {
   const liveItem = liveData.items?.[0];
   const videoId = liveItem?.id?.videoId;
   const snippet = liveItem?.snippet;
-  const thumbnailUrl = snippet?.thumbnails?.high?.url ?? snippet?.thumbnails?.medium?.url ?? "";
+  const thumbnailUrl = selectYouTubeThumbnail(snippet?.thumbnails ?? {});
   if (!videoId || !snippet?.title || !snippet.publishedAt || !thumbnailUrl) {
     return null;
   }
@@ -326,8 +321,7 @@ const fetchYouTubeVideoDetailsWithStats = async (
       const videoId = item.id;
       const title = item.snippet?.title;
       const publishedAt = item.snippet?.publishedAt;
-      const thumbnailUrl =
-        item.snippet?.thumbnails?.high?.url ?? item.snippet?.thumbnails?.medium?.url ?? "";
+      const thumbnailUrl = selectYouTubeThumbnail(item.snippet?.thumbnails ?? {});
       const durationSeconds = parseYouTubeDurationToSeconds(item.contentDetails?.duration);
       const viewCount = Number(item.statistics?.viewCount ?? 0);
 

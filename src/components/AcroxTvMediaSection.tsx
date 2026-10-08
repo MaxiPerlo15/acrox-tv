@@ -8,6 +8,7 @@ import { InstagramIcon, TvGhostIcon, YouTubeIcon } from "@/components/icons";
 import type { AcroxTvFeedResponse, EpisodeItem, MediaSurface, ProgramFeedResponse } from "@/domain/acroxtv-feed";
 import type { SocialContentItem } from "@/domain/social-content";
 import { publicEnv } from "@/lib/public-env";
+import styles from "./ProgramPage.module.css";
 
 const EMPTY_FEED: AcroxTvFeedResponse = {
   liveItem: null,
@@ -292,7 +293,7 @@ const ProgramEpisodePreview = ({ episode, className }: ProgramEpisodePreviewProp
           aria-label={`Reproducir ${episode.title}`}
           aria-expanded={isOpen}
         >
-          <Image src={episode.thumbnailUrl} alt={episode.title} fill sizes="(max-width: 700px) 100vw, 800px" />
+          <Image src={episode.thumbnailUrl} alt={episode.title} fill sizes="(max-width: 700px) 100vw, 800px" loading="lazy" />
           <span className="inline-play-badge">Reproducir</span>
         </button>
       )}
@@ -321,7 +322,7 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
     });
   }, [programSlug]);
 
-  if (!feed) return <p>Cargando programación...</p>;
+  if (!feed) return <section id="ultimo-programa" className="program-media" aria-label="Último episodio"><p className="program-media-loading">Cargando programación...</p></section>;
 
   const episodes = episodeItems(feed.episodes);
   const latestEpisode = episodes[0];
@@ -331,16 +332,19 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
   return (
     <section className="program-media" aria-label="Programación del programa">
       <section className="program-media-row" aria-label="Medios del programa">
-        <section className="program-latest" aria-label="Último episodio">
-          {feed.episodes.state === "error" ? (
-            <p className="program-media-error" role="alert">
-              No pudimos cargar la programación de YouTube para este programa.
-            </p>
-          ) : latestEpisode ? (
-            <ProgramEpisodePreview episode={latestEpisode} className="program-latest-preview" />
-          ) : (
-            <p>{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
-          )}
+        <section id="ultimo-programa" className="program-latest-section" aria-label="Último episodio">
+          <p className={`${styles.latestEyebrow} program-media-heading`}>Último episodio</p>
+          <div className="program-latest" data-reveal="program-latest">
+            {feed.episodes.state === "error" ? (
+              <p className="program-media-error" role="alert">
+                No pudimos cargar la programación de YouTube para este programa.
+              </p>
+            ) : latestEpisode ? (
+              <ProgramEpisodePreview episode={latestEpisode} className="program-latest-preview" />
+            ) : (
+              <p className="program-empty-message">{isEpisodeState ? "No hay episodios atribuidos a este programa." : "La programación de YouTube aún no está disponible para este programa."}</p>
+            )}
+          </div>
         </section>
         <div className="social-feeds-stack social-feeds-stack--three program-media-row__cards">
          <SocialCarousel
@@ -354,6 +358,8 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
            fallbackHref={publicEnv.youtubeUrl}
            fallbackCtaLabel="Ir al canal de YouTube"
            showIndicators={false}
+           lazyImages
+           dataReveal="program-most-viewed"
            ariaLabel="Más visto"
          />
          <SocialCarousel
@@ -367,9 +373,11 @@ export const ProgramMediaSection = ({ programSlug }: ProgramMediaSectionProps) =
            fallbackHref={publicEnv.youtubeUrl}
            fallbackCtaLabel="Ir al canal de YouTube"
            showIndicators={false}
+           lazyImages
+           dataReveal="program-episodes"
            ariaLabel="Episodios"
          />
-         <ProgramInstagramUnavailableCard />
+         <div data-reveal="program-instagram"><ProgramInstagramUnavailableCard /></div>
         </div>
       </section>
     </section>

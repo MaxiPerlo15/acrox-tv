@@ -11,6 +11,7 @@ import {
 } from "@/domain/contact";
 import { CONTACT_PRESET_EVENT, CONTACT_PRESET_KEY } from "@/domain/contact-preset";
 import { WhatsAppIcon } from "@/components/icons";
+import { trackContactFormInvalidSubmit, trackContactFormStart, trackWhatsAppClick } from "@/lib/google-analytics";
 
 type ContactFormProps = {
   whatsappNumber: string;
@@ -46,6 +47,7 @@ const GUEST_MESSAGE_PLACEHOLDER =
 const ContactForm = ({ whatsappNumber }: ContactFormProps) => {
   const formRef = useRef<HTMLFormElement | null>(null);
   const submitLockRef = useRef(false);
+  const contactFormStartTrackedRef = useRef(false);
   const [form, setForm] = useState<ContactFormData>(initialForm);
   const [touched, setTouched] = useState<Record<ContactFieldName, boolean>>(initialTouched);
   const [errors, setErrors] = useState<ContactValidationErrors>({});
@@ -77,32 +79,21 @@ const ContactForm = ({ whatsappNumber }: ContactFormProps) => {
 
   const trackWhatsAppSubmit = () => {
     try {
-      const analyticsData = {
-        event: "click_enviar_whatsapp",
-        channel: "contact_form",
-        platform: "whatsapp"
-      };
-      const typedWindow = window as Window & {
-        dataLayer?: unknown;
-        gtag?: (...args: unknown[]) => void;
-      };
-
-      if (Array.isArray(typedWindow.dataLayer)) {
-        typedWindow.dataLayer.push(analyticsData);
-      }
-
-      if (typeof typedWindow.gtag === "function") {
-        typedWindow.gtag("event", "click_enviar_whatsapp", {
-          channel: "contact_form",
-          platform: "whatsapp"
-        });
-      }
+      trackWhatsAppClick();
     } catch {
       // Nunca bloquear la navegacion a WhatsApp por fallas de analytics.
     }
   };
 
   const updateForm = <K extends ContactFieldName>(field: K, value: ContactFormData[K]) => {
+    if (!contactFormStartTrackedRef.current) {
+      contactFormStartTrackedRef.current = true;
+      try {
+        trackContactFormStart();
+      } catch {
+        // Nunca bloquear la edición del formulario por fallas de analytics.
+      }
+    }
     setForm((prev) => {
       const nextForm = { ...prev, [field]: value };
       validateAndSync(nextForm);
@@ -168,6 +159,11 @@ const ContactForm = ({ whatsappNumber }: ContactFormProps) => {
 
     const nextErrors = validateAndSync(form);
     if (Object.keys(nextErrors).length > 0) {
+      try {
+        trackContactFormInvalidSubmit();
+      } catch {
+        // Nunca bloquear el formulario por fallas de analytics.
+      }
       setFeedback(null);
       submitLockRef.current = false;
       return;

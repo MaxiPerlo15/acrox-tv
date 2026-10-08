@@ -106,6 +106,25 @@ test.describe("program visual polish", () => {
     }));
   });
 
+  test("keeps the latest-program anchor mounted through loading and empty-feed states", async ({ page }) => {
+    let releaseResponse!: () => void;
+    const responseGate = new Promise<void>((resolve) => { releaseResponse = resolve; });
+    await page.route("**/api/acroxtv-feed/alta-data-te-tire", async (route) => {
+      await responseGate;
+      await route.fulfill({ contentType: "application/json", body: JSON.stringify({
+        programSlug: "alta-data-te-tire",
+        episodes: { state: "unavailable" }, instagram: { state: "unavailable" }, live: { state: "unavailable" }
+      }) });
+    });
+    await page.goto(programPath);
+    const latestAnchor = page.locator("#ultimo-programa");
+    await expect(latestAnchor).toHaveCount(1);
+    await expect(latestAnchor).toContainText("Cargando programación");
+    releaseResponse();
+    await expect(latestAnchor).toHaveCount(1);
+    await expect(latestAnchor).toContainText("La programación de YouTube aún no está disponible");
+  });
+
   test("removes program-only copy while preserving an accessible, closable latest preview", async ({ page }) => {
     await page.goto(programPath);
 
@@ -114,7 +133,7 @@ test.describe("program visual polish", () => {
     const trigger = latest.getByRole("button", { name: "Reproducir Alta episodio más reciente" });
 
     await expect(main.getByText("SEÑAL DEL PROGRAMA", { exact: true })).toHaveCount(0);
-    await expect(main.getByText("Último episodio", { exact: true })).toHaveCount(0);
+    await expect(latest.getByText("Último episodio", { exact: true })).toBeVisible();
     await expect(main.getByText("Conducción Acrox TV", { exact: true })).toHaveCount(0);
     await expect(latest).toBeVisible();
     await expect(trigger).toBeVisible();
@@ -125,6 +144,17 @@ test.describe("program visual polish", () => {
 
     await page.keyboard.press("Escape");
     await expect(trigger).toBeFocused();
+  });
+
+  test("removes analytics preferences from Footer while keeping privacy consent controls usable", async ({ page }) => {
+    await page.goto(programPath);
+    const footer = page.getByRole("contentinfo");
+    await expect(footer.getByRole("button", { name: /preferencias de analítica/i })).toHaveCount(0);
+    await footer.getByRole("link", { name: "Politica de privacidad" }).click();
+    const preferences = page.getByRole("button", { name: /preferencias de analítica/i });
+    await expect(preferences).toBeVisible();
+    await preferences.click();
+    await expect(page.getByRole("dialog")).toBeVisible();
   });
 
   test("keeps the shared Footer navigating from a program page to home anchors", async ({ page }) => {
@@ -183,15 +213,61 @@ test.describe("program visual polish", () => {
     expect(styles[1]).toEqual(styles[0]);
   });
 
-  test("keeps the polished direct-program layout free of horizontal overflow on mobile @mobile", async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto(programPath);
+  test("uses shared-background hero composition on both program routes without narrow-screen overflow", async ({ page }) => {
+    for (const canonicalProgramPath of canonicalProgramPaths) {
+      await page.setViewportSize({ width: 380, height: 812 });
+      await page.goto(canonicalProgramPath);
 
-    const main = page.getByRole("main");
-    await expect(main.getByText("SEÑAL DEL PROGRAMA", { exact: true })).toHaveCount(0);
-    await expect(main.getByText("Último episodio", { exact: true })).toHaveCount(0);
-    await expect(main.getByText("Conducción Acrox TV", { exact: true })).toHaveCount(0);
-    expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
+      const main = page.getByRole("main");
+      const hero = main.locator(".program-hero");
+      const title = hero.getByRole("heading", { level: 1 });
+      const identity = hero.locator(".program-hero-identity");
+      await expect(title).toBeVisible();
+      await expect(identity).toBeVisible();
+      await expect(main.getByRole("region", { name: "Último episodio" })).toBeVisible();
+
+      const styles = await hero.evaluate((element) => {
+        const style = getComputedStyle(element);
+        const after = getComputedStyle(element, "::after");
+        return {
+          border: style.borderTopWidth,
+          background: style.backgroundColor,
+          backgroundImage: style.backgroundImage,
+          boxShadow: style.boxShadow,
+          decoration: after.content
+        };
+      });
+      expect(styles.border).toBe("0px");
+      expect(styles.background).toBe("rgba(0, 0, 0, 0)");
+      expect(styles.backgroundImage).toBe("none");
+      expect(styles.boxShadow).toBe("none");
+      expect(styles.decoration).toBe("none");
+      const artworkImage = identity.locator(".program-hero-cover");
+      const hostName = identity.locator(".program-host-name");
+      await expect(artworkImage).toBeVisible();
+      await expect(hostName).toBeVisible();
+      await expect(hostName).toHaveAttribute("alt", /conductora/i);
+      const alignment = await hero.evaluate((element) => {
+        const heroRect = element.getBoundingClientRect();
+        const copy = element.querySelector(".program-hero-copy")!.getBoundingClientRect();
+        const art = element.querySelector(".program-hero-identity")!.getBoundingClientRect();
+        const kicker = element.querySelector(".program-hero-kicker")!.getBoundingClientRect();
+        return { heroTop: heroRect.top, copyTop: copy.top, artTop: art.top, kickerTop: kicker.top, titleSize: parseFloat(getComputedStyle(element.querySelector("h1")!).fontSize) };
+      });
+      if (page.viewportSize()!.width > 700) expect(Math.abs(alignment.kickerTop - alignment.artTop)).toBeLessThanOrEqual(1);
+      else expect(alignment.artTop).toBeLessThan(alignment.copyTop);
+      expect(alignment.titleSize).toBeGreaterThanOrEqual(44);
+      expect(alignment.kickerTop - alignment.heroTop).toBeLessThan(120);
+      await expect(artworkImage).toHaveAttribute("src", canonicalProgramPath.includes("alta-data") ? /caratula-altadata-trimmed\.webp/ : /caratula-masquenutricion-trimmed\.webp/);
+      await expect(hostName).toHaveAttribute("src", canonicalProgramPath.includes("alta-data") ? /nombre-conductora-adtt-trimmed\.webp/ : /nombre-conductora-masnutri-trimmed\.webp/);
+
+      const identityStyles = await identity.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { border: style.borderTopWidth, background: style.backgroundColor };
+      });
+      expect(identityStyles).toEqual({ border: "0px", background: "rgba(0, 0, 0, 0)" });
+      expect(await page.locator("body").evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
+    }
   });
 
   for (const footerParityCase of footerParityCases) {

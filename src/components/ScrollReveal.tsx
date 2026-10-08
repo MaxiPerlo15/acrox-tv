@@ -8,7 +8,11 @@ const ScrollReveal = () => {
       return;
     }
 
+    const programPage = document.querySelector<HTMLElement>(".program-page");
+    programPage?.classList.add("reveal-ready");
+
     const observed = new WeakSet<Element>();
+    let programMediaReady = Boolean(programPage?.querySelector(".program-media"));
 
     const observer = new IntersectionObserver(
       (entries, currentObserver) => {
@@ -30,6 +34,7 @@ const ScrollReveal = () => {
     const observeElement = (element: Element) => {
       if (!(element instanceof HTMLElement)) return;
       if (!element.hasAttribute("data-reveal")) return;
+      if (element.getAttribute("data-reveal") === "program-sponsors" && !programMediaReady) return;
       if (element.classList.contains("is-visible")) return;
       if (observed.has(element)) return;
       observer.observe(element);
@@ -46,6 +51,11 @@ const ScrollReveal = () => {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           if (!(node instanceof HTMLElement)) return;
+          if (node.matches(".program-media") || node.querySelector(".program-media")) {
+            programMediaReady = true;
+            programPage?.querySelectorAll('[data-reveal="program-sponsors"]').forEach((element) => observeElement(element));
+            observeFromRoot(node);
+          }
           observeElement(node);
           observeFromRoot(node);
         });
@@ -60,6 +70,7 @@ const ScrollReveal = () => {
     return () => {
       observer.disconnect();
       mutationObserver.disconnect();
+      programPage?.classList.remove("reveal-ready");
     };
   }, []);
 

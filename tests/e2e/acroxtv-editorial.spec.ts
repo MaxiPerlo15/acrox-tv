@@ -326,6 +326,29 @@ test.describe("Acrox TV direct program routes", () => {
 });
 
 test.describe("Acrox TV editorial directory", () => {
+  test("shows exactly the two canonical program cards without a home sponsor region", async ({ page }) => {
+    await page.goto("/");
+
+    const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+    const cards = directory.locator("[data-program-cover]");
+    await expect(cards).toHaveCount(2);
+    await expect(cards.nth(0)).toHaveAttribute("href", "/alta-data-te-tire");
+    await expect(cards.nth(1)).toHaveAttribute("href", "/mas-que-nutricion");
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
+  });
+
+  test("shows the two canonical program cards without a home sponsor region on mobile @mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 380, height: 844 });
+    await page.goto("/");
+
+    const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
+    const cards = directory.locator("[data-program-cover]");
+    await expect(cards).toHaveCount(2);
+    await expect(cards.nth(0)).toHaveAttribute("href", "/alta-data-te-tire");
+    await expect(cards.nth(1)).toHaveAttribute("href", "/mas-que-nutricion");
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
+  });
+
   test.beforeEach(async ({ page }) => {
     await page.route("**/api/acroxtv-feed", async (route) => {
       await route.fulfill({
@@ -343,7 +366,7 @@ test.describe("Acrox TV editorial directory", () => {
     });
   });
 
-  test("renders equally prominent canonical program covers and keeps the approved-only ribbon off program pages", async ({ page }) => {
+  test("keeps the directory sponsor-free and renders program-owned waiting ribbons", async ({ page }) => {
     await page.goto("/");
 
     const directory = page.getByRole("region", { name: "Programas de Acrox TV" });
@@ -354,10 +377,22 @@ test.describe("Acrox TV editorial directory", () => {
     const [altaDataBox, nutritionBox] = await Promise.all([covers.nth(0).boundingBox(), covers.nth(1).boundingBox()]);
     expect(altaDataBox?.width).toBe(nutritionBox?.width);
     expect(altaDataBox?.height).toBe(nutritionBox?.height);
-    await expect(page.getByRole("region", { name: "Nos acompañan" })).toBeVisible();
-
-    await page.goto("/alta-data-te-tire");
     await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
+
+    for (const program of PROGRAMS) {
+      await page.goto(`/${program.slug}`);
+      const sponsors = page.getByRole("region", { name: "Nos acompañan" });
+      await expect(sponsors).toHaveCount(1);
+      await expect(sponsors.getByText("Estamos preparando este espacio para futuras colaboraciones.")).toBeVisible();
+      await expect(sponsors.locator("img")).toHaveCount(0);
+      const isAfterMedia = await page.evaluate(() => {
+        const media = document.querySelector('[aria-label="Medios del programa"]');
+        const sponsors = document.querySelector('[aria-label="Nos acompañan"]');
+        const footer = document.querySelector("footer");
+        return Boolean(media && sponsors && footer && media.compareDocumentPosition(sponsors) & Node.DOCUMENT_POSITION_FOLLOWING && sponsors.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING);
+      });
+      expect(isAfterMedia).toBe(true);
+    }
   });
 
   test("keeps each canonical program name in the visible editorial hierarchy", async ({ page }) => {
@@ -467,108 +502,82 @@ test.describe("Acrox TV editorial directory", () => {
     await expect(altaDataCover.getByText("ACROX TV", { exact: true })).toHaveCount(0);
   });
 
-  test("renders five approved logos as wide, low marquee slides with one exposed list", async ({ page }) => {
-    await page.goto("/");
+  test("uses the shared kicker treatment and an honest sponsor placeholder on both program routes", async ({ page }) => {
+    for (const program of PROGRAMS) {
+      await page.setViewportSize({ width: 380, height: 812 });
+      await page.goto(`/${program.slug}`);
 
-    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
-    await expect(ribbon.getByRole("heading", { name: "Con el apoyo de" })).toBeVisible();
-    const lists = ribbon.locator("ul");
-    const approvedSponsors = [
-      ["Magnus", "/sponsors/logo-magnus.webp"],
-      ["FG Beauty", "/sponsors/logo-fg-beauty.webp"],
-      ["Noe Peluquería", "/sponsors/logo-noe-peluqueria.webp"],
-      ["San José", "/sponsors/logo-san-jose.webp"],
-      ["Checa", "/sponsors/logo-checa.webp"]
-    ] as const;
+      const main = page.getByRole("main");
+      const hero = main.locator(".program-hero");
+      const programKicker = hero.locator(".program-hero-kicker");
+      const title = hero.getByRole("heading", { level: 1, name: program.name });
+      const sponsors = main.getByRole("region", { name: "Nos acompañan" });
+      const sponsorHeading = sponsors.getByRole("heading", { level: 2, name: "Con el apoyo de" });
+      const tile = sponsors.getByRole("listitem");
 
-    await expect(lists).toHaveCount(2);
-    await expect(lists.nth(0)).not.toHaveAttribute("aria-hidden");
-    await expect(lists.nth(1)).toHaveAttribute("aria-hidden", "true");
-    await expect(ribbon.getByRole("listitem")).toHaveCount(5);
-    await expect(lists.nth(1).locator("li")).toHaveCount(5);
-    for (const [name, src] of approvedSponsors) {
-      await expect(ribbon.getByRole("img", { name })).toHaveAttribute("src", new RegExp(encodeURIComponent(src)));
+      await expect(title).toBeVisible();
+      await expect(programKicker).toHaveText("ACROX TV · PROGRAMACIÓN ORIGINAL");
+      await expect(programKicker.locator("span")).toHaveCount(1);
+      await expect(sponsorHeading).toBeVisible();
+      const kickerTypography = await Promise.all([programKicker, sponsorHeading].map((element) => element.evaluate((node) => {
+        const style = getComputedStyle(node);
+        return { color: style.color, fontWeight: style.fontWeight, letterSpacing: style.letterSpacing };
+      })));
+      expect(kickerTypography[1]).toEqual(kickerTypography[0]);
+      await expect(sponsorHeading.locator("span")).toHaveCount(1);
+      await expect(tile).toHaveCount(1);
+      await expect(tile).toHaveText("Próximamente");
+      await expect(sponsors.locator(".sponsor-ribbon-motion")).toHaveCount(0);
+      await expect(sponsors).not.toHaveClass(/sponsor-ribbon-empty/);
+
+      const marker = await programKicker.locator("span").first().evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { width: style.width, height: style.height, background: style.backgroundImage };
+      });
+      expect(marker).toMatchObject({ width: "4px", height: "32px" });
+      expect(marker.background).toContain("linear-gradient");
+      const sponsorMarker = await sponsorHeading.locator("span").evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { width: style.width, height: style.height, background: style.backgroundImage };
+      });
+      expect(sponsorMarker).toMatchObject({ width: "4px", height: "32px" });
+      expect(sponsorMarker.background).toContain("linear-gradient");
+      const sponsorSectionStyle = await sponsors.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { borderRadius: style.borderRadius, backgroundImage: style.backgroundImage };
+      });
+      expect(sponsorSectionStyle).toEqual({ borderRadius: "0px", backgroundImage: "none" });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(380);
     }
-    await expect(ribbon.getByRole("listitem", { name: "Espacio de colaboración" })).toHaveCount(0);
-
-    const geometry = await ribbon.evaluate((element) => {
-      const directoryHeading = document.querySelector<HTMLElement>(".program-directory-heading h2");
-      const slide = element.querySelector<HTMLElement>("li");
-      const logo = slide?.querySelector<HTMLElement>("img");
-      const motion = element.querySelector<HTMLElement>(".sponsor-ribbon-motion");
-      if (!directoryHeading || !slide || !logo || !motion) throw new Error("Sponsor ribbon geometry is missing");
-
-      return {
-        slideWidth: slide.getBoundingClientRect().width,
-        slideHeight: slide.getBoundingClientRect().height,
-        logoWidth: logo.getBoundingClientRect().width,
-        logoHeight: logo.getBoundingClientRect().height,
-        motionName: getComputedStyle(motion).animationName,
-        titleSize: Number.parseFloat(getComputedStyle(element.querySelector("h2")!).fontSize),
-        directoryTitleSize: Number.parseFloat(getComputedStyle(directoryHeading).fontSize)
-      };
-    });
-
-    expect(geometry.slideWidth).toBeGreaterThanOrEqual(220);
-    expect(geometry.slideWidth).toBeLessThanOrEqual(300);
-    expect(geometry.slideHeight).toBeGreaterThanOrEqual(62);
-    expect(geometry.slideHeight).toBeLessThanOrEqual(68);
-    expect(geometry.logoWidth).toBeGreaterThanOrEqual(36);
-    expect(geometry.logoWidth).toBeLessThanOrEqual(42);
-    expect(geometry.logoHeight).toBeGreaterThanOrEqual(36);
-    expect(geometry.logoHeight).toBeLessThanOrEqual(42);
-    expect(geometry.motionName).toBe("sponsor-ribbon-marquee");
-    expect(geometry.titleSize).toBeLessThan(geometry.directoryTitleSize);
   });
 
-  test("moves seamlessly and pauses for hover, focus, and reduced-motion visitors", async ({ page }) => {
-    await page.goto("/");
+  test("renders square sponsor brand tiles with a tight rail on desktop and mobile", async ({ page }) => {
+    for (const program of PROGRAMS) {
+      for (const viewport of [{ width: 1440, height: 900 }, { width: 380, height: 812 }]) {
+        await page.setViewportSize(viewport);
+        await page.goto(`/${program.slug}`);
 
-    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
-    const track = ribbon.locator(".sponsor-ribbon-motion");
-    const listWidths = await ribbon.locator("ul").evaluateAll((lists) => lists.map((list) => list.getBoundingClientRect().width));
-    expect(listWidths[0]).toBeGreaterThan(0);
-    expect(listWidths[0]).toBeCloseTo(listWidths[1], 3);
+        const sponsors = page.getByRole("region", { name: "Nos acompañan" });
+        const tile = sponsors.getByRole("listitem");
+        const metrics = await tile.evaluate((element) => {
+          const rect = element.getBoundingClientRect();
+          const listStyle = getComputedStyle(element.parentElement!);
+          return { width: rect.width, height: rect.height, gap: listStyle.gap };
+        });
 
-    const startTransform = await track.evaluate((element) => getComputedStyle(element).transform);
-    await page.waitForTimeout(180);
-    expect(await track.evaluate((element) => getComputedStyle(element).transform)).not.toBe(startTransform);
-
-    await ribbon.hover();
-    await expect(track).toHaveCSS("animation-play-state", "paused");
-    await ribbon.focus();
-    await expect(track).toHaveCSS("animation-play-state", "paused");
-
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await expect(track).toHaveCSS("animation-name", "none");
-    await expect(track).toHaveCSS("transform", "none");
+        const expectedTileSize = viewport.width < 700 ? 180 : 300;
+        expect(metrics).toEqual({ width: expectedTileSize, height: expectedTileSize, gap: "2px" });
+        expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
+      }
+    }
   });
 
-  test("keeps the approved sponsor ribbon inside the mobile viewport @mobile", async ({ page }) => {
+  test("does not render the legacy sponsor marquee in the home directory", async ({ page }) => {
     await page.goto("/");
 
-    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
-    await expect(ribbon.getByRole("img", { name: "Magnus" })).toBeVisible();
-    await expect(ribbon.getByRole("img")).toHaveCount(5);
-    const geometry = await ribbon.evaluate((element) => {
-      const viewport = element.querySelector<HTMLElement>(".sponsor-ribbon-viewport");
-      const slide = element.querySelector<HTMLElement>("li");
-      const logo = slide?.querySelector<HTMLElement>("img");
-      if (!viewport || !slide || !logo) throw new Error("Sponsor ribbon mobile geometry is missing");
-      return {
-        viewportWidth: viewport.getBoundingClientRect().width,
-        slideWidth: slide.getBoundingClientRect().width,
-        slideHeight: slide.getBoundingClientRect().height,
-        logoWidth: logo.getBoundingClientRect().width,
-        logoHeight: logo.getBoundingClientRect().height
-      };
-    });
-    expect(geometry.slideWidth).toBeGreaterThanOrEqual(220);
-    expect(geometry.slideHeight).toBeGreaterThanOrEqual(62);
-    expect(geometry.slideHeight).toBeLessThanOrEqual(68);
-    expect(geometry.logoWidth).toBeGreaterThanOrEqual(36);
-    expect(geometry.logoHeight).toBeGreaterThanOrEqual(36);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
+    await expect(page.getByRole("img", { name: "Magnus" })).toHaveCount(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1280);
   });
 
   test("does not emit aspect-ratio warnings for program or sponsor images", async ({ page }) => {
@@ -590,23 +599,12 @@ test.describe("Acrox TV editorial directory", () => {
     });
 
     await page.goto("/");
-    const ribbon = page.getByRole("region", { name: "Nos acompañan" });
-    await expect(ribbon).toBeVisible();
-    const sponsorBoxes = await ribbon.getByRole("img").evaluateAll((images) =>
-      images.map((image) => {
-        const box = image.getBoundingClientRect();
-        return { width: box.width, height: box.height };
-      })
-    );
-    expect(sponsorBoxes).toHaveLength(5);
-    for (const box of sponsorBoxes) {
-      expect(box.width).toBeCloseTo(box.height, 3);
-    }
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
 
     await page.goto("/alta-data-te-tire");
-    const programLogo = page.getByRole("img", { name: "Alta Data ¡Te Tire!" });
-    await expect(programLogo).toBeVisible();
-    await expect(programLogo).toHaveAttribute("height", "250");
+    const programCover = page.getByRole("img", { name: "Alta Data ¡Te Tire! — portada del programa" });
+    await expect(programCover).toBeVisible();
+    await expect(programCover).toHaveAttribute("src", /adtt-1\.webp/);
 
     expect(imageWarnings).toEqual([]);
   });
@@ -629,7 +627,7 @@ test.describe("Acrox TV editorial directory", () => {
     const [altaDataBox, nutritionBox] = await Promise.all([altaDataCover.boundingBox(), nutritionCover.boundingBox()]);
     expect(altaDataBox?.x).toBe(nutritionBox?.x);
     expect(nutritionBox?.y).toBeGreaterThan(altaDataBox?.y ?? 0);
-    await expect(page.getByRole("region", { name: "Nos acompañan" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Nos acompañan" })).toHaveCount(0);
   });
 
   test("keeps the home program directory panel-free on mobile @mobile", async ({ page }) => {

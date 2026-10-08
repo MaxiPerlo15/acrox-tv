@@ -21,6 +21,8 @@ type SocialCarouselProps = {
   fallbackCtaLabel: string;
   showIndicators?: boolean;
   ariaLabel?: string;
+  lazyImages?: boolean;
+  dataReveal?: string;
 };
 
 type PreviewState = {
@@ -51,7 +53,9 @@ const SocialCarousel = ({
   fallbackHref,
   fallbackCtaLabel,
   showIndicators = true,
-  ariaLabel
+  ariaLabel,
+  lazyImages = false,
+  dataReveal
 }: SocialCarouselProps) => {
   const rootRef = useRef<HTMLElement | null>(null);
   const [current, setCurrent] = useState(0);
@@ -128,7 +132,7 @@ const SocialCarousel = ({
 
   if (isLoading) {
     return (
-      <section className={`platform-block ${platform}`} aria-label={ariaLabel}>
+      <section className={`platform-block ${platform}`} aria-label={ariaLabel} data-reveal={dataReveal}>
         <div className="social-loading">
           <div className="skeleton-card" />
           <div className="skeleton-card" />
@@ -141,7 +145,7 @@ const SocialCarousel = ({
   if (items.length === 0) {
     const fallbackText = hasIntegrationError ? integrationErrorMessage : emptyMessage;
     return (
-      <section className={`platform-block ${platform}`} aria-label={ariaLabel}>
+      <section className={`platform-block ${platform}`} aria-label={ariaLabel} data-reveal={dataReveal}>
         <div className={`social-fallback social-fallback--${platform}`}>
           <div className="social-fallback-copy">
             <p className="social-fallback-title">
@@ -203,7 +207,7 @@ const SocialCarousel = ({
   };
 
   return (
-    <section ref={rootRef} className={`platform-block ${platform}`} aria-label={ariaLabel} aria-live="polite">
+    <section ref={rootRef} className={`platform-block ${platform}`} aria-label={ariaLabel} aria-live="polite" data-reveal={dataReveal}>
       <div
         className="carousel-wrapper"
         onMouseEnter={() => setIsHovering(true)}
@@ -278,8 +282,8 @@ const SocialCarousel = ({
                           alt={item.title}
                           fill
                           sizes="(max-width: 900px) 100vw, (max-width: 1400px) 50vw, 620px"
-                          priority={index === 0}
-                          loading={index === 0 ? "eager" : "lazy"}
+                          priority={!lazyImages && index === 0}
+                          loading={lazyImages || index > 0 ? "lazy" : "eager"}
                           unoptimized={platform === "instagram"}
                           onError={() => {
                             if (platform !== "instagram") return;

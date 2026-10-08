@@ -33,12 +33,12 @@ export default function ProgramDirectoryCard({ program, position }: ProgramDirec
   return (
     <Link href={programPath(program.slug)} className="program-directory-card" data-program-cover tabIndex={0}>
       <span className="program-directory-card-meta">{String(position).padStart(2, "0")} / ACROX TV</span>
-      <div className="program-directory-card-art" aria-hidden="true">
+      <div className="program-directory-card-art" aria-hidden={!program.coverLogoSrc || isArtworkUnavailable}>
         {program.coverLogoSrc && !isArtworkUnavailable ? (
           <Image
             ref={artworkRef}
             src={program.coverLogoSrc}
-            alt=""
+            alt={`Logo de ${program.name}`}
             width={320}
             height={320}
             sizes="(max-width: 700px) 100vw, 50vw"
@@ -58,7 +58,6 @@ export default function ProgramDirectoryCard({ program, position }: ProgramDirec
           <h3>{program.name}</h3>
           <p>{program.summary}</p>
         </div>
-        <strong aria-hidden="true">↗</strong>
       </div>
     </Link>
   );

@@ -1,14 +1,5 @@
 import ProgramDirectoryCard from "@/components/ProgramDirectoryCard";
-import SponsorRibbon, { type ApprovedSponsor } from "@/components/SponsorRibbon";
 import { PROGRAMS } from "@/domain/programs";
-
-const APPROVED_SPONSORS = [
-  { name: "Magnus", logoSrc: "/sponsors/logo-magnus.webp" },
-  { name: "FG Beauty", logoSrc: "/sponsors/logo-fg-beauty.webp" },
-  { name: "Noe Peluquería", logoSrc: "/sponsors/logo-noe-peluqueria.webp" },
-  { name: "San José", logoSrc: "/sponsors/logo-san-jose.webp" },
-  { name: "Checa", logoSrc: "/sponsors/logo-checa.webp" }
-] as const satisfies readonly ApprovedSponsor[];
 
 const StreamingSection = () => {
   return (
@@ -26,7 +17,6 @@ const StreamingSection = () => {
           <ProgramDirectoryCard key={program.slug} program={program} position={index + 1} />
         ))}
       </div>
-      <SponsorRibbon sponsors={APPROVED_SPONSORS} />
     </section>
   );
 };

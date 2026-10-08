@@ -12,3 +12,5 @@ artifacts/lighthouse
 lh-desktop-final.json
 lh-mobile-final.json
 test-results
+# Local AI runtime state
+.atl/
