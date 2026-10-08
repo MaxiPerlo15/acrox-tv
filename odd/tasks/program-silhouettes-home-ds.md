@@ -1,5 +1,8 @@
 # Program silhouettes and home design-system alignment
 
+## Authorized work-unit commit
+User subsequently requested commit and push to develop. Completed implementation outcomes in this record are included in work-unit commit `6473979b29a001db9ddb36e098d031ef072c8b92` (`feat(programs): unify branded heroes and sponsor invitations`), with source, assets and tests. Earlier no-commit statements describe the historical authorization boundary and are superseded only for this intended snapshot. Remote push confirmation is tracked in `develop-ui-refinements.md`; native approvals below apply only to their exact frozen candidates.
+
 ## Objective and accepted scope
 Replace program hero artwork with the supplied transparent host silhouettes, use existing program logos as the visual H1, and align the home program directory with the existing design system.
 

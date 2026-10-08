@@ -10,8 +10,8 @@ Current feature branch feat/program-ui-consistency, HEAD791a2198edd3b7e29b50b747
 
 ## Tasks
 - [x] D1 — Verify intended current source/assets/tests, reconcile exclusions and final functional results. **Complete: final independent20Chromium/20Node/lint/diff passed; exact new portrait references and exclusions confirmed.**
-- [ ] D2 — Stage explicit intended paths and create Conventional Commit with behavior, tests and records. **In progress.**
-- [ ] D3 — Non-force push to develop, confirm exact remote commit/main unchanged and report delivery limitations. **Pending.**
+- [x] D2 — Stage explicit intended paths and create Conventional Commit with behavior, tests and records. **Complete: work-unit6473979b29a001db9ddb36e098d031ef072c8b92.** Follow-up records include this actual identity; no source behavior changes.
+- [ ] D3 — Non-force push to develop, confirm exact remote commit/main unchanged and report delivery limitations. **In progress.**
 
 ## Exclusions
 next-env.d.ts; modified odd/tasks/develop-preview-snapshot.md; unused preserved public/programs/hero/silueta-romi.webp; .DS_Store; .pi; .codegraph; prototypes; loose original JPGs; nohup.out; tsconfig.tsbuildinfo; test-results/build caches/logs; Downloads originals. Do not use git add . or -A, delete/reset/stash/clean, or change userdev3000.
@@ -22,4 +22,4 @@ Latest exact-source modern Chromium20/20, Node20/20, lint/diff passed. Final del
 Contracts missing server-only remain blocked, full legacy/Firefox/WebKit not run, pre-existing heading line-height oracle unresolved. Lazy-image report65 remains unaccounted for; ownDOM4/8/8 missingattrs measured but no source-loading fix claimed. Passing functional checks are not equivalent to full native review or deployed-browser verification.
 
 ## Evidence and rollback
-Source snapshot rollback is a revert of the eventual delivery commit; no unrelated local/generated changes belong to it. Final verifier log: /tmp/acrox-develop-ui-delivery/verification.log. All four commands executed sequentially,20Chromium/20Node/lint/diff passed; Instagram invalid-token API warnings did not fail tests. No verification source edits or dependency changes. Git commit/push evidence will be added after the corresponding operation, not invented before. Deployed Vercel/browser/GA4/GBP outcomes must be observed separately.
+Source snapshot rollback is a revert of the eventual delivery commit; no unrelated local/generated changes belong to it. Final verifier log: /tmp/acrox-develop-ui-delivery/verification.log. All four commands executed sequentially,20Chromium/20Node/lint/diff passed; Instagram invalid-token API warnings did not fail tests. No verification source edits or dependency changes. Created source snapshot commit `6473979b29a001db9ddb36e098d031ef072c8b92`:27paths,778additions/93deletions,2WebP assets; source/tests/feature records together. All exclusions remained unstaged. Follow-up documentation records this work-unit identity, while remote push remains unconfirmed until the actual operation. Publishing source and bookkeeping commits together will use non-force HEAD:refs/heads/develop. Deployed Vercel/browser/GA4/GBP outcomes must be observed separately.

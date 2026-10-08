@@ -1,5 +1,8 @@
 # Program host artwork refresh
 
+## Authorized work-unit commit
+User subsequently requested commit and push to develop. H1/H2 implementation, verified assets and tests are included in work-unit commit `6473979b29a001db9ddb36e098d031ef072c8b92` (`feat(programs): unify branded heroes and sponsor invitations`). Earlier no-commit/no-push statements are historical, superseded for this intended snapshot only. H3 stays blocked by native relay timeout; this delivery request creates no native approval or invented review waiver. Remote push confirmation is tracked in `develop-ui-refinements.md`.
+
 ## Goal and authorized scope
 Use the new Nutrition host silhouette from `~/Downloads/silueta-conductora-masnutri.png`, convert it losslessly to WebP, and replace the current displayed portrait. Make both host-name images the same rendered size without stretching their original artwork.
 

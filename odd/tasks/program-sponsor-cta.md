@@ -1,5 +1,8 @@
 # Program sponsor invitation CTA
 
+## Authorized work-unit commit
+User subsequently requested commit and push to develop. S1–S4 implementation outcomes and tests are included in work-unit commit `6473979b29a001db9ddb36e098d031ef072c8b92` (`feat(programs): unify branded heroes and sponsor invitations`). Earlier no-commit/no-push statements are historical, superseded only for the intended snapshot. Remote push evidence is tracked in `develop-ui-refinements.md`. Current aggregate/native review remains pending; previous approvals must not be generalized.
+
 ## Objective and accepted decision
 Add an actionable upcoming-sponsor invitation to both program ribbons, linking directly to the site's configured WhatsApp number. User selected `whatsapp_direct`; no dialog, packages, form or analytics expansion.
 
