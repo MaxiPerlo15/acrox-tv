@@ -73,6 +73,17 @@
 .latestEyebrow.latestEyebrow.latestEyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 14px; color: var(--text-tertiary); font-family: inherit; font-size: .78rem; font-weight: 600; letter-spacing: .14em; line-height: 1.4; text-transform: uppercase; }
 .latestEyebrow.latestEyebrow.latestEyebrow::before { width: 4px; height: 1.8em; flex: 0 0 4px; border-radius: 999px; background: linear-gradient(180deg, #7e9eff, #9468ff 52%, #e182ff); content: ""; }
 
+@media (min-width: 801px) {
+  .hero:global(.program-hero) {
+    --program-column-gap: clamp(30px, 5vw, 72px);
+    grid-template-columns: fit-content(calc((100% - var(--program-column-gap)) * .525)) minmax(var(--program-column-gap), 1fr) max(320px, calc((100% - var(--program-column-gap)) * .475));
+    column-gap: 0;
+  }
+  .hero .title { position: relative; grid-column: 1; max-width: 330px; inset-inline-start: 14px; }
+  .copy:global(.program-hero-copy) { position: relative; grid-column: 1; justify-self: start; inset-inline-start: 14px; }
+  .artwork:global(.program-hero-identity) { grid-column: 3; }
+}
+
 @media (max-width: 800px) {
   .hero:global(.program-hero) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto; gap: 0; min-height: 0; padding: 88px 22px 36px; }
   .hero .kicker:global(.program-hero-kicker) { grid-column: 1; grid-row: 1; margin-top: 16px; }

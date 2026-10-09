@@ -34,6 +34,53 @@ test.describe("program hero branding", () => {
     }
   });
 
+  test("desktop labels, copy, and primary CTA share the actual text axis", async ({ page }) => {
+    for (const width of [1024, 1440]) {
+      for (const program of programs) {
+        await page.setViewportSize({ width, height: 960 });
+        await page.goto(program.path);
+        await expect(page.locator(".program-media-heading")).toHaveText("Último episodio");
+        await page.evaluate(async () => {
+          await document.fonts.ready;
+          await Promise.all(Array.from(document.querySelectorAll(".program-hero img"), (image) => (image as HTMLImageElement).decode()));
+        });
+
+        const geometry = await page.evaluate(() => {
+          const textRange = (selector: string) => {
+            const element = document.querySelector(selector)!;
+            const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+            const range = document.createRange();
+            let node: Node | null;
+            while ((node = walker.nextNode())) {
+              if (node.textContent?.trim()) range.selectNodeContents(node);
+            }
+            const rect = range.getBoundingClientRect();
+            return { x: rect.x, right: rect.right };
+          };
+          const rect = (selector: string) => {
+            const box = document.querySelector(selector)!.getBoundingClientRect();
+            return { x: box.x, right: box.right, width: box.width };
+          };
+          return {
+            kicker: textRange(".program-hero-kicker"),
+            summary: rect(".program-hero-summary"),
+            schedule: rect(".program-schedule"),
+            cta: rect(".program-hero-copy .btn.primary"),
+            logo: rect(".program-hero-logo"),
+            latest: textRange(".program-media-heading")
+          };
+        });
+        for (const item of [geometry.summary, geometry.schedule, geometry.cta, geometry.latest]) {
+          expect(Math.abs(item.x - geometry.kicker.x), `${program.path} ${width}px left text axis`).toBeLessThanOrEqual(1);
+        }
+        expect(geometry.logo.width).toBe(330);
+        const logoCenter = geometry.logo.x + geometry.logo.width / 2;
+        const summaryCenter = geometry.summary.x + geometry.summary.width / 2;
+        expect(Math.abs(logoCenter - summaryCenter), `${program.path} ${width}px logo/copy center`).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+
   for (const program of programs) {
     test(`${program.name} retains its accessible title, host identity, and responsive order`, async ({ page }) => {
       for (const viewport of [{ width: 375, height: 812 }, { width: 1024, height: 900 }, { width: 1440, height: 960 }]) {
