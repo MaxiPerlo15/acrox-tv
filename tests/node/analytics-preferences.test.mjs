@@ -4,21 +4,33 @@ import { readFileSync } from "node:fs";
 
 const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 const consent = read("src/components/AnalyticsConsent.tsx");
+const navigation = read("src/components/AnalyticsConsentNavigation.tsx");
 const styles = read("src/components/AnalyticsConsent.module.css");
 const button = (() => { try { return read("src/components/AnalyticsPreferencesButton.tsx"); } catch { return ""; } })();
 const footer = read("src/components/Footer.tsx");
 const privacy = read("src/app/privacy/page.tsx");
 const analytics = read("src/lib/google-analytics.ts");
 
-test("explicit preview removes its parameter before restoring saved choice", () => {
-  const previewFlow = consent.slice(consent.indexOf("const frame = window.requestAnimationFrame"), consent.indexOf("return () => {", consent.indexOf("const frame = window.requestAnimationFrame")));
-  assert.match(previewFlow, /replaceState/);
-  assert.match(previewFlow, /history\.state/);
-  assert.ok(previewFlow.indexOf("replaceState") < previewFlow.indexOf("setChoice(stored)"));
-  assert.ok(previewFlow.indexOf("replaceState") < previewFlow.indexOf("setReady(true)"));
-  assert.ok(previewFlow.indexOf("replaceState") < previewFlow.indexOf("setOpen(true)"));
+test("preview cleanup preserves history and reports only the cleaned URL", () => {
+  const previewFlow = navigation.slice(navigation.indexOf("useEffect"));
+  assert.match(previewFlow, /replaceState\(window\.history\.state/);
   assert.match(previewFlow, /analytics-preferences/);
-  assert.match(previewFlow, /requestAnimationFrame/);
+  assert.ok(previewFlow.indexOf("replaceState") < previewFlow.indexOf("dispatchEvent"));
+  assert.match(previewFlow, /acrox:analytics-clean-url/);
+  assert.doesNotMatch(previewFlow, /requestAnimationFrame/);
+  assert.match(consent, /url === window\.location\.href/);
+  assert.match(consent, /url !== lastTrackedUrl\.current/);
+});
+
+test("SSR panel bootstraps only a whitelisted visibility enum and defers actions", () => {
+  assert.match(consent, /dangerouslySetInnerHTML/);
+  assert.match(consent, /document\.currentScript\?\.parentElement/);
+  assert.match(consent, /setAttribute\("data-consent-presentation"/);
+  assert.match(consent, /v==="accepted"\|\|v==="rejected"/);
+  assert.match(consent, /suppressHydrationWarning/);
+  assert.match(consent, /disabled={!ready}/);
+  assert.match(styles, /data-consent-presentation="accepted"/);
+  assert.match(styles, /data-consent-presentation="rejected"/);
 });
 
 test("analytics preferences reopen in-flow without a permanent floating trigger", () => {
