@@ -46,5 +46,14 @@ review-01858892b3993b1a, medium consolidated reliability,13paths/1477originaldif
 ## Delivery authorization
 User explicitly requested commit and push after implementation and approval. Publish a non-force fast-forward to `origin/develop` only, from the feature branch. Preserve `main`, `next-env.d.ts`, three older modified task journals and all unrelated local files. Initial feature/remote-develop HEAD: `9fdb35cdb23694d2ec1b386e1e6aa191cff9a9ea`; remote main: `c2b936b387822a5d7332f83c66d8127f4ab19505`. Index was empty. Independent pre-delivery readback confirms all 14 owned code/test/package blobs match approved native candidate `3753ec4ed735865a98cee3d355887f504ed3701a`; lint and diff check pass. Passive receipt documentation is the only subsequent edit. Split delivery into tooling, homepage fixes with their tests, and early consent with its tests, followed by a passive work-unit record. No PR, merge, force push or unrelated cleanup authorized.
 
+## Committed work units
+| Unit | Commit | Verification / rollback boundary |
+| --- | --- | --- |
+| Pinned Lighthouse tooling | `b88a0d14f07b47d92bec401ba60af773afb48746` | CLI13.4.1/engine compatibility and dependency graph verified; isolated package.json/package-lock.json changes. No applicable behavioral RED. |
+| Homepage logo delivery and accessible names | `b1550514532b06149bce66682c4864fd65a9cf36` | Metadata/logo/name RED→GREEN, responsive/error fallback checks; four home components, two E2E files and this record. Source assets/layout unchanged. |
+| Early consent and privacy/navigation regressions | `2bcfca5086efb7d37ee50940ce091476048ad516` | 34 Chromium/21 Node/54 contracts, lint/diff clean; native approval plus early-consent record. Revert this unit independently without removing homepage fixes/tooling. |
+
+Source commits are complete. A separate passive documentation commit records these identities. Push is pending at this record's capture; only a successful remote readback establishes publication. Source identity remains the reviewed candidate; no functional edits during delivery.
+
 ## Follow-up boundary
 Single local desktop/mobile measurements are a new clean baseline, not a controlled performance improvement versus contaminated Vercel preview96. Pending mobileLCP investigation/repeatedstable measurements, actualdeploymentfunctional/productionindex verification and separate old65lazy provenance; no further optimizations/privacy orfont/config changes authorized by these three fixes. Actual tests26+20+54=100 passed; no suitechecks skipped in L4. Lint/diffcheckclean. Sourceoriginals and mobile/programhero CSS/geometry unchanged.

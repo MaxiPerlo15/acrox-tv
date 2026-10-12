@@ -47,3 +47,10 @@ At verification closure, C4 delivery still required explicit authorization and n
 
 ## Delivery authorization
 User explicitly requested commit and push. Deliver to established `origin/develop` only, with non-force fast-forward; never main. Preserve all unrelated files and older journals/generated changes. Source/code/package/test blob identity (14 files) independently matches approved candidate `3753ec4ed735865a98cee3d355887f504ed3701a`; no functional edits after acknowledgement. Lint and diff checks pass. Three behavior-oriented work units: local Lighthouse tooling, homepage improvements with tests, early consent with tests. Record commit identities afterward in a separate passive documentation commit. R3-001 remains nonblocking and separate. Deployment success and deployed browser/field measurements are not implied by a Git push.
+
+## Committed work units
+- `b88a0d14f07b47d92bec401ba60af773afb48746` — `chore(perf): pin local Lighthouse audit tooling`; independently verified CLI/graph, isolated package files.
+- `b1550514532b06149bce66682c4864fd65a9cf36` — `fix(home): optimize logos and align accessible link names`; home behavior, regressions and Lighthouse record together.
+- `2bcfca5086efb7d37ee50940ce091476048ad516` — `fix(analytics): render consent before client hydration`; closes C1–C3 implementation/checks with source, tests and this record. Focused consent13/13 and full34 Chromium/21 Node/54 contracts/lint/diff verified before delivery. Runtime browser/SSR/privacy/LCP evidence and native receipt remain above. Rollback boundary: consent/layout composition/helper, consent E2E/Node regressions and this feature record; prior homepage fixes/tooling stay separate.
+
+Source commits are complete; a separate passive record commit captures these identities. Non-force push to develop is pending at this record's capture. Verify exact remote HEAD before declaring C4 published. No functional source changes during delivery; R3-001 remains a separate nonblocking follow-up.
