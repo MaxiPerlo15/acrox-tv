@@ -44,8 +44,8 @@ const HeroSection = ({ brandLogoSrc }: HeroSectionProps) => {
           <Image
             src={brandLogoSrc}
             alt="Logo Acrox"
-            width={280}
-            height={280}
+            width={560}
+            height={315}
             sizes="(max-width: 900px) 68vw, 250px"
             className="hero-logo"
             priority

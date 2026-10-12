@@ -21,6 +21,30 @@ test.describe("home program design-system alignment", () => {
     });
   });
 
+  test("optimizes the program logo with lazy auto sizing and preserves the failure fallback", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const optimizerRequests: string[] = [];
+    await page.route("**/_next/image**", async (route) => {
+      const url = new URL(route.request().url());
+      optimizerRequests.push(url.toString());
+      await route.continue();
+    });
+    await page.goto("/");
+    const programCard = page.locator("#acroxtv .program-directory-card").first();
+    await programCard.scrollIntoViewIfNeeded();
+    const logo = programCard.locator("img");
+    const sizes = await logo.getAttribute("sizes");
+    expect(sizes).toMatch(/^auto,\s*330px$/);
+    expect(sizes).not.toMatch(/^\s*(?:100vw|50vw)\s*$/);
+    await expect.poll(() => optimizerRequests.some((request) => {
+      const url = new URL(request);
+      return url.searchParams.get("url")?.includes("alta") && Number(url.searchParams.get("w")) > 0;
+    })).toBe(true);
+    const src = await logo.getAttribute("src");
+    expect(src).toContain("/_next/image?");
+    expect(await logo.getAttribute("srcset")).toMatch(/w=\d+/);
+  });
+
   for (const viewport of viewports) {
     test(`matches home program card contract at ${viewport.width}px`, async ({ page }) => {
       await page.setViewportSize(viewport);

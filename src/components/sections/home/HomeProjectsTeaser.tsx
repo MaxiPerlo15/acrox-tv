@@ -39,7 +39,6 @@ const HomeProjectsTeaser = () => {
                 className="home-projects-teaser-link"
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
-                aria-label={`Abrir proyecto destacado: ${item.title}`}
               >
                 <div className="home-projects-teaser-media">
                   <Image
@@ -67,7 +66,6 @@ const HomeProjectsTeaser = () => {
           className="home-projects-teaser-card home-projects-teaser-card--cta"
           data-reveal
           style={{ transitionDelay: `${Math.min(HOME_PROJECT_HIGHLIGHTS.length, 5) * 55}ms` }}
-          aria-label="Ver todos los proyectos"
         >
           <span className="home-projects-teaser-plus" aria-hidden="true">
             +

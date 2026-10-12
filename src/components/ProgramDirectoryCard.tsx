@@ -39,9 +39,8 @@ export default function ProgramDirectoryCard({ program }: ProgramDirectoryCardPr
             alt={`Logo de ${program.name}`}
             width={320}
             height={320}
-            sizes="(max-width: 700px) 100vw, 50vw"
+            sizes="auto, 330px"
             className="program-directory-card-logo"
-            unoptimized
             onError={() => setIsArtworkUnavailable(true)}
           />
         ) : (

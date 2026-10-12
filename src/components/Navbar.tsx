@@ -132,7 +132,6 @@ const Navbar = () => {
         target={isLive ? "_blank" : undefined}
         rel={isLive ? "noopener noreferrer" : undefined}
         className={isLive ? "nav-stream-mobile is-live" : "nav-stream-mobile"}
-        aria-label="Ir a Acrox TV"
       >
         <span>ACROX TV</span>
         {isLive ? <span className="nav-stream-badge animate-pulse">EN VIVO</span> : null}
